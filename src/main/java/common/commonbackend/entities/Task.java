@@ -27,6 +27,4 @@ public class Task {
 
     @Column(name = "NAME")
     private final String name;
-
-
 }

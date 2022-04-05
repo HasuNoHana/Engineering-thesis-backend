@@ -50,7 +50,6 @@ public class HomeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
-
     }
 
     public static String asJsonString(final Object obj) {

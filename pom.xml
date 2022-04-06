@@ -68,72 +68,45 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>coverage</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
-                        <executions>
-                            <execution>
-                                <id>prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                                <configuration>
-                                    <formats>
-                                        <format>XML</format>
-                                    </formats>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
                         <configuration>
-                            <excludes>
-                                <exclude>
-                                    <groupId>org.projectlombok</groupId>
-                                    <artifactId>lombok</artifactId>
-                                </exclude>
-                            </excludes>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
                         </configuration>
-                    </plugin>
-
-                    <!--            <plugin>-->
-                    <!--                <groupId>org.jacoco</groupId>-->
-                    <!--                <artifactId>jacoco-maven-plugin</artifactId>-->
-                    <!--                <version>${jacoco.version}</version>-->
-                    <!--                <executions>-->
-                    <!--                    <execution>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>prepare-agent</goal>-->
-                    <!--                        </goals>-->
-                    <!--                    </execution>-->
-                    <!--                    <execution>-->
-                    <!--                        <id>jacoco-site</id>-->
-                    <!--                        <phase>package</phase>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>report</goal>-->
-                    <!--                        </goals>-->
-                    <!--                    </execution>-->
-                    <!--                </executions>-->
-                    <!--                <configuration>-->
-                    <!--                    <destFile>${sonar.jacoco.reportPath}</destFile>-->
-                    <!--                </configuration>-->
-                    <!--            </plugin>-->
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

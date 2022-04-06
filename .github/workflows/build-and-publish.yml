@@ -43,7 +43,7 @@ jobs:
           context: .
           # Note: tags has to be all lower-case
           tags: |
-            $DOCKER_REPOSITORY_NAME
+            ${{ env.DOCKER_REPOSITORY_NAME }}
           # build on feature branches, push only on main branch
 #           push: ${{ github.ref == 'refs/heads/main' }}
           push: true

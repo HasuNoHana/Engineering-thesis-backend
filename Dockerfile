@@ -1,10 +1,3 @@
-#FROM adoptopenjdk/openjdk11:alpine-jre
-#MAINTAINER ZuzannaSantorowska
-#RUN mvn clean package
-#COPY ./target/common-backend-0.0.1-SNAPSHOT.jar common-backend-1.0.0.jar
-#EXPOSE 8080
-#ENTRYPOINT ["java","-jar","/common-backend-1.0.0.jar"]
-
 #
 # Build stage
 #

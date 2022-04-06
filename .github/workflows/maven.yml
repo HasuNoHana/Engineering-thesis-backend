@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-#name: Java CI with Maven
+name: Create Docker Image and push to ghcr
 
 env:
   DOCKER_REPOSITORY_NAME: ghcr.io/hasunohana/common-backend:latest
@@ -12,20 +9,6 @@ on:
     branches: [ master ]
 
 jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/checkout@v3
-#    - name: Set up JDK 11
-#      uses: actions/setup-java@v3
-#      with:
-#        java-version: '11'
-#        distribution: 'temurin'
-#        cache: maven
-#    - name: Build with Maven
-#      run: mvn -B package --file pom.xml
-
-  # define job to build and publish docker image
   build-and-push-docker-image:
     name: Build Docker image and push to repositories
     # run only when code is compiling and tests are passing
@@ -36,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # setup Docker buld action
+      # setup Docker build action
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1

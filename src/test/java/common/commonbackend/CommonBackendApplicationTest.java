@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class CommonBackendApplicationTests {
+class CommonBackendApplicationTest {
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -58,5 +58,4 @@ class CommonBackendApplicationTests {
 		assertThat(taskRepository.count()).isEqualTo(1);
 		assertThat(taskRepository.getTaskById(1L)).isEqualTo(task1);
 	}
-
 }

@@ -41,7 +41,7 @@ class CommonBackendApplicationTests {
 		//then
 		assertThat(taskRepository.count()).isEqualTo(1);
 		taskRepository.delete(task);
-		assertThat(taskRepository.count()).isEqualTo(0);
+		assertThat(taskRepository.count()).isZero();
 	}
 
 	@Test

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,17 +53,25 @@ public class HomeControllerTest {
     }
 
     @Test
+    public void shouldDeleteTask() throws Exception {
+        mockMvc.perform(delete("/task?id=42"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("42"))
+                .andDo(print());
+    }
+
+    @Test
     public void shouldPostTask() throws Exception {
         //given
-        Long taskId = 42L;
-        Task task = new Task(taskId, "name");
+        Task task = new Task(42L, "name");
 
         //when
-        when(taskRepository.getTaskById(taskId)).thenReturn(task);
+        when(taskRepository.getTaskById(42L)).thenReturn(task);
 
         //then
         mockMvc.perform(post("/task?id=42&name=name"))
                 .andExpect(status().isOk())
+                .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
     }
 

@@ -44,9 +44,9 @@ public class HomeController {
     }
 
     @DeleteMapping(path = "/task")
-    public ResponseEntity<String> deleteTask(@RequestParam Map<String, String> params) {
-        taskRepository.delete(taskRepository.getTaskById(parseLong(params.get("id"))));
-        return new ResponseEntity<>(params.get("id"), HttpStatus.OK);
+    public ResponseEntity<Long> deleteTask(@RequestParam Long id) {
+        taskRepository.delete(taskRepository.getTaskById(id));
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
 }

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
@@ -17,12 +19,17 @@ import java.util.Objects;
 @Table(name = "TASK")
 public class Task {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private final Long id;
+    private Long id;
 
     @Column(name = "NAME")
     private final String name;
+
+    public Task(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Override
     public boolean equals(Object o) {

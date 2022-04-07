@@ -16,20 +16,21 @@ class CommonBackendApplicationTest {
 	@Test
 	void shouldAddTaskToDatabase() {
 		//given
-		Task task = new Task(1L, "name");
+		taskRepository.deleteAll(); //remove tasks from different tests
+		Task task = new Task("name");
 
 		//when
 		taskRepository.save(task);
 
 		//then
 		assertThat(taskRepository.count()).isEqualTo(1);
-//		assertThat(taskRepository.getTaskById(1L));
 	}
 
 	@Test
 	void shouldAddAndDeleteTask() {
 		//given
-		Task task = new Task(1L, "name");
+		taskRepository.deleteAll(); //remove tasks from different tests
+		Task task = new Task("name");
 
 		//when
 		taskRepository.save(task);
@@ -43,15 +44,16 @@ class CommonBackendApplicationTest {
 	@Test
 	void shouldSaveOnAlreadyExistingTask() {
 		//given
-		Task task = new Task(1L, "name");
+		taskRepository.deleteAll(); //remove tasks from different tests
+		Task task = new Task("name");
 		taskRepository.save(task);
 
 		//when
-		Task task1 = new Task(1L, "name1");
+		Task task1 = new Task(task.getId(), "name1");
 		taskRepository.save(task1);
 
 		//then
 		assertThat(taskRepository.count()).isEqualTo(1);
-		assertThat(taskRepository.getTaskById(1L)).isEqualTo(task1);
+		assertThat(taskRepository.getTaskById(task.getId())).isEqualTo(task1);
 	}
 }

@@ -1,4 +1,4 @@
-name: Create Docker Image and push to ghcr
+name: Docker
 
 env:
   DOCKER_REPOSITORY_NAME: ghcr.io/hasunohana/common-backend:latest

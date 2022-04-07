@@ -14,10 +14,6 @@ class CommonBackendApplicationTest {
 	private TaskRepository taskRepository;
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void shouldAddTaskToDatabase() {
 		//given
 		Task task = new Task(1L, "name");

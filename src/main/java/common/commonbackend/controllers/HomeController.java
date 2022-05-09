@@ -6,17 +6,23 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.Long.parseLong;
 
 @Log4j2
-@Controller
+@RestController
+@RequestMapping("/api")
 public class HomeController {
 
     private final TaskRepository taskRepository;
@@ -34,6 +40,12 @@ public class HomeController {
     public ResponseEntity<Task> getTaskById(@RequestParam Long id) {
         Task task = taskRepository.getTaskById(id);
         return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/tasks")
+    public ResponseEntity<Iterable<Task>> getTasks() {
+        Iterable<Task> tasks = taskRepository.findAll();
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @PostMapping(path = "/task")

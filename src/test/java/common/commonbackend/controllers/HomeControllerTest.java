@@ -32,7 +32,7 @@ public class HomeControllerTest {
 
     @Test
     public void home() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("home"));
     }
@@ -47,7 +47,7 @@ public class HomeControllerTest {
         when(taskRepository.getTaskById(taskId)).thenReturn(task);
 
         //then
-        mockMvc.perform(get("/task?id=42"))
+        mockMvc.perform(get("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
@@ -55,7 +55,7 @@ public class HomeControllerTest {
 
     @Test
     public void shouldDeleteTask() throws Exception {
-        mockMvc.perform(delete("/task?id=42"))
+        mockMvc.perform(delete("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("42"))
                 .andDo(print());
@@ -70,7 +70,7 @@ public class HomeControllerTest {
         when(taskRepository.getTaskById(42L)).thenReturn(task);
 
         //then
-        mockMvc.perform(post("/task?id=42&name=name"))
+        mockMvc.perform(post("/api/task?id=42&name=name"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());

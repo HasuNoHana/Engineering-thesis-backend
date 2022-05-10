@@ -13,6 +13,7 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 
     @Override
     default Iterable<Task> findAll() {
+        //TODO change dummy implementation when initializing database //NOSONAR
         return List.of(new Task("task1"),
                 new Task("task2"),
                 new Task("task3"));

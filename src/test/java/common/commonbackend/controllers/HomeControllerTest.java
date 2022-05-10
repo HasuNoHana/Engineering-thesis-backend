@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -50,6 +52,23 @@ public class HomeControllerTest {
         mockMvc.perform(get("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
+                .andDo(print());
+    }
+
+    @Test
+    public void shouldGetTasks() throws Exception {
+        //given
+        List<Task> tasks = List.of(new Task("task1"),
+                new Task("task2"),
+                new Task("task3"));
+
+        //when
+        when(taskRepository.findAll()).thenReturn(tasks);
+
+        //then
+        mockMvc.perform(get("/api/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(asJsonString(tasks)))
                 .andDo(print());
     }
 

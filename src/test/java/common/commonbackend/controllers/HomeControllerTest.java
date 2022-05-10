@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +34,7 @@ public class HomeControllerTest {
 
     @Test
     public void home() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/api/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("home"));
     }
@@ -47,15 +49,32 @@ public class HomeControllerTest {
         when(taskRepository.getTaskById(taskId)).thenReturn(task);
 
         //then
-        mockMvc.perform(get("/task?id=42"))
+        mockMvc.perform(get("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
     }
 
     @Test
+    public void shouldGetTasks() throws Exception {
+        //given
+        List<Task> tasks = List.of(new Task("task1"),
+                new Task("task2"),
+                new Task("task3"));
+
+        //when
+        when(taskRepository.findAll()).thenReturn(tasks);
+
+        //then
+        mockMvc.perform(get("/api/tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(asJsonString(tasks)))
+                .andDo(print());
+    }
+
+    @Test
     public void shouldDeleteTask() throws Exception {
-        mockMvc.perform(delete("/task?id=42"))
+        mockMvc.perform(delete("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("42"))
                 .andDo(print());
@@ -70,7 +89,7 @@ public class HomeControllerTest {
         when(taskRepository.getTaskById(42L)).thenReturn(task);
 
         //then
-        mockMvc.perform(post("/task?id=42&name=name"))
+        mockMvc.perform(post("/api/task?id=42&name=name"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());

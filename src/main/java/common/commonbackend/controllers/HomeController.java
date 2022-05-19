@@ -38,15 +38,26 @@ public class HomeController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/tasks")
-    public ResponseEntity<Iterable<Task>> getTasks() {
-        Iterable<Task> tasks = taskRepository.findAll();
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    @GetMapping(path = "/todo_tasks")
+    public ResponseEntity<Iterable<Task>> getToDoTasks() {
+        Iterable<Task> todoTasks = taskRepository.findByDone(false);
+        return new ResponseEntity<>(todoTasks, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/done_tasks")
+    public ResponseEntity<Iterable<Task>> getDoneTasks() {
+        Iterable<Task> todoTasks = taskRepository.findByDone(true);
+        return new ResponseEntity<>(todoTasks, HttpStatus.OK);
     }
 
     @PostMapping(path = "/task")
     public ResponseEntity<Task> createOrUpdateTask(@RequestParam Map<String, String> params) {
-        Task task = new Task(parseLong(params.get("id")), params.get("name"));
+        Task task = new Task(
+                parseLong(params.get("id")),
+                params.get("name"),
+                Integer.parseInt(params.get("price")),
+                Boolean.parseBoolean(params.get("done"))
+        );
         taskRepository.save(task);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }

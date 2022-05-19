@@ -5,6 +5,7 @@ import common.commonbackend.repositories.TaskRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -17,7 +18,7 @@ class CommonBackendApplicationTest {
 	void shouldAddTaskToDatabase() {
 		//given
 		taskRepository.deleteAll(); //remove tasks from different tests
-		Task task = new Task("name");
+		Task task = new Task("name", 10, false);
 
 		//when
 		taskRepository.save(task);
@@ -30,7 +31,7 @@ class CommonBackendApplicationTest {
 	void shouldAddAndDeleteTask() {
 		//given
 		taskRepository.deleteAll(); //remove tasks from different tests
-		Task task = new Task("name");
+		Task task = new Task("name", 10, false);
 
 		//when
 		taskRepository.save(task);
@@ -45,11 +46,11 @@ class CommonBackendApplicationTest {
 	void shouldSaveOnAlreadyExistingTask() {
 		//given
 		taskRepository.deleteAll(); //remove tasks from different tests
-		Task task = new Task("name");
+		Task task = new Task("name", 10, false);
 		taskRepository.save(task);
 
 		//when
-		Task task1 = new Task(task.getId(), "name1");
+		Task task1 = new Task(task.getId(), "name1", 10, false);
 		taskRepository.save(task1);
 
 		//then

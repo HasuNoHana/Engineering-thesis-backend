@@ -1,7 +1,6 @@
 package common.commonbackend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import common.commonbackend.controllers.HomeController;
 import common.commonbackend.entities.Task;
 import common.commonbackend.repositories.TaskRepository;
 import org.junit.Test;
@@ -43,7 +42,7 @@ public class HomeControllerTest {
     public void shouldGetTaskById() throws Exception {
         //given
         Long taskId = 42L;
-        Task task = new Task(taskId, "name");
+        Task task = new Task(taskId, "name", 10, false);
 
         //when
         when(taskRepository.getTaskById(taskId)).thenReturn(task);
@@ -56,17 +55,31 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void shouldGetTasks() throws Exception {
+    public void shouldGetToDoTasks() throws Exception {
         //given
-        List<Task> tasks = List.of(new Task("task1"),
-                new Task("task2"),
-                new Task("task3"));
+        List<Task> tasks = List.of(new Task("task1", 10, false),
+                new Task("task2", 20, false));
 
         //when
-        when(taskRepository.findAll()).thenReturn(tasks);
+        when(taskRepository.findByDone(false)).thenReturn(tasks);
 
         //then
-        mockMvc.perform(get("/api/tasks"))
+        mockMvc.perform(get("/api/todo_tasks"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(asJsonString(tasks)))
+                .andDo(print());
+    }
+
+    @Test
+    public void shouldGetDoneTasks() throws Exception {
+        //given
+        List<Task> tasks = List.of(new Task("task3", 30, true));
+
+        //when
+        when(taskRepository.findByDone(true)).thenReturn(tasks);
+
+        //then
+        mockMvc.perform(get("/api/done_tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(tasks)))
                 .andDo(print());
@@ -83,13 +96,13 @@ public class HomeControllerTest {
     @Test
     public void shouldPostTask() throws Exception {
         //given
-        Task task = new Task(42L, "name");
+        Task task = new Task(42L, "name", 10, false);
 
         //when
         when(taskRepository.getTaskById(42L)).thenReturn(task);
 
         //then
-        mockMvc.perform(post("/api/task?id=42&name=name"))
+        mockMvc.perform(post("/api/task?id=42&name=name&price=10&done=false"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());

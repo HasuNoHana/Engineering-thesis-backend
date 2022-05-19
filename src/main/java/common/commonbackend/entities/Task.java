@@ -26,9 +26,17 @@ public class Task {
     @Column(name = "NAME")
     private final String name;
 
-    public Task(Long id, String name) {
+    @Column(name = "PRICE")
+    private final int price;
+
+    @Column(name = "DONE")
+    private final boolean done;
+
+    public Task(Long id, String name, int price, boolean done) {
         this.id = id;
         this.name = name;
+        this.price = price;
+        this.done = done;
     }
 
     @Override

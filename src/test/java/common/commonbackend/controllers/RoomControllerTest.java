@@ -41,8 +41,8 @@ public class RoomControllerTest {
     public void shouldGetRooms() throws Exception {
         //given
         List<Room> rooms = List.of(
-                new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg"),
-                new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg"));
+                new Room(1L, "Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg"),
+                new Room(2L, "Łazienka", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg"));
 
         //when
         when(roomRepository.findAll()).thenReturn(rooms);

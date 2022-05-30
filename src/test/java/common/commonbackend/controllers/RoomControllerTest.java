@@ -3,6 +3,7 @@ package common.commonbackend.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import common.commonbackend.entities.Room;
 import common.commonbackend.repositories.RoomRepository;
+import common.commonbackend.repositories.TaskRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class RoomControllerTest {
 
     @MockBean
     private RoomRepository roomRepository;
+
+    @MockBean
+    private TaskRepository taskRepository;
 
     public static String asJsonString(final Object obj) {
         try {

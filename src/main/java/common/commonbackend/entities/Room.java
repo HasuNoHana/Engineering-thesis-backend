@@ -1,16 +1,21 @@
 package common.commonbackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
@@ -18,14 +23,20 @@ import java.util.Objects;
 @Getter
 @Table(name = "ROOM")
 public class Room {
-    @Column(name = "NAME")
-    private final String name;
-    @Column(name = "IMAGE")
-    private final String image;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "NAME")
+    private final String name;
+
+    @Column(name = "IMAGE")
+    private final String image;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Task> tasks;
 
     public Room(Long id, String name, String image) {
         this.id = id;

@@ -1,6 +1,7 @@
 package common.commonbackend.controllers;
 
 import common.commonbackend.entities.Task;
+import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,11 @@ import static java.lang.Long.parseLong;
 public class HomeController {
 
     private final TaskRepository taskRepository;
+    private final RoomRepository roomRepository;
 
-    public HomeController(TaskRepository taskRepository) {
+    public HomeController(TaskRepository taskRepository, RoomRepository roomRepository) {
         this.taskRepository = taskRepository;
+        this.roomRepository = roomRepository;
     }
 
     @GetMapping(path = "/")
@@ -40,13 +43,13 @@ public class HomeController {
 
     @GetMapping(path = "/todo_tasks")
     public ResponseEntity<Iterable<Task>> getToDoTasks() {
-        Iterable<Task> todoTasks = taskRepository.findByDone(false);
+        Iterable<Task> todoTasks = taskRepository.findTaskByDone(false);
         return new ResponseEntity<>(todoTasks, HttpStatus.OK);
     }
 
     @GetMapping(path = "/done_tasks")
     public ResponseEntity<Iterable<Task>> getDoneTasks() {
-        Iterable<Task> todoTasks = taskRepository.findByDone(true);
+        Iterable<Task> todoTasks = taskRepository.findTaskByDone(true);
         return new ResponseEntity<>(todoTasks, HttpStatus.OK);
     }
 
@@ -56,7 +59,8 @@ public class HomeController {
                 parseLong(params.get("id")),
                 params.get("name"),
                 Integer.parseInt(params.get("price")),
-                Boolean.parseBoolean(params.get("done"))
+                Boolean.parseBoolean(params.get("done")),
+                roomRepository.getRoomById(Long.parseLong(params.get("roomId")))
         );
         taskRepository.save(task);
         return new ResponseEntity<>(task, HttpStatus.OK);

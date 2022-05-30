@@ -1,7 +1,9 @@
 package common.commonbackend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
+import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,9 @@ public class HomeControllerTest {
     @MockBean
     private TaskRepository taskRepository;
 
+    @MockBean
+    private RoomRepository roomRepository;
+
     @Test
     public void home() throws Exception {
         mockMvc.perform(get("/api/"))
@@ -42,7 +47,8 @@ public class HomeControllerTest {
     public void shouldGetTaskById() throws Exception {
         //given
         Long taskId = 42L;
-        Task task = new Task(taskId, "name", 10, false);
+        Room room = new Room("Kuchnia", "url");
+        Task task = new Task(taskId, "name", 10, false, room);
 
         //when
         when(taskRepository.getTaskById(taskId)).thenReturn(task);
@@ -57,11 +63,12 @@ public class HomeControllerTest {
     @Test
     public void shouldGetToDoTasks() throws Exception {
         //given
-        List<Task> tasks = List.of(new Task("task1", 10, false),
-                new Task("task2", 20, false));
+        Room room = new Room("Kuchnia", "url");
+        List<Task> tasks = List.of(new Task("task1", 10, false, room),
+                new Task("task2", 20, false, room));
 
         //when
-        when(taskRepository.findByDone(false)).thenReturn(tasks);
+        when(taskRepository.findTaskByDone(false)).thenReturn(tasks);
 
         //then
         mockMvc.perform(get("/api/todo_tasks"))
@@ -73,10 +80,11 @@ public class HomeControllerTest {
     @Test
     public void shouldGetDoneTasks() throws Exception {
         //given
-        List<Task> tasks = List.of(new Task("task3", 30, true));
+        Room room = new Room("Kuchnia", "url");
+        List<Task> tasks = List.of(new Task("task3", 30, true, room));
 
         //when
-        when(taskRepository.findByDone(true)).thenReturn(tasks);
+        when(taskRepository.findTaskByDone(true)).thenReturn(tasks);
 
         //then
         mockMvc.perform(get("/api/done_tasks"))
@@ -96,13 +104,15 @@ public class HomeControllerTest {
     @Test
     public void shouldPostTask() throws Exception {
         //given
-        Task task = new Task(42L, "name", 10, false);
+        Room room = new Room(0L, "Kuchnia", "url");
+        Task task = new Task(42L, "name", 10, false, room);
 
         //when
         when(taskRepository.getTaskById(42L)).thenReturn(task);
+        when(roomRepository.getRoomById(0L)).thenReturn(room);
 
         //then
-        mockMvc.perform(post("/api/task?id=42&name=name&price=10&done=false"))
+        mockMvc.perform(post("/api/task?id=42&name=name&price=10&done=false&roomId=0"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());

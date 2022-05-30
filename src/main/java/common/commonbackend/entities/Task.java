@@ -1,17 +1,22 @@
 package common.commonbackend.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
+@Data
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 @Entity
@@ -32,11 +37,17 @@ public class Task {
     @Column(name = "DONE")
     private final boolean done;
 
-    public Task(Long id, String name, int price, boolean done) {
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "room_id", nullable = false)
+    private final Room room;
+
+
+    public Task(Long id, String name, int price, boolean done, Room room) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.done = done;
+        this.room = room;
     }
 
     @Override

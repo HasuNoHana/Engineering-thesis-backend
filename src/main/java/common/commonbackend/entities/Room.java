@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Set;
 
-@RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 @Entity
 @Getter
@@ -40,6 +39,11 @@ public class Room {
 
     public Room(Long id, String name, String image) {
         this.id = id;
+        this.name = name;
+        this.image = image;
+    }
+
+    public Room(String name, String image) {
         this.name = name;
         this.image = image;
     }

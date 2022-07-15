@@ -3,7 +3,6 @@ package common.commonbackend.entities;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 @Entity
 @Getter
@@ -44,6 +42,13 @@ public class Task {
 
     public Task(Long id, String name, int price, boolean done, Room room) {
         this.id = id;
+        this.name = name;
+        this.price = price;
+        this.done = done;
+        this.room = room;
+    }
+
+    public Task(String name, int price, boolean done, Room room) { //TODO remove this constructor
         this.name = name;
         this.price = price;
         this.done = done;

@@ -1,8 +1,5 @@
 package common.commonbackend;
 
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
-import common.commonbackend.entities.User;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
 import common.commonbackend.repositories.UserRepository;

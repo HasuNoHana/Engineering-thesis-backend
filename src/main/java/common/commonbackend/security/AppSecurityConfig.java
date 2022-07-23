@@ -6,11 +6,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -26,5 +36,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(this.userDetailsService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder());
         return provider;
+    }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.httpBasic().and()
+                .authorizeRequests()
+                    .antMatchers("/index.html", "/", "/home", "/login").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                .csrf()
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 }

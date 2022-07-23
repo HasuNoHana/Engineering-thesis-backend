@@ -6,3 +6,4 @@ mysql> grant all on db_example.* to 'springuser'@'%'; -- Gives all privileges to
 
 3. zuzanna@zuzanna-UX410UAK:~/repos/common-backend/database$ docker-compose -f stack.yml up
 
+SPrawdzic co zrobic zeby nie dodawac credentiali do repo

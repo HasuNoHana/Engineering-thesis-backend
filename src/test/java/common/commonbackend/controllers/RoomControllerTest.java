@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import common.commonbackend.entities.Room;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,11 +25,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RoomController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class RoomControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private UserDetailsService userDetailsService;
     @MockBean
     private RoomRepository roomRepository;
 

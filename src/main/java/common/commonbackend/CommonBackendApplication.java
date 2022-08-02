@@ -1,9 +1,8 @@
 package common.commonbackend;
 
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,12 +18,20 @@ public class CommonBackendApplication {
 	@Autowired
 	private TaskRepository taskRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CommonBackendApplication.class, args);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void addFirstDataAfterStartup() {
+		/* //NOSONAR User user1 = new User("zuza", "haslo");
+		User user2 = new User("filip", "password");
+		this.userRepository.save(user1);
+		this.userRepository.save(user2);
+
 		Room room1 = new Room("Sypialnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg");
 		Room room2 = new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/b/b8/L_K%C3%BCche_2015.jpg");
 		Room room3 = new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/8/8a/Bathroom_with_tub_and_fireplace_%28Pleasure_Point_Roadhouse%2C_Monterey_Bay%2C_California_-_30_September%2C_2002%29.jpg");
@@ -41,7 +48,7 @@ public class CommonBackendApplication {
 		this.taskRepository.save(task2);
 		this.taskRepository.save(task3);
 		this.taskRepository.save(task4);
-		this.taskRepository.save(task5);
+		this.taskRepository.save(task5);*/
 	}
 
 }

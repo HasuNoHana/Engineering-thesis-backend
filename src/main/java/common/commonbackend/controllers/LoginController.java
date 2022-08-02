@@ -14,4 +14,5 @@ public class LoginController {
     public Principal user(Principal user) {
         return user;
     }
+
 }

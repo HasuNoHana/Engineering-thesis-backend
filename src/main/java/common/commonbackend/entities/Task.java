@@ -40,7 +40,7 @@ public class Task {
         this.room = room;
     }
 
-    public Task(String name, int price, boolean done, Room room) { //TODO remove this constructor
+    public Task(String name, int price, boolean done, Room room) { // NOSONAR TODO remove this constructor
         this.name = name;
         this.price = price;
         this.done = done;

@@ -28,12 +28,12 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/index.html", "/", "/home", "/login","/logout", "/api/logout").permitAll()
+                .antMatchers("/index.html", "/", "/home", "/api/register", "/register", "/login","/logout", "/api/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+//                .csrf()
+//                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .logout(logout -> logout.logoutUrl("/api/logout"));
     }
 }

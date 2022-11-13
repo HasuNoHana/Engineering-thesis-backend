@@ -1,4 +1,5 @@
 package common.commonbackend.controllers;
+import common.commonbackend.entities.User;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,12 @@ public class LoginController {
     @GetMapping("/user")
     @ResponseBody
     public Principal user(Principal user) {
+        return user;
+    }
+
+    @GetMapping("/register")
+    @ResponseBody
+    public User user(User user) {
         return user;
     }
 

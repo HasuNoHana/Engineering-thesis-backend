@@ -5,9 +5,7 @@ import common.commonbackend.repositories.RoomRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
@@ -23,5 +21,11 @@ public class RoomController {
     public ResponseEntity<Iterable<Room>> getRooms() {
         Iterable<Room> rooms = this.roomRepository.findAll();
         return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/room/delete")
+    public ResponseEntity<Long> deleteRoom(@RequestParam Long id) {
+        roomRepository.delete(roomRepository.getRoomById(id));
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

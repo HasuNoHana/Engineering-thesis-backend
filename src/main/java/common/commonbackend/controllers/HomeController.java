@@ -49,7 +49,9 @@ public class HomeController {
     }
 
     @PostMapping(path = "/task")
+    @CrossOrigin("*")
     public ResponseEntity<Task> createOrUpdateTask(@RequestParam Map<String, String> params) {
+        log.info("createOrUpdateTask");
         Task task = new Task(
                 parseLong(params.get("id")),
                 params.get("name"),

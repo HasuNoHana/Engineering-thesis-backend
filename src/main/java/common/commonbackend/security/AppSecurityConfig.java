@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -35,5 +39,17 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .logout(logout -> logout.logoutUrl("/api/logout"));
+
+//        http.cors(c -> {  // TODO check if this is required
+//            CorsConfigurationSource source = request -> {
+//                CorsConfiguration config = new CorsConfiguration();
+//                config.setAllowedOrigins(List.of("http://localhost:4200"));
+//                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+//                return config;
+//            };
+//            c.configurationSource(source);
+//        });
+
+//        http.csrf().disable();
     }
 }

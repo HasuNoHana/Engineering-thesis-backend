@@ -1,17 +1,21 @@
 package common.commonbackend.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 @Data
 @NoArgsConstructor(force = true)
 @Entity
 @Getter
-@Table(name = "TASK")
+@EqualsAndHashCode
+@Table(name = "TASK") // TODO task powinien byc rozdzielony na task DTO ktory kominukuje sie z baza i task ktory jest wykorzystywany w biznesowej czesci do zmiany price
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +34,10 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "room_id", nullable = false)
     private final Room room;
+    
+    
+    private final LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
+    private final Period period = Period.ofDays(1); //TODO add persistence
 
 
     public Task(Long id, String name, int price, boolean done, Room room) {
@@ -47,16 +55,15 @@ public class Task {
         this.room = room;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id) && Objects.equals(name, task.name);
+    public LocalDate getLastDoneDate() {
+        return this.lastDoneDate;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public Period getPeriod() {
+        return this.period;
+    }
+
+    public Task getNewTaskWithUpdatedPrice(int newPrice) {
+        return new Task(this.name, newPrice, this.done, this.room);
     }
 }

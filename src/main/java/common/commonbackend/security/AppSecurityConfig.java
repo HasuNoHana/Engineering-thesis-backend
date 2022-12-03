@@ -36,6 +36,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout(logout -> logout.logoutUrl("/api/logout"));
 
-        http.csrf().disable();
+        http.csrf().disable(); //NOSONAR // TODO this is not recomended in prtoduction code. Check https://sonarcloud.io/organizations/hasunohana/rules?open=java%3AS4502&rule_key=java%3AS4502 why
     }
 }

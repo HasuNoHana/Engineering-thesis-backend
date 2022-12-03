@@ -48,7 +48,6 @@ public class HomeController {
     }
 
     @PostMapping(path = "/task")
-    @CrossOrigin("*")
     public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
         log.info("createOrUpdateTask");
         Task task = Task.fromDto(taskDTO);

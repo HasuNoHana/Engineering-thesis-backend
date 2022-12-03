@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -123,13 +124,5 @@ public class HomeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

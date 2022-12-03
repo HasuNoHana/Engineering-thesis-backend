@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor(force = true)
@@ -45,18 +44,5 @@ public class Room {
                 roomDTO.getName(),
                 roomDTO.getImage()
         );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Room room = (Room) o;
-        return Objects.equals(id, room.id) && Objects.equals(name, room.name) && Objects.equals(image, room.image);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, image);
     }
 }

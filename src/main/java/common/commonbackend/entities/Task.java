@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Data
 @NoArgsConstructor(force = true)
 @Entity
 @Getter
-@Table(name = "TASK")
+@Table(name = "TASK") // TODO task powinien byc rozdzielony na task DTO ktory kominukuje sie z baza i task ktory jest wykorzystywany w biznesowej czesci do zmiany price
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +24,7 @@ public class Task {
     private final String name;
 
     @Column(name = "PRICE")
-    private final int price;
+    private final long price;
 
     @Column(name = "DONE")
     private final boolean done;
@@ -31,6 +32,11 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "room_id", nullable = false)
     private final Room room;
+
+
+    @Column(name = "LAST_DONE_DATE")
+    private final LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
+    private final Period period = Period.ofDays(1); //TODO add persistence
 
 
     public Task(Long id, String name, int price, boolean done, Room room) {
@@ -41,7 +47,7 @@ public class Task {
         this.room = room;
     }
 
-    public Task(String name, int price, boolean done, Room room) { // NOSONAR TODO remove this constructor
+    public Task(String name, long price, boolean done, Room room) { // NOSONAR TODO remove this constructor
         this.name = name;
         this.price = price;
         this.done = done;
@@ -56,16 +62,8 @@ public class Task {
                 Room.fromRoomDto(taskDTO.getRoom())
         );
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return Objects.equals(id, task.id) && Objects.equals(name, task.name);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public Task getNewTaskWithUpdatedPrice(long newPrice) {
+        return new Task(this.name, newPrice, this.done, this.room);
     }
 }

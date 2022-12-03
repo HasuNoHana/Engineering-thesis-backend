@@ -4,6 +4,7 @@ import common.commonbackend.dto.TaskDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "room_id", nullable = false)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private final Room room;
 
 

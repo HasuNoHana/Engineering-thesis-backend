@@ -2,16 +2,11 @@ package common.commonbackend.controllers;
 
 import common.commonbackend.dto.TaskDTO;
 import common.commonbackend.entities.Task;
-import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-
-import static java.lang.Long.parseLong;
 
 @Log4j2
 @RestController
@@ -50,7 +45,9 @@ public class HomeController {
     @PostMapping(path = "/task")
     public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
         log.info("createOrUpdateTask");
-        Task task = Task.fromDto(taskDTO);
+        log.debug("Got taskDTO: {}", taskDTO);
+        Task task = Task.fromDto(taskDTO);  //TODO should room be updated?
+        log.debug("Converted to task: {}", task);
         taskRepository.save(task);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }

@@ -25,7 +25,7 @@ public class Task {
     private final String name;
 
     @Column(name = "PRICE")
-    private final long price;
+    private final long initialPrice;
 
     @Column(name = "DONE")
     private final boolean done;
@@ -41,17 +41,17 @@ public class Task {
     private final Period period = Period.ofDays(1); //TODO add persistence
 
 
-    public Task(Long id, String name, int price, boolean done, Room room) {
+    public Task(Long id, String name, int initialPrice, boolean done, Room room) {
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.initialPrice = initialPrice;
         this.done = done;
         this.room = room;
     }
 
-    public Task(String name, long price, boolean done, Room room) { // NOSONAR TODO remove this constructor
+    public Task(String name, long initialPrice, boolean done, Room room) { // NOSONAR TODO remove this constructor
         this.name = name;
-        this.price = price;
+        this.initialPrice = initialPrice;
         this.done = done;
         this.room = room;
     }

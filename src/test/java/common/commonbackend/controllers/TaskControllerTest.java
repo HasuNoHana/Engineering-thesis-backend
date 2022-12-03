@@ -1,11 +1,11 @@
 package common.commonbackend.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
 import common.commonbackend.repositories.UserRepository;
+import common.commonbackend.tasks.TaskService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,9 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(HomeController.class)
+@WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class HomeControllerTest {
+public class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,12 +48,8 @@ public class HomeControllerTest {
     @MockBean
     private RoomRepository roomRepository;
 
-    @Test
-    public void home() throws Exception {
-        mockMvc.perform(get("/api/"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("home"));
-    }
+    @MockBean
+    private TaskService taskService;
 
     @Test
     public void shouldGetTaskById() throws Exception {
@@ -61,7 +59,7 @@ public class HomeControllerTest {
         Task task = new Task(taskId, "name", 10, false, room);
 
         //when
-        when(taskRepository.getTaskById(taskId)).thenReturn(task);
+        when(taskService.getTask(taskId)).thenReturn(task);
 
         //then
         mockMvc.perform(get("/api/task?id=42"))
@@ -78,7 +76,7 @@ public class HomeControllerTest {
                 new Task("task2", 20, false, room));
 
         //when
-        when(taskRepository.findTaskByDone(false)).thenReturn(tasks);
+        when(taskService.getToDoTasks()).thenReturn(tasks);
 
         //then
         mockMvc.perform(get("/api/todo_tasks"))
@@ -94,7 +92,7 @@ public class HomeControllerTest {
         List<Task> tasks = List.of(new Task("task3", 30, true, room));
 
         //when
-        when(taskRepository.findTaskByDone(true)).thenReturn(tasks);
+        when(taskService.getDoneTasks()).thenReturn(tasks);
 
         //then
         mockMvc.perform(get("/api/done_tasks"))
@@ -117,6 +115,9 @@ public class HomeControllerTest {
         Room room = new Room("Kuchnia", "url");
         Task task = new Task("name", 10, false, room);
 
+        //when
+        when(taskService.saveTask(any())).thenReturn(task);
+
         //then
         mockMvc.perform(post("/api/task")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -124,5 +125,7 @@ public class HomeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
+
+        verify(taskService, org.mockito.Mockito.times(1)).saveTask(any()); // TODO could assert with exactly task from dto
     }
 }

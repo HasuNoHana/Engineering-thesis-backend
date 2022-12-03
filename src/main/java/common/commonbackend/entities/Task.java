@@ -33,8 +33,9 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "room_id", nullable = false)
     private final Room room;
-    
-    
+
+
+    @Column(name = "LAST_DONE_DATE")
     private final LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
     private final Period period = Period.ofDays(1); //TODO add persistence
 

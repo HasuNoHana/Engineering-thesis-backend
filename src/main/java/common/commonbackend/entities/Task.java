@@ -1,5 +1,6 @@
 package common.commonbackend.entities;
 
+import common.commonbackend.dto.TaskDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -55,12 +56,13 @@ public class Task {
         this.room = room;
     }
 
-    public LocalDate getLastDoneDate() {
-        return this.lastDoneDate;
-    }
-
-    public Period getPeriod() {
-        return this.period;
+    public static Task fromDto(TaskDTO taskDTO) {
+        return new Task(
+                taskDTO.getName(),
+                taskDTO.getPrice(),
+                taskDTO.isDone(),
+                Room.fromRoomDto(taskDTO.getRoom())
+        );
     }
 
     public Task getNewTaskWithUpdatedPrice(long newPrice) {

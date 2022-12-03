@@ -17,22 +17,16 @@ class TaskPriceUpdaterServiceTest {
     @Test
     void shouldUpdateTask() {
         //given
-        TaskPriceUpdateAlgorithm taskPriceUpdateAlgorithm = new TaskPriceUpdateAlgorithm() {
-            @Override
-            public int getNewPrice(int price, java.time.LocalDate lastDoneDate, java.time.Period period) {
-                return 10;
-            }
-        };
+        TaskPriceUpdateAlgorithm dumbAlgorithm = (price, lastDoneDate, period) -> 10;
 
-        TaskPriceUpdaterService taskPriceUpdaterService = new TaskPriceUpdaterService(taskPriceUpdateAlgorithm);
+        TaskPriceUpdaterService taskPriceUpdaterService = new TaskPriceUpdaterService(dumbAlgorithm);
         Task task = new Task("TaskName", 10, false, room);
 
         //when
         Task updatedTask = taskPriceUpdaterService.updateTask(task);
 
         //then
-        assertThat(task)
-                .isEqualTo(updatedTask);
+        assertThat(task).isEqualTo(updatedTask);
     }
 
 }

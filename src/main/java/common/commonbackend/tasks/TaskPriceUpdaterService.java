@@ -11,7 +11,7 @@ public class TaskPriceUpdaterService {
     }
 
     public Task updateTask(Task task) {
-        int newPrice = taskPriceUpdateAlgorithm.getNewPrice(task.getPrice(), task.getLastDoneDate(), task.getPeriod());
+        long newPrice = taskPriceUpdateAlgorithm.getNewPrice(task.getPrice(), task.getLastDoneDate(), task.getPeriod());
         return task.getNewTaskWithUpdatedPrice(newPrice);
     }
 }

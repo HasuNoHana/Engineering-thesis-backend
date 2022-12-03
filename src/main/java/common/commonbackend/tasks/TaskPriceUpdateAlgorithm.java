@@ -4,5 +4,5 @@ import java.time.LocalDate;
 import java.time.Period;
 
 public interface TaskPriceUpdateAlgorithm {
-    int getNewPrice(int price, LocalDate lastDoneDate, Period period);
+    long getNewPrice(long price, LocalDate lastDoneDate, Period period);
 }

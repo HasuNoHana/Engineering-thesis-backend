@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Objects;
 
 @Data
 @NoArgsConstructor(force = true)
@@ -26,7 +25,7 @@ public class Task {
     private final String name;
 
     @Column(name = "PRICE")
-    private final int price;
+    private final long price;
 
     @Column(name = "DONE")
     private final boolean done;
@@ -48,7 +47,7 @@ public class Task {
         this.room = room;
     }
 
-    public Task(String name, int price, boolean done, Room room) { // NOSONAR TODO remove this constructor
+    public Task(String name, long price, boolean done, Room room) { // NOSONAR TODO remove this constructor
         this.name = name;
         this.price = price;
         this.done = done;
@@ -63,7 +62,7 @@ public class Task {
         return this.period;
     }
 
-    public Task getNewTaskWithUpdatedPrice(int newPrice) {
+    public Task getNewTaskWithUpdatedPrice(long newPrice) {
         return new Task(this.name, newPrice, this.done, this.room);
     }
 }

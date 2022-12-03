@@ -2,7 +2,6 @@ package common.commonbackend.entities;
 
 import common.commonbackend.dto.TaskDTO;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import java.time.Period;
 @NoArgsConstructor(force = true)
 @Entity
 @Getter
-@EqualsAndHashCode
 @Table(name = "TASK") // TODO task powinien byc rozdzielony na task DTO ktory kominukuje sie z baza i task ktory jest wykorzystywany w biznesowej czesci do zmiany price
 public class Task {
     @Id

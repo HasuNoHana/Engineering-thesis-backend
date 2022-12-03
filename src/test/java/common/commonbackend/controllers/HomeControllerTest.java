@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -112,15 +113,13 @@ public class HomeControllerTest {
     @Test
     public void shouldPostTask() throws Exception {
         //given
-        Room room = new Room(0L, "Kuchnia", "url");
-        Task task = new Task(42L, "name", 10, false, room);
-
-        //when
-        when(taskRepository.getTaskById(42L)).thenReturn(task);
-        when(roomRepository.getRoomById(0L)).thenReturn(room);
+        Room room = new Room("Kuchnia", "url");
+        Task task = new Task("name", 10, false, room);
 
         //then
-        mockMvc.perform(post("/api/task?id=42&name=name&price=10&done=false&roomId=0"))
+        mockMvc.perform(post("/api/task")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(task)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());

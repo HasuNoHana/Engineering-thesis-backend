@@ -1,6 +1,7 @@
 package common.commonbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import common.commonbackend.dto.RoomDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +38,13 @@ public class Room {
     public Room(String name, String image) {
         this.name = name;
         this.image = image;
+    }
+
+    public static Room fromRoomDto(RoomDTO roomDTO) {
+        return new Room(
+                roomDTO.getName(),
+                roomDTO.getImage()
+        );
     }
 
     @Override

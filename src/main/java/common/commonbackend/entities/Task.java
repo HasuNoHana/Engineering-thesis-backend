@@ -1,5 +1,6 @@
 package common.commonbackend.entities;
 
+import common.commonbackend.dto.TaskDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,14 @@ public class Task {
         this.room = room;
     }
 
+    public static Task fromDto(TaskDTO taskDTO) {
+        return new Task(
+                taskDTO.getName(),
+                taskDTO.getPrice(),
+                taskDTO.isDone(),
+                Room.fromRoomDto(taskDTO.getRoom())
+        );
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,5 +1,6 @@
 package common.commonbackend.controllers;
 
+import common.commonbackend.dto.TaskDTO;
 import common.commonbackend.entities.Task;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
@@ -18,11 +19,9 @@ import static java.lang.Long.parseLong;
 public class HomeController {
 
     private final TaskRepository taskRepository;
-    private final RoomRepository roomRepository;
 
-    public HomeController(TaskRepository taskRepository, RoomRepository roomRepository) {
+    public HomeController(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.roomRepository = roomRepository;
     }
 
     @GetMapping(path = "/")
@@ -49,14 +48,9 @@ public class HomeController {
     }
 
     @PostMapping(path = "/task")
-    public ResponseEntity<Task> createOrUpdateTask(@RequestParam Map<String, String> params) {
-        Task task = new Task(
-                parseLong(params.get("id")),
-                params.get("name"),
-                Integer.parseInt(params.get("price")),
-                Boolean.parseBoolean(params.get("done")),
-                roomRepository.getRoomById(Long.parseLong(params.get("roomId")))
-        );
+    public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
+        log.info("createOrUpdateTask");
+        Task task = Task.fromDto(taskDTO);
         taskRepository.save(task);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }

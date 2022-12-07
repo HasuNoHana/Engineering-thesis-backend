@@ -61,6 +61,7 @@ public class TaskControllerTest {
         //when
         when(taskService.getTask(taskId)).thenReturn(task);
 
+
         //then
         mockMvc.perform(get("/api/task?id=42"))
                 .andExpect(status().isOk())

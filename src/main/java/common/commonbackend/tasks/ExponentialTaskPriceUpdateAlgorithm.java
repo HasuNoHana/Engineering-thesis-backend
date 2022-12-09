@@ -1,12 +1,13 @@
 package common.commonbackend.tasks;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 
 import java.time.Clock;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 @Log4j2
+@Component
 public class ExponentialTaskPriceUpdateAlgorithm implements TaskPriceUpdateAlgorithm {
 
     private final Clock clock;

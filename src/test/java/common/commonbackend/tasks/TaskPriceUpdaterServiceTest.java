@@ -23,7 +23,7 @@ class TaskPriceUpdaterServiceTest {
         Task task = new Task("TaskName", 10, false, room);
 
         //when
-        Task updatedTask = taskPriceUpdaterService.updateTask(task);
+        Task updatedTask = taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
 
         //then
         assertThat(task).isEqualTo(updatedTask);

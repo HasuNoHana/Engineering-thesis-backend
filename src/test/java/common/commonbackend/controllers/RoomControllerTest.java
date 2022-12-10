@@ -1,18 +1,10 @@
 package common.commonbackend.controllers;
 
+import common.commonbackend.ControllerTest;
 import common.commonbackend.entities.Room;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
-import common.commonbackend.user.UserRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
@@ -23,25 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(RoomController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class RoomControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private UserDetailsService userDetailsService;
-    @MockBean
-    private RoomRepository roomRepository;
-
-    @MockBean
-    private TaskRepository taskRepository;
-
+public class RoomControllerTest extends ControllerTest {
 
     @Test
     public void shouldGetRooms() throws Exception {
@@ -54,7 +30,7 @@ public class RoomControllerTest {
         when(roomRepository.findAll()).thenReturn(rooms);
 
         //then
-        mockMvc.perform(get("/api/rooms"))
+        getMocMvc().perform(get("/api/rooms"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(rooms)))
                 .andDo(print());

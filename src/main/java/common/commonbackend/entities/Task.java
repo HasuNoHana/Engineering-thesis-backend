@@ -61,7 +61,7 @@ public class Task {
                 taskDTO.getName(),
                 taskDTO.getPrice(),
                 taskDTO.isDone(),
-                Room.fromRoomDto(taskDTO.getRoom())
+                Room.fromRoomDto(taskDTO.getRoom()) //TODO should NOT create new room
         );
     }
 

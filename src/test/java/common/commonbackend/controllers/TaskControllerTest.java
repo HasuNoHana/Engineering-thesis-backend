@@ -1,21 +1,13 @@
 package common.commonbackend.controllers;
 
+import common.commonbackend.ControllerTest;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
-import common.commonbackend.repositories.UserRepository;
-import common.commonbackend.tasks.TaskService;
+import lombok.SneakyThrows;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
@@ -28,31 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class TaskControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private TaskRepository taskRepository;
-
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private UserDetailsService userDetailsService;
-
-    @MockBean
-    private RoomRepository roomRepository;
-
-    @MockBean
-    private TaskService taskService;
-
+public class TaskControllerTest extends ControllerTest {
     @Test
-    public void shouldGetTaskById() throws Exception {
+    @SneakyThrows
+    public void shouldGetTaskById(){
         //given
         Long taskId = 42L;
         Room room = new Room("Kuchnia", "url");
@@ -63,7 +36,7 @@ public class TaskControllerTest {
 
 
         //then
-        mockMvc.perform(get("/api/task?id=42"))
+        getMocMvc().perform(get("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
@@ -80,7 +53,7 @@ public class TaskControllerTest {
         when(taskService.getToDoTasks()).thenReturn(tasks);
 
         //then
-        mockMvc.perform(get("/api/todo_tasks"))
+        getMocMvc().perform(get("/api/todo_tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(tasks)))
                 .andDo(print());
@@ -96,7 +69,7 @@ public class TaskControllerTest {
         when(taskService.getDoneTasks()).thenReturn(tasks);
 
         //then
-        mockMvc.perform(get("/api/done_tasks"))
+        getMocMvc().perform(get("/api/done_tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(tasks)))
                 .andDo(print());
@@ -104,7 +77,7 @@ public class TaskControllerTest {
 
     @Test
     public void shouldDeleteTask() throws Exception {
-        mockMvc.perform(delete("/api/task?id=42"))
+        getMocMvc().perform(delete("/api/task?id=42"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("42"))
                 .andDo(print());
@@ -120,7 +93,7 @@ public class TaskControllerTest {
         when(taskService.saveTask(any())).thenReturn(task);
 
         //then
-        mockMvc.perform(post("/api/task")
+        getMocMvc().perform(post("/api/task")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(task)))
                 .andExpect(status().isOk())

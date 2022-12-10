@@ -2,7 +2,7 @@ package common.commonbackend.services;
 
 import common.commonbackend.entities.User;
 import common.commonbackend.entities.UserPrincipal;
-import common.commonbackend.repositories.UserRepository;
+import common.commonbackend.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

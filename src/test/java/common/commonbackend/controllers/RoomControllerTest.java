@@ -1,10 +1,9 @@
 package common.commonbackend.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import common.commonbackend.entities.Room;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
-import common.commonbackend.repositories.UserRepository;
+import common.commonbackend.user.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -22,26 +22,53 @@ class HouseControllerTest extends ControllerTest {
     @Mock
     private User user;
 
+    @Mock
+    private HouseEntity houseEntity;
+
     @SneakyThrows
     @Test
-    void shouldPostTask() {
+    void shouldCreateHouse() {
         //given
         long userId = 1;
-        String joinCode = "{\"joinCode\":\"dupa\"}"; // TODO fix me when join code is implemented
+        String joinCode = "dupa"; // TODO fix me when join code is implemented
 
+        when(houseEntity.getJoinCode()).thenReturn("dupa");
         when(userService.getUserById(userId)).thenReturn(user);
-        when(houseService.createHouseForUser(user)).thenReturn(joinCode);
+        when(houseService.createHouseForUser(user)).thenReturn(houseEntity);
 
         //when
-        getMocMvc().perform(post("/api/house")
+        getMocMvc().perform(post("/api/createHouse")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(userId)))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(joinCode))
-                .andDo(print());
+                .andExpect(content().string(joinCode));
 
         //then
         verify(houseService, times(1)).createHouseForUser(user);
+        verify(userService, times(1)).getUserById(userId);
+    }
+
+
+    @SneakyThrows
+    @Test
+    void shouldAddUserToHouse() {
+        //given
+        long userId = 1;
+        String joinCode = "dupa";  // TODO fix me when join code is implemented
+        HouseController.UserAndJoinCode userAndJoinCode = new HouseController.UserAndJoinCode(userId, joinCode);
+
+        when(userService.getUserById(userId)).thenReturn(user);
+
+        //when
+        getMocMvc().perform(post("/api/addUserToHouse")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(userAndJoinCode)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        //then
+        verify(houseService, times(1)).addUserToHouse(user, joinCode);
         verify(userService, times(1)).getUserById(userId);
     }
 }

@@ -2,6 +2,7 @@ package common.commonbackend.controllers;
 
 import common.commonbackend.ControllerTest;
 import common.commonbackend.entities.User;
+import common.commonbackend.house.HouseEntity;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,10 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(LoginController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class LoginControllerTest extends ControllerTest {
+
     @Test
     public void shouldGetUser() throws Exception {
         //given
-        User user = new User("zuza","haslo");
+        HouseEntity house = new HouseEntity();
+        User user = new User("zuza","haslo", house);
 
         //when
         when(userRepository.findByUsername("zuza")).thenReturn(user);

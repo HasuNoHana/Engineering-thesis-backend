@@ -1,5 +1,6 @@
 package common.commonbackend.house;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.User;
 import lombok.Data;
@@ -20,9 +21,11 @@ public class HouseEntity {
     @Column(name = "JOIN_CODE")
     private String joinCode;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Room> rooms = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();
 

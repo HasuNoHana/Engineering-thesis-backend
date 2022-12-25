@@ -10,10 +10,10 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.util.Set;
 
-@NoArgsConstructor(force = true)
 @Entity
 @Getter
 @Table(name = "ROOM")
+@NoArgsConstructor(force = true)
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +31,7 @@ public class Room {
     private Set<Task> tasks;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "house_id", nullable = false)
+    @JoinColumn(name = "house_entity_id", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private HouseEntity house;
 
@@ -53,3 +53,5 @@ public class Room {
         );
     }
 }
+
+

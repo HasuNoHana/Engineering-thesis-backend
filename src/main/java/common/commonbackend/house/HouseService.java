@@ -5,6 +5,8 @@ import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class HouseService {
@@ -29,5 +31,16 @@ public class HouseService {
         houseEntity.addUser(user);
         houseRepository.save(houseEntity);
 
+    }
+
+    public HouseEntity getOrCreateHouse(String joinCode) {
+        return Optional.ofNullable(houseRepository.findByJoinCode(joinCode))
+                .orElseGet(() -> createNewHouse(joinCode));
+    }
+
+    private HouseEntity createNewHouse(String joinCode) {
+        HouseEntity houseEntity = new HouseEntity();
+        houseEntity.setJoinCode(joinCode);
+        return houseRepository.save(houseEntity);
     }
 }

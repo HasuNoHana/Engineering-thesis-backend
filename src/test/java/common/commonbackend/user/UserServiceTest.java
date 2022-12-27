@@ -1,6 +1,8 @@
 package common.commonbackend.user;
 
 import common.commonbackend.entities.User;
+import common.commonbackend.house.HouseEntity;
+import common.commonbackend.house.HouseService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -18,24 +20,31 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private HouseService houseService;
+
     @Test
     void shouldCreateUser() {
         // given
         String username = "username";
         String password = "password";
-        UserService userService = new UserService(userRepository);
+        String joinCode = "joinCode";
+        UserService userService = new UserService(userRepository, houseService);
         String encodedPassword = UserService.getPasswordEncoder().encode(password);
         when(userRepository.save(any())).thenAnswer(returnsFirstArg());
 
-        User expectedUser = new User(username, encodedPassword, null);
+        HouseEntity house = new HouseEntity();
+        house.setJoinCode(joinCode);
+        when(houseService.getOrCreateHouse(joinCode)).thenReturn(house);
+        User expectedUser = new User(username, encodedPassword, house);
 
         // when
-        User actual = userService.createUser(username, password);
+        User actual = userService.createUser(username, password, joinCode);
 
         // then
         assertThat(actual.getUsername()).isEqualTo(expectedUser.getUsername());
+        assertThat(actual.getHouse().getJoinCode()).isEqualTo(expectedUser.getHouse().getJoinCode());
         assertThat(UserService.getPasswordEncoder().matches(password, actual.getPassword())).isTrue();
-        assertThat(actual.getHouse()).isNull();
     }
 
 }

@@ -3,6 +3,7 @@ package common.commonbackend.controllers;
 import common.commonbackend.ControllerTest;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
+import common.commonbackend.house.HouseEntity;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,12 +24,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class TaskControllerTest extends ControllerTest {
+
+    HouseEntity house = new HouseEntity();
     @Test
     @SneakyThrows
     public void shouldGetTaskById(){
         //given
         Long taskId = 42L;
-        Room room = new Room("Kuchnia", "url");
+        Room room = new Room("Kuchnia", "url",house);
         Task task = new Task(taskId, "name", 10, false, room);
 
         //when
@@ -45,7 +48,7 @@ public class TaskControllerTest extends ControllerTest {
     @Test
     public void shouldGetToDoTasks() throws Exception {
         //given
-        Room room = new Room("Kuchnia", "url");
+        Room room = new Room("Kuchnia", "url",house);
         List<Task> tasks = List.of(new Task("task1", 10, false, room),
                 new Task("task2", 20, false, room));
 
@@ -62,7 +65,7 @@ public class TaskControllerTest extends ControllerTest {
     @Test
     public void shouldGetDoneTasks() throws Exception {
         //given
-        Room room = new Room("Kuchnia", "url");
+        Room room = new Room("Kuchnia", "url",house);
         List<Task> tasks = List.of(new Task("task3", 30, true, room));
 
         //when
@@ -86,7 +89,7 @@ public class TaskControllerTest extends ControllerTest {
     @Test
     public void shouldPostTask() throws Exception {
         //given
-        Room room = new Room("Kuchnia", "url");
+        Room room = new Room("Kuchnia", "url",house);
         Task task = new Task("name", 10, false, room);
 
         //when

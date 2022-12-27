@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
 import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,7 +23,6 @@ public class LoginControllerTest extends ControllerTest {
         User user = new User("zuza","haslo", house);
 
         //when
-        when(userRepository.findByUsername("zuza")).thenReturn(user);
 
         //then
         getMocMvc().perform(get("/api/user")

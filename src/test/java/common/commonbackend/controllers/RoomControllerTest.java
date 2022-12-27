@@ -2,6 +2,7 @@ package common.commonbackend.controllers;
 
 import common.commonbackend.ControllerTest;
 import common.commonbackend.entities.Room;
+import common.commonbackend.house.HouseEntity;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,9 +23,11 @@ public class RoomControllerTest extends ControllerTest {
     @Test
     public void shouldGetRooms() throws Exception {
         //given
+        HouseEntity houseEntity = new HouseEntity();
+
         List<Room> rooms = List.of(
-                new Room(1L, "Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg"),
-                new Room(2L, "Łazienka", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg"));
+                new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg",houseEntity),
+                new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg",houseEntity));
 
         //when
         when(roomRepository.findAll()).thenReturn(rooms);

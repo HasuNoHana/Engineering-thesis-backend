@@ -38,6 +38,41 @@ class HouseServiceTest {
     }
 
     @Test
+    void shouldGetOrCreateHouseForExistingHouse() {
+        //given
+        HouseService houseService = new HouseService(houseRepository);
+        String joinCode = "abc";
+        HouseEntity house = new HouseEntity();
+        house.setJoinCode(joinCode);
+        when(houseRepository.findByJoinCode(joinCode)).thenReturn(house);
+
+        //when
+        HouseEntity houseForUser = houseService.getOrCreateHouse(joinCode);
+
+        //then
+        verify(houseRepository, times(0)).save(houseForUser);
+        assertThat(houseForUser.getJoinCode()).isEqualTo(joinCode);
+    }
+
+    @Test
+    void shouldGetOrCreateHouseForNoExistingHouse() {
+        //given
+        HouseService houseService = new HouseService(houseRepository);
+        String joinCode = "abc";
+        when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(houseRepository.findByJoinCode(joinCode)).thenReturn(null);
+
+        //when
+        HouseEntity houseForUser = houseService.getOrCreateHouse(joinCode);
+
+        //then
+        verify(houseRepository, times(1)).save(houseForUser);
+        assertThat(houseForUser.getJoinCode()).isEqualTo(joinCode);
+        assertThat(houseForUser.getUsers()).isEmpty();
+        assertThat(houseForUser.getRooms()).isEmpty();
+    }
+
+    @Test
     void shouldAddUserToHouseIfCorrectJoinCode() {
         //given
         HouseService houseService = new HouseService(houseRepository);

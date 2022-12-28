@@ -22,11 +22,11 @@ public class HouseEntity {
     private String joinCode;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<Room> rooms = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<User> users = new HashSet<>();
 
     public void addUser(User user) {

@@ -3,6 +3,7 @@ package common.commonbackend.tasks;
 import common.commonbackend.dto.RoomDTO;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
+import common.commonbackend.house.HouseEntity;
 import common.commonbackend.repositories.TaskRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,18 +29,21 @@ class TaskServiceTest {
     @Mock
     TaskRepository taskRepository;
 
+    @Mock
+    HouseEntity house;
+
     @Test
     void shouldGetTask() {
         //given
         Task task = new Task(1L,"TaskName", 10, false, room);
 
-        when(taskRepository.getTaskById(1L)).thenReturn(task);
+        when(taskRepository.getTaskByIdAndRoom_House(1L,house)).thenReturn(task);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task)).thenReturn(task);
 
         TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
 
         //when
-        Task recivedTask = taskService.getTask(1L);
+        Task recivedTask = taskService.getTask(1L, house);
 
         //then
         assertThat(task).isEqualTo(recivedTask);
@@ -51,13 +55,13 @@ class TaskServiceTest {
         List<Task> tasks = List.of(new Task("task1", 10, false, room),
                 new Task("task2", 20, false, room));
 
-        when(taskRepository.findTaskByDone(false)).thenReturn(tasks);
+        when(taskRepository.findTaskByDoneAndRoom_House(false, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
 
         TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
 
         //when
-        List<Task> recivedTasks = taskService.getToDoTasks();
+        List<Task> recivedTasks = taskService.getToDoTasks(house);
 
         //then
         assertThat(tasks).isEqualTo(recivedTasks);
@@ -69,13 +73,13 @@ class TaskServiceTest {
         List<Task> tasks = List.of(new Task("task1", 10, false, room),
                 new Task("task2", 20, false, room));
 
-        when(taskRepository.findTaskByDone(true)).thenReturn(tasks);
+        when(taskRepository.findTaskByDoneAndRoom_House(true, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
 
         TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
 
         //when
-        List<Task> recivedTasks = taskService.getDoneTasks();
+        List<Task> recivedTasks = taskService.getDoneTasks(house);
 
         //then
         assertThat(tasks).isEqualTo(recivedTasks);

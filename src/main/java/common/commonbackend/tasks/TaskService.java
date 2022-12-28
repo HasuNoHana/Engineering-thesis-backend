@@ -2,6 +2,7 @@ package common.commonbackend.tasks;
 
 import common.commonbackend.dto.TaskDTO;
 import common.commonbackend.entities.Task;
+import common.commonbackend.house.HouseEntity;
 import common.commonbackend.repositories.TaskRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,19 @@ public class TaskService {
         this.taskPriceUpdaterService = taskPriceUpdaterService;
     }
 
-    public Task getTask(Long id) {
+    public Task getTask(Long id, HouseEntity myHouse) {
         log.debug("Looking for task with id: " + id);
-        Task task = taskRepository.getTaskById(id);
+        Task task = taskRepository.getTaskByIdAndRoom_House(id, myHouse);
         log.debug("Found task: " + task);
         return taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
     }
 
-    public List<Task> getToDoTasks() {
-        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByDone(false));
+    public List<Task> getToDoTasks(HouseEntity myHouse) {
+        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByDoneAndRoom_House(false, myHouse));
     }
 
-    public List<Task> getDoneTasks() {
-        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByDone(true));
+    public List<Task> getDoneTasks(HouseEntity myHouse) {
+        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByDoneAndRoom_House(true, myHouse));
     }
 
     public void deleteTask(Long id) {

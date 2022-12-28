@@ -35,7 +35,7 @@ public class TaskControllerTest extends ControllerTest {
         Task task = new Task(taskId, "name", 10, false, room);
 
         //when
-        when(taskService.getTask(taskId)).thenReturn(task);
+        when(taskService.getTask(taskId, controllerHelper.getMyHouse())).thenReturn(task);
 
 
         //then
@@ -53,7 +53,8 @@ public class TaskControllerTest extends ControllerTest {
                 new Task("task2", 20, false, room));
 
         //when
-        when(taskService.getToDoTasks()).thenReturn(tasks);
+        when(controllerHelper.getMyHouse()).thenReturn(house);
+        when(taskService.getToDoTasks(house)).thenReturn(tasks);
 
         //then
         getMocMvc().perform(get("/api/todo_tasks"))
@@ -69,7 +70,8 @@ public class TaskControllerTest extends ControllerTest {
         List<Task> tasks = List.of(new Task("task3", 30, true, room));
 
         //when
-        when(taskService.getDoneTasks()).thenReturn(tasks);
+        when(controllerHelper.getMyHouse()).thenReturn(house);
+        when(taskService.getDoneTasks(house)).thenReturn(tasks);
 
         //then
         getMocMvc().perform(get("/api/done_tasks"))

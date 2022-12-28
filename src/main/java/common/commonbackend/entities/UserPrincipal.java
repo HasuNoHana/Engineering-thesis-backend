@@ -9,6 +9,10 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
+    public User getUser() {
+        return user;
+    }
+
     private User user; //NOSONAR
 
     public UserPrincipal(User user) {

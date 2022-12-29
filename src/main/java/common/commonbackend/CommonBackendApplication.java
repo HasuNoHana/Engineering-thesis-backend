@@ -10,6 +10,8 @@ import common.commonbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 public class CommonBackendApplication {
@@ -29,10 +31,9 @@ public class CommonBackendApplication {
 		SpringApplication.run(CommonBackendApplication.class, args);
 	}
 
-
-//		@EventListener(ApplicationReadyEvent.class)
+	@EventListener(ApplicationReadyEvent.class)
 	public void addFirstDataAfterStartup() {
-		HouseEntity houseEntity = new HouseEntity();
+		/* //NOSONAR HouseEntity houseEntity = new HouseEntity();
 		houseEntity.setJoinCode("1234");
 
 		HouseEntity obcyHouse = new HouseEntity();
@@ -73,7 +74,7 @@ public class CommonBackendApplication {
 		Task task66 = new Task("przygotować pentagram", 20, true, szatanskaKuchnia);
 
 		this.taskRepository.save(task6);
-		this.taskRepository.save(task66);
+		this.taskRepository.save(task66);*/
 	}
 
 }

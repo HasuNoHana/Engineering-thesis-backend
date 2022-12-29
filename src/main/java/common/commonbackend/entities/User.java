@@ -25,7 +25,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "house_entity_id", nullable = false)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
     private HouseEntity house;
 
     public User(String username, String password, HouseEntity house) {

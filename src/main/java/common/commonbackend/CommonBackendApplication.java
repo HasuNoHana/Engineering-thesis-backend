@@ -33,10 +33,16 @@ public class CommonBackendApplication {
 		/* //NOSONAR HouseEntity houseEntity = new HouseEntity();
 		houseEntity.setJoinCode("1234");
 
+		HouseEntity obcyHouse = new HouseEntity();
+		obcyHouse.setJoinCode("6666");
 
 		this.houseRepository.save(houseEntity);
+		this.houseRepository.save(obcyHouse);
+
 		userService.createUser("zuza", "haslo", "1234");
 		userService.createUser("filip", "password", "1234");
+
+		userService.createUser("obcy", "666", "6666");
 
 
 		Room room1 = new Room("Sypialnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg",houseEntity);
@@ -45,6 +51,10 @@ public class CommonBackendApplication {
 		this.roomRepository.save(room1);
 		this.roomRepository.save(room2);
 		this.roomRepository.save(room3);
+
+		Room szatanskaKuchnia = new Room("Kuchnia piekła", "https://upload.wikimedia.org/wikipedia/pt/0/03/HKSIC.png",obcyHouse);
+		this.roomRepository.save(szatanskaKuchnia);
+
 
 		Task task1 = new Task("task1", 10, false, room1);
 		Task task2 = new Task("task2", 20, false, room1);
@@ -55,7 +65,13 @@ public class CommonBackendApplication {
 		this.taskRepository.save(task2);
 		this.taskRepository.save(task3);
 		this.taskRepository.save(task4);
-		this.taskRepository.save(task5); */
+		this.taskRepository.save(task5);
+
+		Task task6 = new Task("złożyć ofiarę z martwych niemowląt", 10, false, szatanskaKuchnia);
+		Task task66 = new Task("przygotować pentagram", 20, true, szatanskaKuchnia);
+
+		this.taskRepository.save(task6);
+		this.taskRepository.save(task66);*/
 	}
 
 }

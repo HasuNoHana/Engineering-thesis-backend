@@ -37,6 +37,9 @@ public abstract class ControllerTest {
     @MockBean
     protected RoomRepository roomRepository;
 
+    @MockBean
+    protected ControllerHelper controllerHelper;
+
     @Autowired
     private MockMvc mockMvc;
 

@@ -20,17 +20,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 public class RoomControllerTest extends ControllerTest {
 
+    public static final String IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg";
+
     @Test
     public void shouldGetRooms() throws Exception {
         //given
-        HouseEntity houseEntity = new HouseEntity();
+        HouseEntity house = new HouseEntity();
 
         List<Room> rooms = List.of(
-                new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg",houseEntity),
-                new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg",houseEntity));
+                new Room("Kitchen", IMAGE_URL, house),
+                new Room("Bathroom", IMAGE_URL, house));
+
 
         //when
-        when(roomRepository.findAll()).thenReturn(rooms);
+        when(controllerHelper.getMyHouse()).thenReturn(house);
+        when(roomRepository.findRoomsByHouse(house)).thenReturn(rooms);
 
         //then
         getMocMvc().perform(get("/api/rooms"))

@@ -1,8 +1,5 @@
 package common.commonbackend;
 
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
-import common.commonbackend.house.HouseEntity;
 import common.commonbackend.house.HouseRepository;
 import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
@@ -29,7 +26,7 @@ public class CommonBackendApplication {
 		SpringApplication.run(CommonBackendApplication.class, args);
 	}
 
-//	@EventListener(ApplicationReadyEvent.class)
+	/* \\NOSONAR @EventListener(ApplicationReadyEvent.class)
 	public void addFirstDataAfterStartup() {
 		HouseEntity houseEntity = new HouseEntity();
 		houseEntity.setJoinCode("1234");
@@ -57,6 +54,6 @@ public class CommonBackendApplication {
 		this.taskRepository.save(task3);
 		this.taskRepository.save(task4);
 		this.taskRepository.save(task5);
-	}
+	}*/
 
 }

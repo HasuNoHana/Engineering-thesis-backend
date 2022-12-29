@@ -20,10 +20,14 @@ public class LoginController {
         return user;
     }
 
-    @PostMapping("/createUser")
-    public void createUser(@RequestBody String username, @RequestBody String password) {
-        log.info("Creating user with username: " + username + " and password: " + password);
-        userService.createUser(username, password);
+    @PostMapping("/create-user")
+    public void createUser(@RequestBody UserSignup userSignup) {
+        log.debug("User signup: {}", userSignup);
+        String username = userSignup.getUsername();
+        String password = userSignup.getPassword();
+        String joinCode = userSignup.getHouseJoinCode();
+        log.debug("Creating user with username: {} and password: {} and join code: {}", username, password, joinCode);
+        userService.createUser(username, password, joinCode);
     }
 
 }

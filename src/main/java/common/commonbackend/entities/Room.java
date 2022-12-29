@@ -5,6 +5,7 @@ import common.commonbackend.dto.RoomDTO;
 import common.commonbackend.house.HouseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Table(name = "ROOM")
 @NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,31 +29,19 @@ public class Room {
     private final String image;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<Task> tasks;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "house_entity_id", nullable = false)
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private HouseEntity house;
-
-    public Room(Long id, String name, String image) {
-        this.id = id;
-        this.name = name;
-        this.image = image;
-    }
-
-    public Room(String name, String image) {
-        this.name = name;
-        this.image = image;
-    }
+    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
+    private final HouseEntity house;
 
     public static Room fromRoomDto(RoomDTO roomDTO) {
         return new Room(
                 roomDTO.getName(),
-                roomDTO.getImage()
+                roomDTO.getImage(),
+                roomDTO.getHouse()
         );
     }
 }
-
-

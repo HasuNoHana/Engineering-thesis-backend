@@ -9,8 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
 import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LoginController.class)
@@ -24,7 +25,6 @@ public class LoginControllerTest extends ControllerTest {
         User user = new User("zuza","haslo", house);
 
         //when
-        when(userRepository.findByUsername("zuza")).thenReturn(user);
 
         //then
         getMocMvc().perform(get("/api/user")
@@ -38,6 +38,27 @@ public class LoginControllerTest extends ControllerTest {
 //                .andExpect(jsonPath("$.username",containsString(user.getUsername()))
 //                .andExpect(content().json(asJsonString(user)));
 //                .andDo(print());
+    }
+
+    @Test
+    public void shouldCreateUser() throws Exception {
+        //given
+        String joinCode = "1234";
+        String username = "zuza";
+        String password = "haslo";
+        HouseEntity house = new HouseEntity();
+        house.setJoinCode(joinCode);
+        UserSignup userSignup = new UserSignup(username,password, joinCode);
+        User user = new User(username,password, house);
+        when(userService.createUser(username, password, joinCode)).thenReturn(user);
+
+        //then
+        getMocMvc().perform(post("/api/create-user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(userSignup)))
+                .andExpect(status().isOk());
+
+        verify(userService, times(1)).createUser(username,password,joinCode);
     }
 
 

@@ -30,9 +30,9 @@ class HouseControllerTest extends ControllerTest {
     void shouldCreateHouse() {
         //given
         long userId = 1;
-        String joinCode = "dupa"; // TODO fix me when join code is implemented
+        String joinCode = "1234"; // TODO fix me when join code is implemented
 
-        when(houseEntity.getJoinCode()).thenReturn("dupa");
+        when(houseEntity.getJoinCode()).thenReturn(joinCode);
         when(userService.getUserById(userId)).thenReturn(user);
         when(houseService.createHouseForUser(user)).thenReturn(houseEntity);
 
@@ -55,7 +55,7 @@ class HouseControllerTest extends ControllerTest {
     void shouldAddUserToHouse() {
         //given
         long userId = 1;
-        String joinCode = "dupa";  // TODO fix me when join code is implemented
+        String joinCode = "1234";  // TODO fix me when join code is implemented
         HouseController.UserAndJoinCode userAndJoinCode = new HouseController.UserAndJoinCode(userId, joinCode);
 
         when(userService.getUserById(userId)).thenReturn(user);

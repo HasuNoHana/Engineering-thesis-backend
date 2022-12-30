@@ -21,18 +21,22 @@ class HouseServiceTest {
     @Mock
     private HouseRepository houseRepository;
 
+    @Mock
+    JoinCodeGenerator joinCodeGenerator;
+
     @Test
     void shouldCreateHouseForUser() {
         //given
-        HouseService houseService = new HouseService(houseRepository);
+        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(joinCodeGenerator.generateNewJoinCode()).thenReturn("1234");
 
         //when
         HouseEntity houseForUser = houseService.createHouseForUser(user);
 
         //then
         verify(houseRepository, times(1)).save(houseForUser);
-        assertThat(houseForUser.getJoinCode()).isEqualTo("dupa");
+        assertThat(houseForUser.getJoinCode()).isEqualTo("1234");
         assertThat(houseForUser.getUsers()).containsExactly(user);
         assertThat(houseForUser.getRooms()).isEmpty();
     }
@@ -40,8 +44,8 @@ class HouseServiceTest {
     @Test
     void shouldGetOrCreateHouseForExistingHouse() {
         //given
-        HouseService houseService = new HouseService(houseRepository);
-        String joinCode = "abc";
+        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
+        String joinCode = "1234";
         HouseEntity house = new HouseEntity();
         house.setJoinCode(joinCode);
         when(houseRepository.findByJoinCode(joinCode)).thenReturn(house);
@@ -57,8 +61,8 @@ class HouseServiceTest {
     @Test
     void shouldGetOrCreateHouseForNoExistingHouse() {
         //given
-        HouseService houseService = new HouseService(houseRepository);
-        String joinCode = "abc";
+        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
+        String joinCode = "1234";
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
         when(houseRepository.findByJoinCode(joinCode)).thenReturn(null);
 
@@ -75,8 +79,8 @@ class HouseServiceTest {
     @Test
     void shouldAddUserToHouseIfCorrectJoinCode() {
         //given
-        HouseService houseService = new HouseService(houseRepository);
-        String joinCode = "dupa";
+        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
+        String joinCode = "1234";
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCode);
         when(houseRepository.findByJoinCode(joinCode)).thenReturn(houseEntity);
@@ -93,8 +97,8 @@ class HouseServiceTest {
     @Test
     void shouldThrowExceptionIfWrongJoinCode() {
         //given
-        HouseService houseService = new HouseService(houseRepository);
-        String joinCode = "dupa";
+        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
+        String joinCode = "1234";
         when(houseRepository.findByJoinCode(joinCode)).thenReturn(null);
 
         //when

@@ -12,15 +12,13 @@ import java.util.Optional;
 public class HouseService {
     private final HouseRepository houseRepository;
 
+    private final JoinCodeGenerator joinCodeGenerator;
+
     public HouseEntity createHouseForUser(User user) {
         HouseEntity houseEntity = new HouseEntity();
-        houseEntity.setJoinCode(generateNewJoinCode());
+        houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
         houseEntity.addUser(user);
         return houseRepository.save(houseEntity);
-    }
-
-    private String generateNewJoinCode() {
-        return "dupa"; //NOSONAR TODO fix me
     }
 
     public void addUserToHouse(User user, String joinCode) {

@@ -4,6 +4,7 @@ import common.commonbackend.dto.RoomDTO;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
 import common.commonbackend.house.HouseEntity;
+import common.commonbackend.repositories.RoomRepository;
 import common.commonbackend.repositories.TaskRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -30,6 +31,9 @@ class TaskServiceTest {
     TaskRepository taskRepository;
 
     @Mock
+    RoomRepository roomRepository;
+
+    @Mock
     HouseEntity house;
 
     @Test
@@ -40,7 +44,7 @@ class TaskServiceTest {
         when(taskRepository.getTaskByIdAndRoom_House(1L,house)).thenReturn(task);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task)).thenReturn(task);
 
-        TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
+        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
 
         //when
         Task recivedTask = taskService.getTask(1L, house);
@@ -58,7 +62,7 @@ class TaskServiceTest {
         when(taskRepository.findTaskByDoneAndRoom_House(false, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
 
-        TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
+        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
 
         //when
         List<Task> recivedTasks = taskService.getToDoTasks(house);
@@ -76,7 +80,7 @@ class TaskServiceTest {
         when(taskRepository.findTaskByDoneAndRoom_House(true, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
 
-        TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
+        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
 
         //when
         List<Task> recivedTasks = taskService.getDoneTasks(house);
@@ -90,7 +94,7 @@ class TaskServiceTest {
         //given
         Task task = new Task(1L,"TaskName", 10, false, room);
         when(taskRepository.getTaskById(1L)).thenReturn(task);
-        TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
+        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
 
         //when
         taskService.deleteTask(1L);

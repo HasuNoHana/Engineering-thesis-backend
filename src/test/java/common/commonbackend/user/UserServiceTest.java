@@ -3,6 +3,7 @@ package common.commonbackend.user;
 import common.commonbackend.entities.User;
 import common.commonbackend.house.HouseEntity;
 import common.commonbackend.house.HouseService;
+import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,10 @@ import static org.mockito.Mockito.*;
 @MockitoSettings
 class UserServiceTest {
 
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String ENCODED_PASSWORD = UserService.getPasswordEncoder().encode(PASSWORD);
+    private static final String JOIN_CODE = "1234";
     @Mock
     private UserRepository userRepository;
 
@@ -29,63 +34,86 @@ class UserServiceTest {
     private HouseService houseService;
 
     private UserService userService;
+
+    @Mock
+    private HouseEntity house;
+
     @BeforeEach
     public void setUp() {
         userService = new UserService(userRepository, houseService);
     }
 
     @Test
-    void shouldCreateUser() {
+    void shouldCreateUserForExistingHouse() {
         // given
-        String username = "username";
-        String password = "password";
-        String joinCode = "joinCode";
-
-        String encodedPassword = UserService.getPasswordEncoder().encode(password);
         when(userRepository.save(any())).thenAnswer(returnsFirstArg());
 
-        HouseEntity house = new HouseEntity();
-        house.setJoinCode(joinCode);
-        when(houseService.getOrCreateHouse(joinCode)).thenReturn(house);
-        User expectedUser = new User(username, encodedPassword, house);
+        when(houseService.getHouseForJoinCode(JOIN_CODE)).thenReturn(house);
+        User expectedUser = new User(USERNAME, ENCODED_PASSWORD, house);
 
         // when
-        User actual = userService.createUser(username, password, joinCode);
+        User actual = userService.createUser(USERNAME, PASSWORD, JOIN_CODE);
 
         // then
         assertThat(actual.getUsername()).isEqualTo(expectedUser.getUsername());
-        assertThat(actual.getHouse().getJoinCode()).isEqualTo(expectedUser.getHouse().getJoinCode());
-        assertThat(UserService.getPasswordEncoder().matches(password, actual.getPassword())).isTrue();
+        verify(houseService,times(1)).getHouseForJoinCode(JOIN_CODE);
+        assertThat(actual.getHouse()).isEqualTo(expectedUser.getHouse());
+        assertThat(UserService.getPasswordEncoder().matches(PASSWORD, actual.getPassword())).isTrue();
+    }
+
+    @Test
+    void shouldbalabalalWhenHouseNotExist(){
+        // given
+        when(houseService.getHouseForJoinCode(JOIN_CODE)).thenReturn(null);
+
+        //when
+        ThrowableAssert.ThrowingCallable throwingCallable =
+                () -> userService.createUser(USERNAME, PASSWORD, JOIN_CODE);
+
+        //then
+        assertThatThrownBy(throwingCallable).isInstanceOf(WrongHouseJoinCodeException.class);
+    }
+
+    @Test
+    void shouldCreateUserAndHouse() {
+        // given
+        when(userRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(houseService.createNewHouse()).thenReturn(house);
+
+        User expectedUser = new User(USERNAME, ENCODED_PASSWORD, house);
+
+        // when
+        User actual = userService.createUser(USERNAME, PASSWORD);
+
+        // then
+        assertThat(actual.getUsername()).isEqualTo(expectedUser.getUsername());
+        verify(houseService,times(1)).createNewHouse();
+        assertThat(actual.getHouse()).isEqualTo(expectedUser.getHouse());
+        assertThat(UserService.getPasswordEncoder().matches(PASSWORD, actual.getPassword())).isTrue();
     }
 
     @Test
     void shouldLoadUserByUsernameWithExistingUser() {
         // given
-        String username = "username";
-        String password = "password";
-        String joinCode = "joinCode";
-        HouseEntity house = new HouseEntity();
-        house.setJoinCode(joinCode);
-        User user = new User(username, password, house);
-        when(userRepository.findByUsername(username)).thenReturn(user);
+        User user = new User(USERNAME, PASSWORD, house);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(user);
 
         // when
-        UserDetails actual = userService.loadUserByUsername(username);
+        UserDetails actual = userService.loadUserByUsername(USERNAME);
 
         // then
-        verify(userRepository, times(1)).findByUsername(username);
-        assertThat(actual.getUsername()).isEqualTo(username);
-        assertThat(actual.getPassword()).isEqualTo(password);
+        verify(userRepository, times(1)).findByUsername(USERNAME);
+        assertThat(actual.getUsername()).isEqualTo(USERNAME);
+        assertThat(actual.getPassword()).isEqualTo(PASSWORD);
     }
 
     @Test
     void shouldLoadUserByUsernameWithNoUser() {
         // given
-        String username = "username";
-        when(userRepository.findByUsername(username)).thenReturn(null);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(null);
 
         //when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> userService.loadUserByUsername(username);
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> userService.loadUserByUsername(USERNAME);
 
         //then
         assertThatThrownBy(throwingCallable).isInstanceOf(UsernameNotFoundException.class);

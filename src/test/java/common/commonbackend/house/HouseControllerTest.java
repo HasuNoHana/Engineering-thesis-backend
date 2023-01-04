@@ -19,6 +19,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(HouseController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class HouseControllerTest extends ControllerTest {
+
+    private final String JOIN_CODE = "1234";
+
+    private final long USER_ID = 1L;
     @Mock
     private User user;
 
@@ -29,46 +33,21 @@ class HouseControllerTest extends ControllerTest {
     @Test
     void shouldCreateHouse() {
         //given
-        long userId = 1;
-        String joinCode = "1234"; // TODO fix me when join code is implemented
-
-        when(houseEntity.getJoinCode()).thenReturn(joinCode);
-        when(userService.getUserById(userId)).thenReturn(user);
+        when(houseEntity.getJoinCode()).thenReturn(JOIN_CODE);
+        when(userService.getUserById(USER_ID)).thenReturn(user);
         when(houseService.createHouseForUser(user)).thenReturn(houseEntity);
 
         //when
         getMocMvc().perform(post("/api/createHouse")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(userId)))
+                        .content(asJsonString(USER_ID)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(joinCode));
+                .andExpect(content().string(JOIN_CODE));
 
         //then
         verify(houseService, times(1)).createHouseForUser(user);
-        verify(userService, times(1)).getUserById(userId);
+        verify(userService, times(1)).getUserById(USER_ID);
     }
 
-
-    @SneakyThrows
-    @Test
-    void shouldAddUserToHouse() {
-        //given
-        long userId = 1;
-        String joinCode = "1234";  // TODO fix me when join code is implemented
-        HouseController.UserAndJoinCode userAndJoinCode = new HouseController.UserAndJoinCode(userId, joinCode);
-
-        when(userService.getUserById(userId)).thenReturn(user);
-
-        //when
-        getMocMvc().perform(post("/api/addUserToHouse")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(userAndJoinCode)))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        //then
-        verify(houseService, times(1)).addUserToHouse(user, joinCode);
-        verify(userService, times(1)).getUserById(userId);
-    }
 }

@@ -6,7 +6,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -26,8 +25,7 @@ class JoinCodeGeneratorTest {
         String joinCode = joinCodeGenerator.generateNewJoinCode();
 
         //then
-        assertEquals(4, joinCode.length());
-        assertTrue(joinCode.matches("[0-9]+"));
+        assertTrue(joinCode.matches("\\d{4}"));
     }
 
 }

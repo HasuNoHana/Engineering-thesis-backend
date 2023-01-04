@@ -28,7 +28,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/index.html", "/", "/home", "/login", "/create-user", "/api/create-user", "/logout", "/api/logout").permitAll()
+                .antMatchers("/index.html", "/", "/home", "/login", "/createUserAndHouse", "/api/createUserAndHouse",
+                        "/createUserForExistingHouse", "/api/createUserForExistingHouse", "/logout", "/api/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf()

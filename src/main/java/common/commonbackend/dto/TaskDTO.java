@@ -7,5 +7,5 @@ public class TaskDTO {
     String name;
     int price;
     boolean done;
-    RoomDTO room;
+    long roomId;
 }

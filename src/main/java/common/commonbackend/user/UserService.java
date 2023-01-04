@@ -3,7 +3,9 @@ package common.commonbackend.user;
 
 import common.commonbackend.entities.User;
 import common.commonbackend.entities.UserPrincipal;
+import common.commonbackend.house.HouseEntity;
 import common.commonbackend.house.HouseService;
+import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,9 +27,32 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(String username, String password, String joinCode) {
-        //TODO validate username and password
-        String encodedPassword = PASSWORD_ENCODER.encode(password);
-        User user = new User(username, encodedPassword, houseService.getOrCreateHouse(joinCode));
+        if(username == null || password == null || joinCode == null
+        || username.equals("") || password.equals("") || joinCode.equals("")) {
+            throw new IllegalArgumentException("Username, password or join code cannot be empty");
+        }
+
+        HouseEntity house = houseService.getHouseForJoinCode(joinCode);
+        if(house == null) {
+            throw new WrongHouseJoinCodeException("House for join code: " + joinCode + " not found");
+        }
+
+        User user = new User(
+                username,
+                PASSWORD_ENCODER.encode(password),
+                house);
+        return userRepository.save(user);
+    }
+
+    public User createUser(String username, String password) {
+        if(username == null || password == null || username.equals("") || password.equals("")) {
+            throw new IllegalArgumentException("Username or password code cannot be empty");
+        }
+
+        User user = new User(
+                username,
+                PASSWORD_ENCODER.encode(password),
+                houseService.createNewHouse());
         return userRepository.save(user);
     }
 

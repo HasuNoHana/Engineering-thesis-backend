@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface RoomRepository extends CrudRepository<Room, Long> {
 
+    Room getRoomById(Long id);
+
     List<Room> findRoomsByHouse(HouseEntity house);
 }

@@ -56,12 +56,13 @@ public class Task {
         this.room = room;
     }
 
-    public static Task fromDto(TaskDTO taskDTO) {
+    public static Task fromDto(TaskDTO taskDTO, Room room) {
+
         return new Task(
                 taskDTO.getName(),
                 taskDTO.getPrice(),
                 taskDTO.isDone(),
-                Room.fromRoomDto(taskDTO.getRoom()) //TODO should NOT create new room
+                room
         );
     }
 

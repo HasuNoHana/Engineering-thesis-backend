@@ -15,6 +15,8 @@ import static org.mockito.Mockito.*;
 @MockitoSettings
 class HouseServiceTest {
 
+    private final String JOIN_CODE = "1234";
+
     @Mock
     private User user;
 
@@ -25,18 +27,18 @@ class HouseServiceTest {
     JoinCodeGenerator joinCodeGenerator;
 
     @Test
-    void shouldCreateHouseForUser() {
+    void shouldCreateHouseForUser() { //TODO zrobic refactor tych testow
         //given
         HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
-        when(joinCodeGenerator.generateNewJoinCode()).thenReturn("1234");
+        when(joinCodeGenerator.generateNewJoinCode()).thenReturn(JOIN_CODE);
 
         //when
         HouseEntity houseForUser = houseService.createHouseForUser(user);
 
         //then
         verify(houseRepository, times(1)).save(houseForUser);
-        assertThat(houseForUser.getJoinCode()).isEqualTo("1234");
+        assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
         assertThat(houseForUser.getUsers()).containsExactly(user);
         assertThat(houseForUser.getRooms()).isEmpty();
     }
@@ -45,33 +47,31 @@ class HouseServiceTest {
     void shouldGetOrCreateHouseForExistingHouse() {
         //given
         HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
-        String joinCode = "1234";
         HouseEntity house = new HouseEntity();
-        house.setJoinCode(joinCode);
-        when(houseRepository.findByJoinCode(joinCode)).thenReturn(house);
+        house.setJoinCode(JOIN_CODE);
+        when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(house);
 
         //when
-        HouseEntity houseForUser = houseService.getOrCreateHouse(joinCode);
+        HouseEntity houseForUser = houseService.getHouseForJoinCode(JOIN_CODE);
 
         //then
         verify(houseRepository, times(0)).save(houseForUser);
-        assertThat(houseForUser.getJoinCode()).isEqualTo(joinCode);
+        assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
     }
 
     @Test
     void shouldGetOrCreateHouseForNoExistingHouse() {
         //given
         HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
-        String joinCode = "1234";
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
-        when(houseRepository.findByJoinCode(joinCode)).thenReturn(null);
+        when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(null);
 
         //when
-        HouseEntity houseForUser = houseService.getOrCreateHouse(joinCode);
+        HouseEntity houseForUser = houseService.getHouseForJoinCode(JOIN_CODE);
 
         //then
         verify(houseRepository, times(1)).save(houseForUser);
-        assertThat(houseForUser.getJoinCode()).isEqualTo(joinCode);
+        assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
         assertThat(houseForUser.getUsers()).isEmpty();
         assertThat(houseForUser.getRooms()).isEmpty();
     }
@@ -80,14 +80,13 @@ class HouseServiceTest {
     void shouldAddUserToHouseIfCorrectJoinCode() {
         //given
         HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
-        String joinCode = "1234";
         HouseEntity houseEntity = new HouseEntity();
-        houseEntity.setJoinCode(joinCode);
-        when(houseRepository.findByJoinCode(joinCode)).thenReturn(houseEntity);
+        houseEntity.setJoinCode(JOIN_CODE);
+        when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(houseEntity);
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
 
         //when
-        houseService.addUserToHouse(user, joinCode);
+        houseService.addUserToHouse(user, JOIN_CODE);
 
         //then
         verify(houseRepository, times(1)).save(houseEntity);
@@ -98,11 +97,10 @@ class HouseServiceTest {
     void shouldThrowExceptionIfWrongJoinCode() {
         //given
         HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
-        String joinCode = "1234";
-        when(houseRepository.findByJoinCode(joinCode)).thenReturn(null);
+        when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(null);
 
         //when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> houseService.addUserToHouse(user, joinCode);
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> houseService.addUserToHouse(user, JOIN_CODE);
 
         //then
         assertThatThrownBy(throwingCallable).isInstanceOf(WrongHouseJoinCodeException.class);

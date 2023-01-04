@@ -31,14 +31,20 @@ public class HouseService {
 
     }
 
-    public HouseEntity getOrCreateHouse(String joinCode) {
-        return Optional.ofNullable(houseRepository.findByJoinCode(joinCode))
+    public HouseEntity getHouseForJoinCode(String joinCode) {
+        return Optional.ofNullable(houseRepository.findByJoinCode(joinCode)) //TODO to wyjebac powinno zwracac house albo obsluzyc jakos blad
                 .orElseGet(() -> createNewHouse(joinCode));
     }
 
-    private HouseEntity createNewHouse(String joinCode) {
+    private HouseEntity createNewHouse(String joinCode) { //TODO to tez
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCode);
+        return houseRepository.save(houseEntity);
+    }
+
+    public HouseEntity createNewHouse() {
+        HouseEntity houseEntity = new HouseEntity();
+        houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
         return houseRepository.save(houseEntity);
     }
 }

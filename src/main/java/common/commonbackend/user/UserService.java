@@ -1,11 +1,10 @@
 package common.commonbackend.user;
 
 
-import common.commonbackend.entities.User;
-import common.commonbackend.entities.UserPrincipal;
 import common.commonbackend.house.HouseEntity;
 import common.commonbackend.house.HouseService;
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

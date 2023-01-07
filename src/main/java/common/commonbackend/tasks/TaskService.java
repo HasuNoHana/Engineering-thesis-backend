@@ -1,11 +1,8 @@
 package common.commonbackend.tasks;
 
-import common.commonbackend.dto.TaskDTO;
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
 import common.commonbackend.house.HouseEntity;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.rooms.Room;
+import common.commonbackend.rooms.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -49,7 +46,7 @@ public class TaskService {
     public Task saveNewTask(TaskDTO taskDTO) {
         log.debug("Got taskDTO: {}", taskDTO);
         Room room = roomRepository.getRoomById(taskDTO.getRoomId());
-        Task task = Task.fromDto(taskDTO, room);  //TODO should room be updated?
+        Task task = Task.fromDto(taskDTO, room);
         log.debug("Converted to task: {}", task);
         return taskRepository.save(task);
     }

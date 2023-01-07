@@ -1,11 +1,9 @@
 package common.commonbackend.tasks;
 
-import common.commonbackend.dto.RoomDTO;
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
 import common.commonbackend.house.HouseEntity;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.rooms.Room;
+import common.commonbackend.rooms.RoomRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -13,114 +11,169 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @MockitoSettings
 class TaskServiceTest {
-
+    public static final String TASK_NAME = "TaskName";
+    public static final long INITIAL_PRICE = 10;
+    public static final boolean NOT_DONE = false;
+    public static final boolean DONE = true;
+    public static final long TASK_ID = 1L;
+    public static final long ROOM_ID = 1L;
+    public static final String TASK_NAME_2 = "task2";
+    public static final int INITIAL_PRICE_2 = 20;
     @Mock
     TaskPriceUpdaterService taskPriceUpdaterService;
-
     @Mock
     Room room;
-
-    @Mock
-    RoomDTO roomDTO;
-
     @Mock
     TaskRepository taskRepository;
-
     @Mock
     RoomRepository roomRepository;
-
     @Mock
     HouseEntity house;
+    private TaskService systemUnderTest;
+
+    @BeforeEach
+    void setUp() {
+        systemUnderTest = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
+    }
 
     @Test
     void shouldGetTask() {
         //given
-        Task task = new Task(1L,"TaskName", 10, false, room);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
 
-        when(taskRepository.getTaskByIdAndRoom_House(1L,house)).thenReturn(task);
+        when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(task);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task)).thenReturn(task);
 
-        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
-
         //when
-        Task recivedTask = taskService.getTask(1L, house);
+        Task receivedTask = systemUnderTest.getTask(TASK_ID, house);
 
         //then
-        assertThat(task).isEqualTo(recivedTask);
+        assertThat(task).isEqualTo(receivedTask);
     }
 
     @Test
     void shouldGetToDoTasks() {
         //given
-        List<Task> tasks = List.of(new Task("task1", 10, false, room),
-                new Task("task2", 20, false, room));
+        List<Task> tasks = List.of(
+                new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room),
+                new Task(TASK_NAME_2, INITIAL_PRICE_2, NOT_DONE, room));
 
-        when(taskRepository.findTaskByDoneAndRoom_House(false, house)).thenReturn(tasks);
+        when(taskRepository.findTaskByDoneAndRoom_House(NOT_DONE, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
 
-        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
-
         //when
-        List<Task> recivedTasks = taskService.getToDoTasks(house);
+        List<Task> receivedTasks = systemUnderTest.getToDoTasks(house);
 
         //then
-        assertThat(tasks).isEqualTo(recivedTasks);
+        assertThat(tasks).isEqualTo(receivedTasks);
     }
 
     @Test
     void shouldGetDoneTasks() {
         //given
-        List<Task> tasks = List.of(new Task("task1", 10, false, room),
-                new Task("task2", 20, false, room));
+        List<Task> tasks = List.of(
+                new Task(TASK_NAME, INITIAL_PRICE, DONE, room),
+                new Task(TASK_NAME_2, INITIAL_PRICE_2, DONE, room));
 
-        when(taskRepository.findTaskByDoneAndRoom_House(true, house)).thenReturn(tasks);
+        when(taskRepository.findTaskByDoneAndRoom_House(DONE, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
 
-        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
-
         //when
-        List<Task> recivedTasks = taskService.getDoneTasks(house);
+        List<Task> receivedTasks = systemUnderTest.getDoneTasks(house);
 
         //then
-        assertThat(tasks).isEqualTo(recivedTasks);
+        assertThat(tasks).isEqualTo(receivedTasks);
     }
 
     @Test
     void shouldDeleteTask() {
         //given
-        Task task = new Task(1L,"TaskName", 10, false, room);
-        when(taskRepository.getTaskById(1L)).thenReturn(task);
-        TaskService taskService = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        when(taskRepository.getTaskById(TASK_ID)).thenReturn(task);
 
         //when
-        taskService.deleteTask(1L);
+        systemUnderTest.deleteTask(TASK_ID);
 
         //then
         verify(taskRepository, times(1)).delete(task);
     }
 
-//    @Test
-//    void shouldSaveTask() { // TODO task should not create new room when fromDto is called. It should use existing room
-//        //given
-//        TaskDTO taskDTO = new TaskDTO();
-//        taskDTO.setName("TaskName");
-//        taskDTO.setPrice(10);
-//        taskDTO.setDone(false);
-//        taskDTO.setRoom(roomDTO);
-//        Task task = Task.fromDto(taskDTO);
-//
-//        when(taskRepository.save(task)).thenReturn(task);
-//        TaskService taskService = new TaskService(taskRepository,taskPriceUpdaterService);
-//
-//        //when
-//        taskService.saveTask(taskDTO);
-//
-//        //then
-//        verify(taskRepository, times(1)).save(any());
-//    }
+    @Test
+    void shouldSaveUpdatedTask() {
+        //given
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID);
+        when(taskRepository.getTaskById(TASK_ID)).thenReturn(task);
 
+        //when
+        systemUnderTest.saveUpdatedTask(TASK_ID, taskDTO);
+
+        //then
+        verify(taskRepository, times(1)).getTaskById(TASK_ID);
+        verify(roomRepository, times(1)).getRoomById(ROOM_ID);
+        verify(taskRepository, times(1)).save(task);
+    }
+
+    @Test
+    void shouldSaveNewTask() {
+        //given
+        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID);
+        when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(roomRepository.getRoomById(ROOM_ID)).thenReturn(room);
+
+        //when
+        Task actual = systemUnderTest.saveNewTask(taskDTO);
+
+        //then
+        assertThat(actual)
+                .extracting(
+                        Task::isDone,
+                        Task::getInitialPrice,
+                        Task::getName,
+                        Task::getRoom)
+                .contains(
+                        taskDTO.isDone(),
+                        taskDTO.getPrice(),
+                        taskDTO.getName(),
+                        room);
+
+        verify(roomRepository, times(1)).getRoomById(ROOM_ID);
+        verify(taskRepository, times(1)).save(any());
+    }
+
+    @Test
+    void shouldSetTaskDone() {
+        //given
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(task);
+        when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task)).thenReturn(task);
+        when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
+
+        TaskService taskService = this.systemUnderTest;
+
+        //when
+        Task actual = taskService.setTaskDone(TASK_ID, house, DONE);
+
+        //then
+        assertThat(actual)
+                .extracting(
+                        Task::isDone,
+                        Task::getInitialPrice,
+                        Task::getName,
+                        Task::getRoom,
+                        Task::getId)
+                .contains(
+                        DONE,
+                        INITIAL_PRICE,
+                        TASK_NAME,
+                        room,
+                        TASK_ID);
+
+        verify(taskRepository, times(1)).save(task);
+    }
 }

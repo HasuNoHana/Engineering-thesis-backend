@@ -1,10 +1,8 @@
-package common.commonbackend.controllers;
+package common.commonbackend.tasks;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.dto.TaskDTO;
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
 import common.commonbackend.house.HouseEntity;
+import common.commonbackend.rooms.Room;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,7 +11,7 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
-import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
+import static common.commonbackend.TestObjectMapperHelper.asJsonString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

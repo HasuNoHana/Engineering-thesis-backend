@@ -1,8 +1,6 @@
-package common.commonbackend.controllers;
+package common.commonbackend.rooms;
 
 import common.commonbackend.ControllerHelper;
-import common.commonbackend.entities.Room;
-import common.commonbackend.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

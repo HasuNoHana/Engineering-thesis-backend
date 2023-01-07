@@ -1,9 +1,6 @@
-package common.commonbackend.controllers;
+package common.commonbackend.tasks;
 
 import common.commonbackend.ControllerHelper;
-import common.commonbackend.dto.TaskDTO;
-import common.commonbackend.entities.Task;
-import common.commonbackend.tasks.TaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

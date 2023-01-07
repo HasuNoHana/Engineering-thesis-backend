@@ -1,14 +1,13 @@
 package common.commonbackend.user;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.entities.User;
 import common.commonbackend.house.HouseEntity;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
-import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
+import static common.commonbackend.TestObjectMapperHelper.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

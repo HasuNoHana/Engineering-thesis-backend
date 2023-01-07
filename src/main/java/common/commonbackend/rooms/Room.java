@@ -1,8 +1,8 @@
-package common.commonbackend.entities;
+package common.commonbackend.rooms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import common.commonbackend.dto.RoomDTO;
 import common.commonbackend.house.HouseEntity;
+import common.commonbackend.tasks.Task;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

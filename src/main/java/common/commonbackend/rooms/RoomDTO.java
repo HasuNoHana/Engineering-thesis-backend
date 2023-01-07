@@ -1,4 +1,4 @@
-package common.commonbackend.dto;
+package common.commonbackend.rooms;
 
 import common.commonbackend.house.HouseEntity;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package common.commonbackend.entities;
+package common.commonbackend.user;
 
 import common.commonbackend.house.HouseEntity;
 import lombok.Getter;

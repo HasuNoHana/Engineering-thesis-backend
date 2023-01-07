@@ -1,6 +1,5 @@
 package common.commonbackend.tasks;
 
-import common.commonbackend.entities.Task;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

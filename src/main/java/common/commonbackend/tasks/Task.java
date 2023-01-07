@@ -1,6 +1,6 @@
-package common.commonbackend.entities;
+package common.commonbackend.tasks;
 
-import common.commonbackend.dto.TaskDTO;
+import common.commonbackend.rooms.Room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,7 +61,7 @@ public class Task {
     public static Task fromDto(TaskDTO taskDTO, Room room) {
         return new Task(
                 taskDTO.getName(),
-                taskDTO.getPrice(),
+                taskDTO.getPrice(), // TODO tu jest bug z logigki biznesowej. Actual price jest przypisywany do initial price
                 taskDTO.isDone(),
                 room
         );

@@ -1,6 +1,5 @@
-package common.commonbackend.repositories;
+package common.commonbackend.rooms;
 
-import common.commonbackend.entities.Room;
 import common.commonbackend.house.HouseEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -2,8 +2,8 @@ package common.commonbackend;
 
 import common.commonbackend.house.HouseRepository;
 import common.commonbackend.house.HouseService;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.tasks.TaskService;
 import common.commonbackend.user.UserService;
 import org.junit.runner.RunWith;

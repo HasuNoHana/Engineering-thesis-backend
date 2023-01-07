@@ -25,6 +25,24 @@ public class TaskController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
+    @PostMapping(path = "/makeTaskDone")
+    public ResponseEntity<Task> makeTaskDone(@RequestParam Long id) {
+        Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), true);
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/makeTaskToDo")
+    public ResponseEntity<Task> makeTaskToDo(@RequestParam Long id) {
+        Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), false);
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/tasks")
+    public ResponseEntity<Iterable<Task>> getTasks() {
+        Iterable<Task> tasks = taskService.getTasks(controllerHelper.getMyHouse());
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/todo_tasks")
     public ResponseEntity<Iterable<Task>> getToDoTasks() {
         Iterable<Task> todoTasks = taskService.getToDoTasks(controllerHelper.getMyHouse());
@@ -37,10 +55,17 @@ public class TaskController {
         return new ResponseEntity<>(todoTasks, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/task")
+    @PostMapping(path = "/updateTask")
+    public ResponseEntity<Task> updateTask(@RequestParam Long id, @RequestBody TaskDTO taskDTO) {
+        log.info("Update task with id: " + id);
+        Task t = taskService.saveUpdatedTask(id, taskDTO);
+        return new ResponseEntity<>(t, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/addTask")
     public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
-        log.info("createOrUpdateTask");
-        Task task = taskService.saveTask(taskDTO);
+        log.info("Create task");
+        Task task = taskService.saveNewTask(taskDTO);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 

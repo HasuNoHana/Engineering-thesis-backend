@@ -14,6 +14,8 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
 
     List<Task> findTaskByDoneAndRoom_House(boolean done, HouseEntity house); //NOSONAR
 
+    List<Task> findTaskByRoom_House(HouseEntity house); //NOSONAR
+
     Task getTaskByIdAndRoom_House(Long id, HouseEntity myHouse); //NOSONAR
 }
 

@@ -1,6 +1,7 @@
 package common.commonbackend.controllers;
 
 import common.commonbackend.ControllerTest;
+import common.commonbackend.dto.TaskDTO;
 import common.commonbackend.entities.Room;
 import common.commonbackend.entities.Task;
 import common.commonbackend.house.HouseEntity;
@@ -13,7 +14,6 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 import static common.commonbackend.controllers.TestObjectMapperHelper.asJsonString;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -91,20 +91,21 @@ public class TaskControllerTest extends ControllerTest {
     @Test
     public void shouldPostTask() throws Exception {
         //given
-        Room room = new Room("Kuchnia", "url",house);
+        Room room = new Room(1L, "Kuchnia", "url", house);
         Task task = new Task("name", 10, false, room);
+        TaskDTO taskDTO = new TaskDTO("name", 10, false, room.getId());
 
         //when
-        when(taskService.saveTask(any())).thenReturn(task);
+        when(taskService.saveUpdatedTask(1L, taskDTO)).thenReturn(task);
 
         //then
-        getMocMvc().perform(post("/api/task")
+        getMocMvc().perform(post("/api/updateTask?id=1")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(asJsonString(task)))
+                    .content(asJsonString(taskDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
 
-        verify(taskService, org.mockito.Mockito.times(1)).saveTask(any()); // TODO could assert with exactly task from dto
+        verify(taskService, org.mockito.Mockito.times(1)).saveUpdatedTask(1L, taskDTO);
     }
 }

@@ -1,10 +1,10 @@
 package common.commonbackend.entities;
 
 import common.commonbackend.dto.TaskDTO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,7 +13,8 @@ import java.time.Period;
 @Data
 @NoArgsConstructor(force = true)
 @Entity
-@Getter
+@EqualsAndHashCode
+@AllArgsConstructor
 @Table(name = "TASK") // TODO task powinien byc rozdzielony na task DTO ktory kominukuje sie z baza i task ktory jest wykorzystywany w biznesowej czesci do zmiany price
 public class Task {
     @Id
@@ -22,42 +23,42 @@ public class Task {
     private Long id;
 
     @Column(name = "NAME")
-    private final String name;
+    private String name;
 
     @Column(name = "PRICE")
-    private final long initialPrice;
+    private long initialPrice;
 
     @Column(name = "DONE")
-    private final boolean done;
+    private boolean done;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "room_id", nullable = false)
-    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
-    private final Room room;
+    private Room room;
 
 
     @Column(name = "LAST_DONE_DATE")
-    private final LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
-    private final Period period = Period.ofDays(1); //TODO add persistence
+    private LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
+
+    @Column(name = "PERIOD")
+    private Period period = Period.ofDays(1); //TODO add persistence
 
 
-    public Task(Long id, String name, int initialPrice, boolean done, Room room) {
+    public Task(Long id, String name, long initialPrice, boolean done, Room room) {
         this.id = id;
         this.name = name;
-        this.initialPrice = initialPrice;
+        this.initialPrice = initialPrice; //TODO wywalić to
         this.done = done;
         this.room = room;
     }
 
     public Task(String name, long initialPrice, boolean done, Room room) { // NOSONAR TODO remove this constructor
         this.name = name;
-        this.initialPrice = initialPrice;
+        this.initialPrice = initialPrice;//TODO wywalić to
         this.done = done;
         this.room = room;
     }
 
     public static Task fromDto(TaskDTO taskDTO, Room room) {
-
         return new Task(
                 taskDTO.getName(),
                 taskDTO.getPrice(),
@@ -67,6 +68,13 @@ public class Task {
     }
 
     public Task getNewTaskWithUpdatedPrice(long newPrice) {
-        return new Task(this.name, newPrice, this.done, this.room);
+        return new Task(this.id, this.name, newPrice, this.done, this.room);
+    }
+
+    public void updateFromDto(TaskDTO updatedTask, Room room) {
+        this.name = updatedTask.getName();
+        this.initialPrice = updatedTask.getPrice();
+        this.done = updatedTask.isDone();
+        this.room = room;
     }
 }

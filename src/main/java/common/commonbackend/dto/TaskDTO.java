@@ -8,4 +8,11 @@ public class TaskDTO {
     int price;
     boolean done;
     long roomId;
+
+    public TaskDTO(String name, int price, boolean done, long roomId) {
+        this.name = name;
+        this.price = price;
+        this.done = done;
+        this.roomId = roomId;
+    }
 }

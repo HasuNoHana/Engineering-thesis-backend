@@ -18,10 +18,10 @@ public class User {
     private Long id;
 
     @Column(name = "USERNAME")
-    private final String username;
+    private String username;
 
     @Column(name = "PASSWORD")
-    private final String password;
+    private String password;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "house_entity_id", nullable = false)

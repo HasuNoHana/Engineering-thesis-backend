@@ -3,6 +3,7 @@ package common.commonbackend.tasks;
 import common.commonbackend.house.HouseEntity;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

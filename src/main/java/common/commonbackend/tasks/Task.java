@@ -39,8 +39,8 @@ public class Task {
     @Column(name = "LAST_DONE_DATE")
     private LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
 
-    @Column(name = "PERIOD")
-    private Period period = Period.ofDays(1); //TODO add persistence
+    @Column(name = "REPETITION_RATE")
+    private Period repetitionRate = Period.ofDays(1); //TODO add persistence
 
 
     public Task(Long id, String name, long initialPrice, boolean done, Room room) {

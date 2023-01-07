@@ -3,6 +3,7 @@ package common.commonbackend.tasks;
 import common.commonbackend.house.HouseEntity;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

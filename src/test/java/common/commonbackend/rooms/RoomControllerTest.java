@@ -11,9 +11,8 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 import static common.commonbackend.TestObjectMapperHelper.asJsonString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,6 +87,24 @@ class RoomControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(room)))
                 .andDo(print());
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldDeleteRoom() {
+        //given
+        HouseEntity house = new HouseEntity();
+        Room room = new Room(ROOM_NAME, IMAGE_URL, house);
+
+        //when
+        when(controllerHelper.getMyHouse()).thenReturn(house);
+        when(roomService.deleteRoom(ID, house)).thenReturn(room);
+
+        //then
+        getMocMvc().perform(delete("/api/deleteRoom?id=" + ID))
+                .andExpect(status().isOk())
+                .andDo(print());
+        verify(roomService, times(1)).deleteRoom(ID, house);
     }
 
 }

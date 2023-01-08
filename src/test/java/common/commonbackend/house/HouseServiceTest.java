@@ -1,7 +1,7 @@
 package common.commonbackend.house;
 
-import common.commonbackend.entities.User;
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.user.User;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

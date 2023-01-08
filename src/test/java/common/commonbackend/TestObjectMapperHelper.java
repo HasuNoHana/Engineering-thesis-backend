@@ -1,4 +1,4 @@
-package common.commonbackend.controllers;
+package common.commonbackend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

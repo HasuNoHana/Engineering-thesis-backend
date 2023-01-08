@@ -1,8 +1,8 @@
 package common.commonbackend.house;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.User;
+import common.commonbackend.rooms.Room;
+import common.commonbackend.user.User;
 import lombok.Data;
 
 import javax.persistence.*;

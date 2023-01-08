@@ -1,4 +1,4 @@
-package common.commonbackend.tasks;
+package common.commonbackend.tasks.updatealgorithms;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

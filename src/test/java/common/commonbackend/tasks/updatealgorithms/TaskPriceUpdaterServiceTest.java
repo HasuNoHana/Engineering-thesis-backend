@@ -1,7 +1,7 @@
-package common.commonbackend.tasks;
+package common.commonbackend.tasks.updatealgorithms;
 
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
+import common.commonbackend.rooms.Room;
+import common.commonbackend.tasks.Task;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

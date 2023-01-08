@@ -1,8 +1,8 @@
 package common.commonbackend;
 
 import common.commonbackend.house.HouseRepository;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

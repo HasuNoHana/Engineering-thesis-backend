@@ -1,6 +1,5 @@
 package common.commonbackend.user;
 
-import common.commonbackend.entities.User;
 import common.commonbackend.house.HouseEntity;
 import common.commonbackend.house.HouseService;
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;

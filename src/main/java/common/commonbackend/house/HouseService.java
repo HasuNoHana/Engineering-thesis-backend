@@ -1,7 +1,7 @@
 package common.commonbackend.house;
 
-import common.commonbackend.entities.User;
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +46,9 @@ public class HouseService {
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
         return houseRepository.save(houseEntity);
+    }
+
+    public HouseEntity getHouseById(long houseId) {
+        return houseRepository.findById(houseId).orElseThrow(() -> new RuntimeException("House not found"));
     }
 }

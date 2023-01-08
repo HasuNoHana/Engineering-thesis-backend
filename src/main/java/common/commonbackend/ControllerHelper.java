@@ -1,8 +1,8 @@
 package common.commonbackend;
 
-import common.commonbackend.entities.User;
-import common.commonbackend.entities.UserPrincipal;
 import common.commonbackend.house.HouseEntity;
+import common.commonbackend.security.UserPrincipal;
+import common.commonbackend.user.User;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;

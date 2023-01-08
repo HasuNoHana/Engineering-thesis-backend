@@ -1,11 +1,9 @@
 package common.commonbackend.tasks;
 
-import common.commonbackend.dto.TaskDTO;
-import common.commonbackend.entities.Room;
-import common.commonbackend.entities.Task;
 import common.commonbackend.house.HouseEntity;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.rooms.Room;
+import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,11 @@ public class TaskService {
         log.debug("Looking for task with id: " + id);
         Task task = taskRepository.getTaskByIdAndRoom_House(id, myHouse);
         log.debug("Found task: " + task);
-        return taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
+         return taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
+    }
+
+    public List<Task> getTasks(HouseEntity myHouse) {
+        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByRoom_House(myHouse));
     }
 
     public List<Task> getToDoTasks(HouseEntity myHouse) {
@@ -42,11 +44,29 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public Task saveTask(TaskDTO taskDTO) {
+    public Task saveNewTask(TaskDTO taskDTO, HouseEntity myHouse) {
         log.debug("Got taskDTO: {}", taskDTO);
-        Room room = roomRepository.getRoomById(taskDTO.getRoomId());
-        Task task = Task.fromDto(taskDTO, room);  //TODO should room be updated?
+        Room room = roomRepository.getRoomByIdAndHouse(taskDTO.getRoomId(), myHouse);
+        if (room == null) {
+            log.error("Room with id: " + taskDTO.getRoomId() + " not found");
+            return null;
+        }
+        Task task = Task.fromDto(taskDTO, room);
         log.debug("Converted to task: {}", task);
         return taskRepository.save(task);
+    }
+
+    public Task saveUpdatedTask(Long id, TaskDTO updatedTask, HouseEntity house) {
+        Task task = taskRepository.getTaskById(id);
+        Room room = roomRepository.getRoomByIdAndHouse(updatedTask.getRoomId(), house);
+        task.updateFromDto(updatedTask, room);
+        return taskRepository.save(task);
+    }
+
+    public Task setTaskDone(Long id, HouseEntity house, boolean done) {
+        Task task = getTask(id, house);
+        task.setDone(done);
+        task =  taskRepository.save(task);
+        return task;
     }
 }

@@ -2,8 +2,9 @@ package common.commonbackend;
 
 import common.commonbackend.house.HouseRepository;
 import common.commonbackend.house.HouseService;
-import common.commonbackend.repositories.RoomRepository;
-import common.commonbackend.repositories.TaskRepository;
+import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.rooms.RoomService;
+import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.tasks.TaskService;
 import common.commonbackend.user.UserService;
 import org.junit.runner.RunWith;
@@ -40,10 +41,13 @@ public abstract class ControllerTest {
     @MockBean
     protected ControllerHelper controllerHelper;
 
+    @MockBean
+    protected RoomService roomService;
+
     @Autowired
     private MockMvc mockMvc;
 
-    protected MockMvc getMocMvc(){
+    protected MockMvc getMocMvc() {
         return mockMvc;
     }
 

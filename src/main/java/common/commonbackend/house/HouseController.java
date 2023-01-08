@@ -1,7 +1,7 @@
 package common.commonbackend.house;
 
 
-import common.commonbackend.entities.User;
+import common.commonbackend.user.User;
 import common.commonbackend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

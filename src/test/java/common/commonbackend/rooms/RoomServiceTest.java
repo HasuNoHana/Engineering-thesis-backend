@@ -1,6 +1,7 @@
 package common.commonbackend.rooms;
 
 import common.commonbackend.house.HouseEntity;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -73,5 +74,29 @@ class RoomServiceTest {
                         UPDATED_ROOM_IMAGE,
                         house);
         verify(roomRepository, times(1)).save(any());
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldDeleteRoom() {
+        //given
+        HouseEntity house = new HouseEntity();
+        Room room = new Room(ROOM_NAME, ROOM_IMAGE, house);
+        when(roomRepository.getRoomByIdAndHouse(ID, house)).thenReturn(room);
+
+        //when
+        Room actual = systemUnderTest.deleteRoom(ID, house);
+
+        //then
+        assertThat(actual)
+                .extracting(
+                        Room::getName,
+                        Room::getImage,
+                        Room::getHouse)
+                .containsExactly(
+                        ROOM_NAME,
+                        ROOM_IMAGE,
+                        house);
+        verify(roomRepository, times(1)).delete(any());
     }
 }

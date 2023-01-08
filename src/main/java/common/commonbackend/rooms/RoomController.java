@@ -33,4 +33,10 @@ public class RoomController {
         Room room = roomService.updateRoom(id, roomDTO, controllerHelper.getMyHouse());
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/deleteRoom")
+    public ResponseEntity<Long> deleteRoom(@RequestParam long id) {
+        roomService.deleteRoom(id, controllerHelper.getMyHouse());
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
 }

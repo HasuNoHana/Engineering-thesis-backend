@@ -15,6 +15,9 @@ import static org.mockito.Mockito.*;
 class RoomServiceTest {
     private static final String ROOM_IMAGE = "url";
     private static final String ROOM_NAME = "Kitchen";
+    public static final long ID = 1L;
+    public static final String UPDATED_ROOM_NAME = "updatedRoomName";
+    public static final String UPDATED_ROOM_IMAGE = "updatedRoomImage";
     @Mock
     private RoomRepository roomRepository;
     private RoomService systemUnderTest;
@@ -43,6 +46,31 @@ class RoomServiceTest {
                 .containsExactly(
                         ROOM_NAME,
                         ROOM_IMAGE,
+                        house);
+        verify(roomRepository, times(1)).save(any());
+    }
+
+    @Test
+    void shouldUpdateRoom() {
+        //given
+        HouseEntity house = new HouseEntity();
+        RoomDTO roomDTO = new RoomDTO(UPDATED_ROOM_NAME, UPDATED_ROOM_IMAGE);
+        Room oldRoom = new Room(ROOM_NAME, ROOM_IMAGE, house);
+        when(roomRepository.getRoomByIdAndHouse(ID, house)).thenReturn(oldRoom);
+        when(roomRepository.save(any())).thenAnswer(returnsFirstArg());
+
+        //when
+        Room actual = systemUnderTest.updateRoom(ID, roomDTO, house);
+
+        //then
+        assertThat(actual)
+                .extracting(
+                        Room::getName,
+                        Room::getImage,
+                        Room::getHouse)
+                .containsExactly(
+                        UPDATED_ROOM_NAME,
+                        UPDATED_ROOM_IMAGE,
                         house);
         verify(roomRepository, times(1)).save(any());
     }

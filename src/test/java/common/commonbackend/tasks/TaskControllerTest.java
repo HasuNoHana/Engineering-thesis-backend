@@ -98,7 +98,8 @@ public class TaskControllerTest extends ControllerTest {
         TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, room.getId());
 
         //when
-        when(taskService.saveUpdatedTask(TASK_ID, taskDTO)).thenReturn(task);
+        when(controllerHelper.getMyHouse()).thenReturn(house);
+        when(taskService.saveUpdatedTask(TASK_ID, taskDTO, house)).thenReturn(task);
 
         //then
         getMocMvc().perform(post("/api/updateTask?id=" + TASK_ID)
@@ -108,6 +109,6 @@ public class TaskControllerTest extends ControllerTest {
                 .andExpect(content().json(asJsonString(task)))
                 .andDo(print());
 
-        verify(taskService, org.mockito.Mockito.times(1)).saveUpdatedTask(TASK_ID, taskDTO);
+        verify(taskService, org.mockito.Mockito.times(1)).saveUpdatedTask(TASK_ID, taskDTO, house);
     }
 }

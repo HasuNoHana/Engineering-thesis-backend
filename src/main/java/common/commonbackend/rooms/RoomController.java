@@ -27,4 +27,10 @@ public class RoomController {
         Room room = roomService.createRoom(roomDTO, controllerHelper.getMyHouse());
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
+
+    @PostMapping(path = "/updateRoom")
+    public ResponseEntity<Room> updateRoom(@RequestParam long id, @RequestBody RoomDTO roomDTO) {
+        Room room = roomService.updateRoom(id, roomDTO, controllerHelper.getMyHouse());
+        return new ResponseEntity<>(room, HttpStatus.OK);
+    }
 }

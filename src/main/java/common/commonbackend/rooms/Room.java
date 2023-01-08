@@ -49,4 +49,9 @@ public class Room {
         this.image = image;
         this.house = house;
     }
+
+    public void updateFromDTO(RoomDTO roomDTO) {
+        this.name = roomDTO.getName();
+        this.image = roomDTO.getImage();
+    }
 }

@@ -112,11 +112,11 @@ class TaskServiceTest {
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(task);
 
         //when
-        systemUnderTest.saveUpdatedTask(TASK_ID, taskDTO);
+        systemUnderTest.saveUpdatedTask(TASK_ID, taskDTO, house);
 
         //then
         verify(taskRepository, times(1)).getTaskById(TASK_ID);
-        verify(roomRepository, times(1)).getRoomById(ROOM_ID);
+        verify(roomRepository, times(1)).getRoomByIdAndHouse(ROOM_ID, house);
         verify(taskRepository, times(1)).save(task);
     }
 
@@ -125,10 +125,10 @@ class TaskServiceTest {
         //given
         TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
-        when(roomRepository.getRoomById(ROOM_ID)).thenReturn(room);
+        when(roomRepository.getRoomByIdAndHouse(ROOM_ID, house)).thenReturn(room);
 
         //when
-        Task actual = systemUnderTest.saveNewTask(taskDTO);
+        Task actual = systemUnderTest.saveNewTask(taskDTO, house);
 
         //then
         assertThat(actual)
@@ -143,7 +143,7 @@ class TaskServiceTest {
                         taskDTO.getName(),
                         room);
 
-        verify(roomRepository, times(1)).getRoomById(ROOM_ID);
+        verify(roomRepository, times(1)).getRoomByIdAndHouse(ROOM_ID, house);
         verify(taskRepository, times(1)).save(any());
     }
 

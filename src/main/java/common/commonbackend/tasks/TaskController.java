@@ -54,15 +54,14 @@ public class TaskController {
 
     @PostMapping(path = "/updateTask")
     public ResponseEntity<Task> updateTask(@RequestParam Long id, @RequestBody TaskDTO taskDTO) {
-        log.info("Update task with id: " + id);
-        Task t = taskService.saveUpdatedTask(id, taskDTO);
+        log.debug("Update task with id: " + id);
+        Task t = taskService.saveUpdatedTask(id, taskDTO, controllerHelper.getMyHouse());
         return new ResponseEntity<>(t, HttpStatus.OK);
     }
 
     @PostMapping(path = "/addTask")
     public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
-        log.info("Create task");
-        Task task = taskService.saveNewTask(taskDTO);
+        Task task = taskService.saveNewTask(taskDTO, controllerHelper.getMyHouse());
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 

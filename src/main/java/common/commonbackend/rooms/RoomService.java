@@ -19,4 +19,10 @@ public class RoomService {
     public List<Room> getRoomsForHouse(HouseEntity house) {
         return roomRepository.findRoomsByHouse(house);
     }
+
+    public Room updateRoom(long id, RoomDTO roomDTO, HouseEntity myHouse) {
+        Room room = roomRepository.getRoomByIdAndHouse(id, myHouse);
+        room.updateFromDTO(roomDTO);
+        return roomRepository.save(room);
+    }
 }

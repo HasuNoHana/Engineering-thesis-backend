@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -49,16 +48,5 @@ public class Room {
         this.name = name;
         this.image = image;
         this.house = house;
-    }
-
-    public static Room fromRoomDto(RoomDTO roomDTO) {
-        Set<Task> tasks = new HashSet<>();
-        return new Room(
-                null,
-                roomDTO.getName(),
-                roomDTO.getImage(),
-                tasks,
-                roomDTO.getHouse()
-        );
     }
 }

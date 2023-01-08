@@ -47,4 +47,8 @@ public class HouseService {
         houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
         return houseRepository.save(houseEntity);
     }
+
+    public HouseEntity getHouseById(long houseId) {
+        return houseRepository.findById(houseId).orElseThrow(() -> new RuntimeException("House not found"));
+    }
 }

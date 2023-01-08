@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Log4j2
@@ -15,12 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class RoomController {
-    private final RoomRepository roomRepository;
     private final ControllerHelper controllerHelper;
+    private final RoomService roomService;
 
     @GetMapping(path = "/rooms")
     public ResponseEntity<Iterable<Room>> getRooms() {
-        Iterable<Room> rooms = this.roomRepository.findRoomsByHouse(controllerHelper.getMyHouse());
+        Iterable<Room> rooms = roomService.getRoomsForHouse(controllerHelper.getMyHouse());
         return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/addRoom")
+    public ResponseEntity<Room> createRoom(@RequestBody RoomDTO roomDTO) {
+        Room room = roomService.createRoom(roomDTO, controllerHelper.getMyHouse());
+        return new ResponseEntity<>(room, HttpStatus.OK);
     }
 }

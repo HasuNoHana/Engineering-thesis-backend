@@ -47,6 +47,10 @@ public class TaskService {
     public Task saveNewTask(TaskDTO taskDTO) {
         log.debug("Got taskDTO: {}", taskDTO);
         Room room = roomRepository.getRoomById(taskDTO.getRoomId());
+        if (room == null) {
+            log.error("Room with id: " + taskDTO.getRoomId() + " not found");
+            return null;
+        }
         Task task = Task.fromDto(taskDTO, room);
         log.debug("Converted to task: {}", task);
         return taskRepository.save(task);

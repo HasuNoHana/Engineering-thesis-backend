@@ -1,7 +1,10 @@
 package common.commonbackend;
 
+import common.commonbackend.house.HouseEntity;
 import common.commonbackend.house.HouseRepository;
+import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
+import common.commonbackend.tasks.Task;
 import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +33,7 @@ public class CommonBackendApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void addFirstDataAfterStartup() {
-		/* //NOSONAR HouseEntity houseEntity = new HouseEntity();
+		HouseEntity houseEntity = new HouseEntity();
 		houseEntity.setJoinCode("1234");
 
 		HouseEntity obcyHouse = new HouseEntity();
@@ -71,7 +74,7 @@ public class CommonBackendApplication {
 		Task task66 = new Task("przygotować pentagram", 20, true, szatanskaKuchnia);
 
 		this.taskRepository.save(task6);
-		this.taskRepository.save(task66);*/
+		this.taskRepository.save(task66);
 	}
 
 }

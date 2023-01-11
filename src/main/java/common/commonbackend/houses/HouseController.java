@@ -1,9 +1,9 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
 
 import common.commonbackend.ControllerHelper;
-import common.commonbackend.user.User;
-import common.commonbackend.user.UserService;
+import common.commonbackend.users.User;
+import common.commonbackend.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

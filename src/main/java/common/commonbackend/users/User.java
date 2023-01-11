@@ -1,12 +1,12 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static common.commonbackend.user.HouseBuddy.getDefaultHouseBuddy;
+import static common.commonbackend.users.HouseBuddy.getDefaultHouseBuddy;
 
 @NoArgsConstructor(force = true)
 @Entity

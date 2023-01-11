@@ -1,8 +1,8 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.rooms.Room;
-import common.commonbackend.user.HouseBuddy;
+import common.commonbackend.users.HouseBuddy;
 import lombok.Data;
 
 import javax.persistence.*;

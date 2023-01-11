@@ -1,4 +1,4 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

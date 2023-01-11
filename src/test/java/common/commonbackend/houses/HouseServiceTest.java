@@ -1,8 +1,8 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
-import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
-import common.commonbackend.user.HouseBuddy;
-import common.commonbackend.user.User;
+import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.users.HouseBuddy;
+import common.commonbackend.users.User;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

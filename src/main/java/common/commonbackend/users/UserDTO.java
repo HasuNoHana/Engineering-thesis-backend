@@ -1,4 +1,4 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;

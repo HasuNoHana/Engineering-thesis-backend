@@ -1,8 +1,8 @@
 package common.commonbackend;
 
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.security.UserPrincipal;
-import common.commonbackend.user.User;
+import common.commonbackend.users.User;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,7 @@ public class ControllerHelper {
         return house;
     }
 
-    public User getMyUser() {
+    public User getMyUser() { // TODO czy to jest potrzebbe?
         return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 }

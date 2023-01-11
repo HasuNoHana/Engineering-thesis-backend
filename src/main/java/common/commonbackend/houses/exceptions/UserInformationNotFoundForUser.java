@@ -1,6 +1,6 @@
-package common.commonbackend.house.exceptions;
+package common.commonbackend.houses.exceptions;
 
-import common.commonbackend.user.User;
+import common.commonbackend.users.User;
 
 public class UserInformationNotFoundForUser extends RuntimeException {
     public UserInformationNotFoundForUser(User user) {

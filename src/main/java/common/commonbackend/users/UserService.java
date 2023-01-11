@@ -1,9 +1,9 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
 
-import common.commonbackend.house.HouseEntity;
-import common.commonbackend.house.HouseService;
-import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.houses.HouseService;
+import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -1,7 +1,7 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
-import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
-import common.commonbackend.user.User;
+import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.users.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

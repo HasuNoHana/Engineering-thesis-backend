@@ -1,6 +1,6 @@
 package common.commonbackend.security;
 
-import common.commonbackend.user.UserService;
+import common.commonbackend.users.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

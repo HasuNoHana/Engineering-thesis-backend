@@ -1,12 +1,12 @@
 package common.commonbackend;
 
-import common.commonbackend.house.HouseEntity;
-import common.commonbackend.house.HouseRepository;
+import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.houses.HouseRepository;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.Task;
 import common.commonbackend.tasks.TaskRepository;
-import common.commonbackend.user.UserService;
+import common.commonbackend.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

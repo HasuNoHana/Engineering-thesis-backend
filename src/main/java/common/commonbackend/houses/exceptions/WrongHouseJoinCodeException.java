@@ -1,4 +1,4 @@
-package common.commonbackend.house.exceptions;
+package common.commonbackend.houses.exceptions;
 
 public class WrongHouseJoinCodeException extends RuntimeException {
     public WrongHouseJoinCodeException() {

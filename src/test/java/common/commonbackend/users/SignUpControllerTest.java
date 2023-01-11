@@ -1,8 +1,8 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.user.SignUpController.UserAndJoinCode;
-import common.commonbackend.user.SignUpController.UserWithoutHouse;
+import common.commonbackend.users.SignUpController.UserAndJoinCode;
+import common.commonbackend.users.SignUpController.UserWithoutHouse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

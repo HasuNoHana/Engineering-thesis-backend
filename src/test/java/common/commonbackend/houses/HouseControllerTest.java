@@ -1,7 +1,7 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.user.User;
+import common.commonbackend.users.User;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

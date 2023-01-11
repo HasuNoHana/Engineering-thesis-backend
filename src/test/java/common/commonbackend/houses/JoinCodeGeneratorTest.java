@@ -1,4 +1,4 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

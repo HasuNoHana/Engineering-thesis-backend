@@ -33,7 +33,7 @@ public class Room {
     private Set<Task> tasks;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "house_entity_id", nullable = false)
+    @JoinColumn(name = "HOUSE_ID", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.MERGE)
     private HouseEntity house;
 

@@ -1,7 +1,9 @@
 package common.commonbackend.user;
 
+import common.commonbackend.house.HouseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 

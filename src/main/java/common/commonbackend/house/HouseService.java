@@ -1,7 +1,10 @@
 package common.commonbackend.house;
 
+import common.commonbackend.house.exceptions.UserInformationNotFoundForUser;
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.user.User;
+import common.commonbackend.user.UserInformation;
+import common.commonbackend.user.UserInformationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,16 @@ public class HouseService {
 
     private final JoinCodeGenerator joinCodeGenerator;
 
+    private final UserInformationRepository userInformationRepository;
+
     public HouseEntity createHouseForUser(User user) {
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
-        houseEntity.addUser(user);
+        Optional<UserInformation> userInformation = userInformationRepository.findById(user.getId());
+        if (!userInformation.isPresent()) {
+            throw new UserInformationNotFoundForUser(user);
+        }
+        houseEntity.addUser(userInformation.get());
         return houseRepository.save(houseEntity);
     }
 
@@ -26,7 +35,11 @@ public class HouseService {
         if (houseEntity == null) {
             throw new WrongHouseJoinCodeException();
         }
-        houseEntity.addUser(user);
+        Optional<UserInformation> userInformation = userInformationRepository.findById(user.getId());
+        if (!userInformation.isPresent()) {
+            throw new UserInformationNotFoundForUser(user);
+        }
+        houseEntity.addUser(userInformation.get());
         houseRepository.save(houseEntity);
 
     }

@@ -39,7 +39,7 @@ class HouseServiceTest {
         //then
         verify(houseRepository, times(1)).save(houseForUser);
         assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
-        assertThat(houseForUser.getUsers()).containsExactly(user);
+        assertThat(houseForUser.getUsersInformation()).containsExactly(user);
         assertThat(houseForUser.getRooms()).isEmpty();
     }
 
@@ -72,7 +72,7 @@ class HouseServiceTest {
         //then
         verify(houseRepository, times(1)).save(houseForUser);
         assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
-        assertThat(houseForUser.getUsers()).isEmpty();
+        assertThat(houseForUser.getUsersInformation()).isEmpty();
         assertThat(houseForUser.getRooms()).isEmpty();
     }
 
@@ -90,7 +90,7 @@ class HouseServiceTest {
 
         //then
         verify(houseRepository, times(1)).save(houseEntity);
-        assertThat(houseEntity.getUsers()).contains(user);
+        assertThat(houseEntity.getUsersInformation()).contains(user);
     }
 
     @Test

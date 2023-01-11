@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ControllerHelper {
     public HouseEntity getMyHouse() {
         final User currentUser = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        HouseEntity house = currentUser.getHouse();
+        HouseEntity house = currentUser.getUserInformation().getHouse();
         log.debug("Current user: {}, house {}", currentUser.getUsername(), house);
         return house;
     }

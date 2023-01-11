@@ -1,9 +1,7 @@
 package common.commonbackend.user;
 
-import common.commonbackend.house.HouseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -23,14 +21,14 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "house_entity_id", nullable = false)
-    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
-    private HouseEntity house;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserInformation userInformation;
 
-    public User(String username, String password, HouseEntity house) {
+
+    public User(String username, String password, UserInformation userInformation) {
         this.username = username;
         this.password = password;
-        this.house = house;
+        this.userInformation = userInformation;
     }
 }

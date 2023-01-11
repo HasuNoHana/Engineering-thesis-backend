@@ -1,21 +1,21 @@
 package common.commonbackend;
 
-import common.commonbackend.house.HouseRepository;
-import common.commonbackend.house.HouseService;
+import common.commonbackend.houses.HouseRepository;
+import common.commonbackend.houses.HouseService;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.rooms.RoomService;
 import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.tasks.TaskService;
-import common.commonbackend.user.UserService;
-import org.junit.runner.RunWith;
+import common.commonbackend.users.UserService;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public abstract class ControllerTest {
 
     @MockBean

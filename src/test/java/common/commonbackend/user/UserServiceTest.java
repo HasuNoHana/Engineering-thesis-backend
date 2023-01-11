@@ -46,7 +46,6 @@ class UserServiceTest {
     void shouldCreateUserForExistingHouse() {
         // given
         when(userRepository.save(any())).thenAnswer(returnsFirstArg());
-
         when(houseService.getHouseForJoinCode(JOIN_CODE)).thenReturn(house);
         User expectedUser = new User(USERNAME, ENCODED_PASSWORD, house);
 
@@ -55,8 +54,8 @@ class UserServiceTest {
 
         // then
         assertThat(actual.getUsername()).isEqualTo(expectedUser.getUsername());
-        verify(houseService,times(1)).getHouseForJoinCode(JOIN_CODE);
-        assertThat(actual.getHouse()).isEqualTo(expectedUser.getHouse());
+        verify(houseService, times(1)).getHouseForJoinCode(JOIN_CODE);
+        assertThat(actual.getHouseBuddy().getHouse()).isEqualTo(expectedUser.getHouseBuddy().getHouse());
         assertThat(UserService.getPasswordEncoder().matches(PASSWORD, actual.getPassword())).isTrue();
     }
 
@@ -86,8 +85,8 @@ class UserServiceTest {
 
         // then
         assertThat(actual.getUsername()).isEqualTo(expectedUser.getUsername());
-        verify(houseService,times(1)).createNewHouse();
-        assertThat(actual.getHouse()).isEqualTo(expectedUser.getHouse());
+        verify(houseService, times(1)).createNewHouse();
+        assertThat(actual.getHouseBuddy().getHouse()).isEqualTo(expectedUser.getHouseBuddy().getHouse());
         assertThat(UserService.getPasswordEncoder().matches(PASSWORD, actual.getPassword())).isTrue();
     }
 

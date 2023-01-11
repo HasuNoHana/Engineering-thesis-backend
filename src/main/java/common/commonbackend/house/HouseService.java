@@ -1,10 +1,7 @@
 package common.commonbackend.house;
 
-import common.commonbackend.house.exceptions.UserInformationNotFoundForUser;
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.user.User;
-import common.commonbackend.user.UserInformation;
-import common.commonbackend.user.UserInformationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +11,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HouseService {
     private final HouseRepository houseRepository;
-
     private final JoinCodeGenerator joinCodeGenerator;
-
-    private final UserInformationRepository userInformationRepository;
 
     public HouseEntity createHouseForUser(User user) {
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
-        Optional<UserInformation> userInformation = userInformationRepository.findById(user.getId());
-        if (!userInformation.isPresent()) {
-            throw new UserInformationNotFoundForUser(user);
-        }
-        houseEntity.addUser(userInformation.get());
+        houseEntity.addHouseBuddy(user.getHouseBuddy());
         return houseRepository.save(houseEntity);
     }
 
@@ -35,13 +25,8 @@ public class HouseService {
         if (houseEntity == null) {
             throw new WrongHouseJoinCodeException();
         }
-        Optional<UserInformation> userInformation = userInformationRepository.findById(user.getId());
-        if (!userInformation.isPresent()) {
-            throw new UserInformationNotFoundForUser(user);
-        }
-        houseEntity.addUser(userInformation.get());
+        houseEntity.addHouseBuddy(user.getHouseBuddy());
         houseRepository.save(houseEntity);
-
     }
 
     public HouseEntity getHouseForJoinCode(String joinCode) {
@@ -59,9 +44,5 @@ public class HouseService {
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
         return houseRepository.save(houseEntity);
-    }
-
-    public HouseEntity getHouseById(long houseId) {
-        return houseRepository.findById(houseId).orElseThrow(() -> new RuntimeException("House not found"));
     }
 }

@@ -3,9 +3,10 @@ package common.commonbackend.user;
 import common.commonbackend.house.HouseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+
+import static common.commonbackend.user.HouseBuddy.getDefaultHouseBuddy;
 
 @NoArgsConstructor(force = true)
 @Entity
@@ -16,21 +17,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
-
     @Column(name = "USERNAME")
     private String username;
-
     @Column(name = "PASSWORD")
     private String password;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HOUSE_BUDDY_ID", referencedColumnName = "id")
+    private HouseBuddy houseBuddy;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private UserInformation userInformation;
-
-
-    public User(String username, String password, UserInformation userInformation) {
+    public User(String username, String password, HouseEntity house) {
         this.username = username;
         this.password = password;
-        this.userInformation = userInformation;
+        this.houseBuddy = getDefaultHouseBuddy(house);
     }
 }

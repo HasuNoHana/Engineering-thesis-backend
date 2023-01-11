@@ -2,7 +2,7 @@ package common.commonbackend.house;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.rooms.Room;
-import common.commonbackend.user.UserInformation;
+import common.commonbackend.user.HouseBuddy;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,9 +28,9 @@ public class HouseEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<UserInformation> usersInformation = new HashSet<>();
+    private Set<HouseBuddy> houseBuddies = new HashSet<>();
 
-    public void addUser(UserInformation userInformation) {
-        usersInformation.add(userInformation);
+    public void addHouseBuddy(HouseBuddy houseBuddy) {
+        houseBuddies.add(houseBuddy);
     }
 }

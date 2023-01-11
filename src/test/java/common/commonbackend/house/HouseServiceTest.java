@@ -1,8 +1,10 @@
 package common.commonbackend.house;
 
 import common.commonbackend.house.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.user.HouseBuddy;
 import common.commonbackend.user.User;
 import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -14,45 +16,49 @@ import static org.mockito.Mockito.*;
 
 @MockitoSettings
 class HouseServiceTest {
-
     private final String JOIN_CODE = "1234";
-
     @Mock
     private User user;
-
+    @Mock
+    private HouseBuddy houseBuddy;
     @Mock
     private HouseRepository houseRepository;
-
     @Mock
     JoinCodeGenerator joinCodeGenerator;
+    private HouseService systemUnderTest;
+
+    @BeforeEach
+    void setUp() {
+        systemUnderTest = new HouseService(houseRepository, joinCodeGenerator);
+    }
+
 
     @Test
-    void shouldCreateHouseForUser() { //TODO zrobic refactor tych testow
+    void shouldCreateHouseForUser() {
         //given
-        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
         when(joinCodeGenerator.generateNewJoinCode()).thenReturn(JOIN_CODE);
+        when(user.getHouseBuddy()).thenReturn(houseBuddy);
 
         //when
-        HouseEntity houseForUser = houseService.createHouseForUser(user);
+        HouseEntity houseForUser = systemUnderTest.createHouseForUser(user);
 
         //then
         verify(houseRepository, times(1)).save(houseForUser);
         assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
-        assertThat(houseForUser.getUsersInformation()).containsExactly(user);
+        assertThat(houseForUser.getHouseBuddies()).containsExactly(houseBuddy);
         assertThat(houseForUser.getRooms()).isEmpty();
     }
 
     @Test
     void shouldGetOrCreateHouseForExistingHouse() {
         //given
-        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         HouseEntity house = new HouseEntity();
         house.setJoinCode(JOIN_CODE);
         when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(house);
 
         //when
-        HouseEntity houseForUser = houseService.getHouseForJoinCode(JOIN_CODE);
+        HouseEntity houseForUser = systemUnderTest.getHouseForJoinCode(JOIN_CODE);
 
         //then
         verify(houseRepository, times(0)).save(houseForUser);
@@ -62,45 +68,43 @@ class HouseServiceTest {
     @Test
     void shouldGetOrCreateHouseForNoExistingHouse() {
         //given
-        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
         when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(null);
 
         //when
-        HouseEntity houseForUser = houseService.getHouseForJoinCode(JOIN_CODE);
+        HouseEntity houseForUser = systemUnderTest.getHouseForJoinCode(JOIN_CODE);
 
         //then
         verify(houseRepository, times(1)).save(houseForUser);
         assertThat(houseForUser.getJoinCode()).isEqualTo(JOIN_CODE);
-        assertThat(houseForUser.getUsersInformation()).isEmpty();
+        assertThat(houseForUser.getHouseBuddies()).isEmpty();
         assertThat(houseForUser.getRooms()).isEmpty();
     }
 
     @Test
     void shouldAddUserToHouseIfCorrectJoinCode() {
         //given
-        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(JOIN_CODE);
         when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(houseEntity);
         when(houseRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(user.getHouseBuddy()).thenReturn(houseBuddy);
 
         //when
-        houseService.addUserToHouse(user, JOIN_CODE);
+        systemUnderTest.addUserToHouse(user, JOIN_CODE);
 
         //then
         verify(houseRepository, times(1)).save(houseEntity);
-        assertThat(houseEntity.getUsersInformation()).contains(user);
+        assertThat(houseEntity.getHouseBuddies()).contains(houseBuddy);
     }
 
     @Test
     void shouldThrowExceptionIfWrongJoinCode() {
         //given
-        HouseService houseService = new HouseService(houseRepository, joinCodeGenerator);
         when(houseRepository.findByJoinCode(JOIN_CODE)).thenReturn(null);
 
         //when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> houseService.addUserToHouse(user, JOIN_CODE);
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> systemUnderTest.addUserToHouse(user, JOIN_CODE);
 
         //then
         assertThatThrownBy(throwingCallable).isInstanceOf(WrongHouseJoinCodeException.class);

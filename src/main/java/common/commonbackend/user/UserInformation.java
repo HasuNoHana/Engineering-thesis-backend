@@ -27,13 +27,13 @@ public class UserInformation {
     private String image;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "house_entity_id", nullable = false)
+    @JoinColumn(name = "HOUSE_ID", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.MERGE)
     private HouseEntity house;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     public UserInformation(Long points, Long range, String image, HouseEntity house) {

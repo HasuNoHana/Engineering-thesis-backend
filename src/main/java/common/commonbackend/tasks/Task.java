@@ -32,7 +32,7 @@ public class Task {
     private boolean done;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "ROOM_ID", nullable = false)
     private Room room;
 
 

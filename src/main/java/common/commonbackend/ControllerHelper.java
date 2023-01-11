@@ -18,4 +18,8 @@ public class ControllerHelper {
         log.debug("Current user: {}, house {}", currentUser.getUsername(), house);
         return house;
     }
+
+    public User getMyUser() {
+        return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+    }
 }

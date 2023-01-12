@@ -1,6 +1,8 @@
 package common.commonbackend.users;
 
 import common.commonbackend.ControllerHelper;
+import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -30,10 +32,9 @@ public class UserController {
 
     @GetMapping(path = "/users")
     public ResponseEntity<List<UserDTO>> getUsers() {
-//        List<User> users = userService.getUsersForHouse(controllerHelper.getMyHouse());
-        List<UserDTO> users = List.of(new UserDTO(1L, "zuza", 40, 100, "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg"),
-                new UserDTO(2L, "filip", 50, 60, "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg"));
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<UserDTO> userDTOs = houseBuddyService
+                .createUserDTOsFromHouseBuddies(userService.getUsersForHouse(controllerHelper.getMyHouse()));
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
     @PostMapping(path = "/edituser")

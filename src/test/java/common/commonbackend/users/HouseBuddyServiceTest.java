@@ -1,6 +1,8 @@
 package common.commonbackend.users;
 
 import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

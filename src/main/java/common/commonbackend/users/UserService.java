@@ -5,6 +5,7 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.security.UserPrincipal;
+import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -77,5 +80,9 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found!");
         }
         return new UserPrincipal(user);
+    }
+
+    public List<User> getUsersForHouse(HouseEntity myHouse) {
+        return this.userRepository.findByHouseBuddy_House(myHouse);
     }
 }

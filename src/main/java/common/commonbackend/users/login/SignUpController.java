@@ -1,6 +1,7 @@
-package common.commonbackend.users;
+package common.commonbackend.users.login;
 
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
@@ -53,13 +54,13 @@ public class SignUpController {
     }
 
     @Value
-    static class UserWithoutHouse {
+    public static class UserWithoutHouse {
         String username;
         String password;
     }
 
     @Value
-    static class UserAndJoinCode {
+    public static class UserAndJoinCode {
         String username;
         String password;
         String houseJoinCode;

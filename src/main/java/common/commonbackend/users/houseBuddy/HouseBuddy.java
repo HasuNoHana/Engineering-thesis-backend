@@ -1,7 +1,8 @@
-package common.commonbackend.users;
+package common.commonbackend.users.houseBuddy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.users.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;

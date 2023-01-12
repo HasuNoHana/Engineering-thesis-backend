@@ -3,6 +3,8 @@ package common.commonbackend.users;
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +14,11 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -120,6 +125,25 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(throwingCallable).isInstanceOf(UsernameNotFoundException.class);
+    }
+
+    @Test
+    void shouldGetUsersForHouse() {
+        // given
+        User user1 = new User("zuza", "haslo", houseBuddy);
+        User user2 = new User("filip", "password", houseBuddy);
+        List<User> users = List.of(user1,
+                user2);
+        when(userRepository.findByHouseBuddy_House(house)).thenReturn(users);
+
+        // when
+        List<User> actual = userService.getUsersForHouse(house);
+
+        // then
+        verify(userRepository, times(1)).findByHouseBuddy_House(house);
+        assertEquals(actual.size(), 2);
+        assertThat(actual.get(0)).isEqualTo(user1);
+        assertThat(actual.get(1)).isEqualTo(user2);
     }
 
 }

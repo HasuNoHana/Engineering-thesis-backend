@@ -1,7 +1,12 @@
-package common.commonbackend.users;
+package common.commonbackend.users.houseBuddy;
 
 import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.users.User;
+import common.commonbackend.users.UserDTO;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class HouseBuddyService {
@@ -25,5 +30,13 @@ public class HouseBuddyService {
                 houseBuddy.getFirewoodStackSize(),
                 houseBuddy.getWeeklyFirewoodContribution(),
                 houseBuddy.getAvatarImageUrl());
+    }
+
+    public List<UserDTO> createUserDTOsFromHouseBuddies(List<User> users) {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : users) {
+            userDTOS.add(createUserDTOFromHouseBuddy(user.getHouseBuddy()));
+        }
+        return userDTOS;
     }
 }

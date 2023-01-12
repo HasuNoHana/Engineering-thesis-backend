@@ -2,6 +2,9 @@ package common.commonbackend;
 
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseRepository;
+import common.commonbackend.images.Image;
+import common.commonbackend.images.ImageService;
+import common.commonbackend.images.ImageType;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.Task;
@@ -12,6 +15,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+
+import java.util.List;
 
 @SpringBootApplication
 public class CommonBackendApplication {
@@ -26,6 +31,8 @@ public class CommonBackendApplication {
 	private HouseRepository houseRepository;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ImageService imageService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CommonBackendApplication.class, args);
@@ -75,6 +82,17 @@ public class CommonBackendApplication {
 
 		this.taskRepository.save(task6);
 		this.taskRepository.save(task66);
+
+		List<String> avatarImages = List.of("https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/3/35/Red-simple-heart-symbol-only.png",
+				"https://upload.wikimedia.org/wikipedia/commons/2/2b/Black_Cat_Vector.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/4/47/Anchor_pictogram_grey.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/0/03/Oxygen480-apps-preferences-web-browser-cookies.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/6/6f/Lotus_flower_animation.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/f/f5/Circle-icons-flower.svg",
+				"https://upload.wikimedia.org/wikipedia/commons/3/3c/Dog_%28134522%29_-_The_Noun_Project.svg");
+
+		avatarImages.forEach(image -> imageService.saveImage(new Image(image, ImageType.AVATAR)));
 	}
 
 }

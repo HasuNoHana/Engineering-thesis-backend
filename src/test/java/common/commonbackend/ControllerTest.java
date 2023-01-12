@@ -2,6 +2,7 @@ package common.commonbackend;
 
 import common.commonbackend.houses.HouseRepository;
 import common.commonbackend.houses.HouseService;
+import common.commonbackend.images.ImageService;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.rooms.RoomService;
 import common.commonbackend.tasks.TaskRepository;
@@ -40,6 +41,9 @@ public abstract class ControllerTest {
     protected RoomService roomService;
     @MockBean
     protected HouseBuddyService houseBuddyService;
+
+    @MockBean
+    protected ImageService imageService;
     @Autowired
     private MockMvc mockMvc;
 

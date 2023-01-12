@@ -1,6 +1,7 @@
 package common.commonbackend.users;
 
 import common.commonbackend.ControllerHelper;
+import common.commonbackend.images.ImageService;
 import common.commonbackend.users.houseBuddy.HouseBuddy;
 import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,11 @@ public class UserController {
 
     private final HouseBuddyService houseBuddyService;
 
+    private final ImageService imageService;
+
     @GetMapping(path = "/currentUserData")
     public ResponseEntity<HouseBuddy> getCurrentUserData() {
         HouseBuddy houseBuddy = controllerHelper.getMyUser().getHouseBuddy();
-//        UserDTO userDTO = houseBuddyService.createUserDTOFromHouseBuddy(houseBuddy);
         return new ResponseEntity<>(houseBuddy, HttpStatus.OK);
     }
 
@@ -46,16 +48,9 @@ public class UserController {
         return new ResponseEntity<>(user.getHouseBuddy(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/proposedImages")
-    public ResponseEntity<Iterable<String>> getImages() {
-        List<String> images = List.of("https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg",
-                "https://upload.wikimedia.org/wikipedia/commons/3/35/Red-simple-heart-symbol-only.png",
-                "https://upload.wikimedia.org/wikipedia/commons/2/2b/Black_Cat_Vector.svg",
-                "https://upload.wikimedia.org/wikipedia/commons/4/47/Anchor_pictogram_grey.svg",
-                "https://upload.wikimedia.org/wikipedia/commons/0/03/Oxygen480-apps-preferences-web-browser-cookies.svg",
-                "https://upload.wikimedia.org/wikipedia/commons/6/6f/Lotus_flower_animation.svg",
-                "https://upload.wikimedia.org/wikipedia/commons/f/f5/Circle-icons-flower.svg",
-                "https://upload.wikimedia.org/wikipedia/commons/3/3c/Dog_%28134522%29_-_The_Noun_Project.svg");
-        return new ResponseEntity<>(images, HttpStatus.OK);
+    @GetMapping(path = "/avatarImages")
+    public ResponseEntity<Iterable<String>> getAvatarImages() {
+        List<String> imageUrls = imageService.getAvatarImages();
+        return new ResponseEntity<>(imageUrls, HttpStatus.OK);
     }
 }

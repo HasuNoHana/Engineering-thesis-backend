@@ -36,6 +36,7 @@ class UserControllerTest extends ControllerTest {
     public static final int FIREWOOD_STACK_SIZE_2 = 20;
     public static final int WEEKLY_FIREWOOD_CONTRIBUTION_2 = 30;
     public static final String IMAGE_2 = "url2";
+    private static final String PASSWORD = "password";
 
     @Mock
     User user;
@@ -50,20 +51,16 @@ class UserControllerTest extends ControllerTest {
     @SneakyThrows
     void shouldGetUser() {
         //given
-        UserDTO userDTO = new UserDTO(USER_ID, USERNAME, FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION,
-                DEFAULT_IMAGE);
+        HouseEntity house = new HouseEntity();
+        HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, DEFAULT_IMAGE, house);
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
         when(controllerHelper.getMyUser()).thenReturn(user);
-        when(user.getHouseBuddy()).thenReturn(houseBuddy);
-        when(houseBuddyService.createUserDTOFromHouseBuddy(houseBuddy)).thenReturn(userDTO);
 
         //when
         getMocMvc().perform(get("/api/currentUserData"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(userDTO)))
+                .andExpect(content().json(asJsonString(houseBuddy)))
                 .andDo(print());
-
-        //then
-        verify(houseBuddyService, times(1)).createUserDTOFromHouseBuddy(houseBuddy);
     }
 
     @Test
@@ -98,13 +95,17 @@ class UserControllerTest extends ControllerTest {
         UserDTO userDTO = new UserDTO(USER_ID, USERNAME, FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION,
                 DEFAULT_IMAGE);
         when(userService.editUser(USER_ID, userDTO)).thenReturn(user);
+        HouseEntity house = new HouseEntity();
+        HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION,
+                DEFAULT_IMAGE, house);
+        when(user.getHouseBuddy()).thenReturn(houseBuddy);
 
         //when
         getMocMvc().perform(post("/api/editUser?id=" + USER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(userDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().string(String.valueOf(USER_ID)))
+                .andExpect(content().json(asJsonString(houseBuddy)))
                 .andDo(print());
 
         //then

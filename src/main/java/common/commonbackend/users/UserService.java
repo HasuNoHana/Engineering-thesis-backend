@@ -5,9 +5,9 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.security.UserPrincipal;
-import common.commonbackend.users.houseBuddy.HouseBuddy;
-import common.commonbackend.users.houseBuddy.HouseBuddyRepository;
-import common.commonbackend.users.houseBuddy.HouseBuddyService;
+import common.commonbackend.users.house_buddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddyRepository;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +33,7 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(long id) {
         Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
         return user.get();
@@ -96,7 +96,7 @@ public class UserService implements UserDetailsService {
 
     public User editUser(Long id, UserDTO newUser) {
         Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
         HouseBuddy houseBuddy = user.get().getHouseBuddy();

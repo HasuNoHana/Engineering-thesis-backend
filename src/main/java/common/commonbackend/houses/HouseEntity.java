@@ -2,7 +2,7 @@ package common.commonbackend.houses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.rooms.Room;
-import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddy;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package common.commonbackend.users.houseBuddy;
+package common.commonbackend.users.house_buddy;
 
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.users.User;

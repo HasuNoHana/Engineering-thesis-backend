@@ -1,4 +1,4 @@
-package common.commonbackend.users.houseBuddy;
+package common.commonbackend.users.house_buddy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.houses.HouseEntity;

@@ -1,6 +1,6 @@
 package common.commonbackend.users;
 
-import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

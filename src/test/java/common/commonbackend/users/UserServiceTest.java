@@ -3,9 +3,9 @@ package common.commonbackend.users;
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
-import common.commonbackend.users.houseBuddy.HouseBuddy;
-import common.commonbackend.users.houseBuddy.HouseBuddyRepository;
-import common.commonbackend.users.houseBuddy.HouseBuddyService;
+import common.commonbackend.users.house_buddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddyRepository;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -150,7 +150,7 @@ class UserServiceTest {
 
         // then
         verify(userRepository, times(1)).findByHouseBuddy_House(house);
-        assertEquals(actual.size(), 2);
+        assertEquals(2, actual.size());
         assertThat(actual.get(0)).isEqualTo(user1);
         assertThat(actual.get(1)).isEqualTo(user2);
     }

@@ -1,8 +1,8 @@
 package common.commonbackend.users;
 
 import common.commonbackend.houses.HouseEntity;
-import common.commonbackend.users.houseBuddy.HouseBuddy;
-import common.commonbackend.users.houseBuddy.HouseBuddyService;
+import common.commonbackend.users.house_buddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -57,11 +57,11 @@ class HouseBuddyServiceTest {
         UserDTO userDTO = systemUnderTest.createUserDTOFromHouseBuddy(houseBuddy);
 
         //then
-        assertEquals(userDTO.getId(), USER_ID);
-        assertEquals(userDTO.getUsername(), USERNAME);
-        assertEquals(userDTO.getPoints(), FIREWOOD_STACK_SIZE);
-        assertEquals(userDTO.getRange(), WEEKLY_POINTS_CONTRIBUTION);
-        assertEquals(userDTO.getImage(), IMAGE);
+        assertEquals(USER_ID, userDTO.getId());
+        assertEquals(USERNAME, userDTO.getUsername());
+        assertEquals(FIREWOOD_STACK_SIZE, userDTO.getPoints());
+        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTO.getRange());
+        assertEquals(IMAGE, userDTO.getImage());
     }
 
 }

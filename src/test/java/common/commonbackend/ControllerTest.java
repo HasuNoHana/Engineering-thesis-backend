@@ -8,7 +8,7 @@ import common.commonbackend.rooms.RoomService;
 import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.tasks.TaskService;
 import common.commonbackend.users.UserService;
-import common.commonbackend.users.houseBuddy.HouseBuddyService;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

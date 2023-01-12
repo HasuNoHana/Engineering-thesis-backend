@@ -2,7 +2,7 @@ package common.commonbackend.users;
 
 import common.commonbackend.ControllerTest;
 import common.commonbackend.houses.HouseEntity;
-import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddy;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

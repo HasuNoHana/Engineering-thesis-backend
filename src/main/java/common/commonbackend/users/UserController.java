@@ -2,8 +2,8 @@ package common.commonbackend.users;
 
 import common.commonbackend.ControllerHelper;
 import common.commonbackend.images.ImageService;
-import common.commonbackend.users.houseBuddy.HouseBuddy;
-import common.commonbackend.users.houseBuddy.HouseBuddyService;
+import common.commonbackend.users.house_buddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

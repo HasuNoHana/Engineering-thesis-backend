@@ -9,12 +9,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 
 import static common.commonbackend.TestObjectMapperHelper.asJsonString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -87,6 +89,26 @@ class UserControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(usersDTOs)))
                 .andDo(print());
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldEditUser() {
+        //given
+        UserDTO userDTO = new UserDTO(USER_ID, USERNAME, FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION,
+                DEFAULT_IMAGE);
+        when(userService.editUser(USER_ID, userDTO)).thenReturn(user);
+
+        //when
+        getMocMvc().perform(post("/api/editUser?id=" + USER_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(userDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(String.valueOf(USER_ID)))
+                .andDo(print());
+
+        //then
+        verify(userService, times(1)).editUser(USER_ID, userDTO);
     }
 
 }

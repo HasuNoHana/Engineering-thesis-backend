@@ -4,6 +4,7 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.houseBuddy.HouseBuddyRepository;
 import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.ThrowableAssert;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -31,6 +33,11 @@ class UserServiceTest {
     public static final String PASSWORD = "password";
     public static final String ENCODED_PASSWORD = UserService.getPasswordEncoder().encode(PASSWORD);
     private static final String JOIN_CODE = "1234";
+    public static final long USER_ID = 1L;
+    public static final Long FIREWOOD_STACK_SIZE = 40L;
+
+    public static final long WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
+    private static final String IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -41,12 +48,14 @@ class UserServiceTest {
     private HouseEntity house;
     @Mock
     private HouseBuddy houseBuddy;
+    @Mock
+    private HouseBuddyRepository houseBuddyRepository;
 
     private UserService userService;
 
     @BeforeEach
     public void setUp() {
-        userService = new UserService(userRepository, houseService, houseBuddyService);
+        userService = new UserService(userRepository, houseService, houseBuddyService, houseBuddyRepository);
     }
 
     @Test
@@ -144,6 +153,27 @@ class UserServiceTest {
         assertEquals(actual.size(), 2);
         assertThat(actual.get(0)).isEqualTo(user1);
         assertThat(actual.get(1)).isEqualTo(user2);
+    }
+
+    @Test
+    void shouldEditUser() {
+        // given
+        UserDTO userDTO = new UserDTO(USER_ID, USERNAME, FIREWOOD_STACK_SIZE, WEEKLY_FIREWOOD_CONTRIBUTION,
+                IMAGE);
+        HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, WEEKLY_FIREWOOD_CONTRIBUTION, IMAGE, house);
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+        when(houseBuddyRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        // when
+        User actual = userService.editUser(USER_ID, userDTO);
+
+        // then
+        verify(userRepository, times(1)).findById(USER_ID);
+        assertThat(actual.getUsername()).isEqualTo(USERNAME);
+        assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE);
+        assertThat(actual.getHouseBuddy().getWeeklyFirewoodContribution()).isEqualTo(WEEKLY_FIREWOOD_CONTRIBUTION);
+        assertThat(actual.getHouseBuddy().getAvatarImageUrl()).isEqualTo(IMAGE);
     }
 
 }

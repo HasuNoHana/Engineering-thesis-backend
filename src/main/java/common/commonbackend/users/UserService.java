@@ -5,6 +5,8 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.security.UserPrincipal;
+import common.commonbackend.users.houseBuddy.HouseBuddy;
+import common.commonbackend.users.houseBuddy.HouseBuddyRepository;
 import common.commonbackend.users.houseBuddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +29,14 @@ public class UserService implements UserDetailsService {
     private final HouseService houseService;
 
     private final HouseBuddyService houseBuddyService;
+    private final HouseBuddyRepository houseBuddyRepository;
 
     public User getUserById(long id) {
-        return userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return user.get();
     }
 
     public User createUser(String username, String password, String joinCode) {
@@ -84,5 +92,17 @@ public class UserService implements UserDetailsService {
 
     public List<User> getUsersForHouse(HouseEntity myHouse) {
         return this.userRepository.findByHouseBuddy_House(myHouse);
+    }
+
+    public User editUser(Long id, UserDTO newUser) {
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        HouseBuddy houseBuddy = user.get().getHouseBuddy();
+        houseBuddy.setWeeklyFirewoodContribution(newUser.getRange());
+        houseBuddy.setAvatarImageUrl(newUser.getImage());
+        houseBuddyRepository.save(houseBuddy);
+        return user.get();
     }
 }

@@ -5,6 +5,7 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.users.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "HOUSE_BUDDY")
 @Getter
+@Setter
 @NoArgsConstructor
 public class HouseBuddy {
     @Id

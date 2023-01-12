@@ -22,6 +22,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final HouseService houseService;
 
+    private final HouseBuddyService houseBuddyService;
+
     public User getUserById(long id) {
         return userRepository.findById(id);
     }
@@ -39,7 +41,7 @@ public class UserService implements UserDetailsService {
         User user = new User(
                 username,
                 PASSWORD_ENCODER.encode(password),
-                house);
+                houseBuddyService.getDefaultHouseBuddy(house));
         return userRepository.save(user);
     }
 
@@ -60,7 +62,7 @@ public class UserService implements UserDetailsService {
         User user = new User(
                 username,
                 PASSWORD_ENCODER.encode(password),
-                houseService.createNewHouse());
+                houseBuddyService.getDefaultHouseBuddy(houseService.createNewHouse()));
         return userRepository.save(user);
     }
 

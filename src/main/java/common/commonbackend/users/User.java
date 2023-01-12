@@ -1,12 +1,9 @@
 package common.commonbackend.users;
 
-import common.commonbackend.houses.HouseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import static common.commonbackend.users.HouseBuddy.getDefaultHouseBuddy;
 
 @NoArgsConstructor(force = true)
 @Entity
@@ -25,9 +22,9 @@ public class User {
     @JoinColumn(name = "HOUSE_BUDDY_ID", referencedColumnName = "id")
     private HouseBuddy houseBuddy;
 
-    public User(String username, String password, HouseEntity house) {
+    public User(String username, String password, HouseBuddy houseBuddy) {
         this.username = username;
         this.password = password;
-        this.houseBuddy = getDefaultHouseBuddy(house);
+        this.houseBuddy = houseBuddy;
     }
 }

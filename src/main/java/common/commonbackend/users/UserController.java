@@ -19,13 +19,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping(path = "/userData")
-    public ResponseEntity<UserDTO> getUserData() {
-        User user = controllerHelper.getMyUser();
-//        UserDTO userDTO = new UserDTO(user.getUsername(), user.getPoints(), user.getRange());
-//        UserDTO userDTO = UserDTO.DTOFromUser(user);
-        UserDTO userDTO = new UserDTO(1L, "zuza", 40, 100,
-                "https://upload.wikimedia.org/wikipedia/commons/6/6f/Lotus_flower_animation.svg");
+    private final HouseBuddyService houseBuddyService;
+
+    @GetMapping(path = "/currentUserData")
+    public ResponseEntity<UserDTO> getCurrentUserData() {
+        HouseBuddy houseBuddy = controllerHelper.getMyUser().getHouseBuddy();
+        UserDTO userDTO = houseBuddyService.createUserDTOFromHouseBuddy(houseBuddy);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 

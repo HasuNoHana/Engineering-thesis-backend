@@ -36,11 +36,6 @@ public class HouseBuddy {
     @OneToOne(mappedBy = "houseBuddy")
     private User user;
 
-    public static final long DEFAULT_FIREWOOD_STACK_SIZE = 0L;
-    public static final long DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
-    private static final String DEFAULT_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
-
-
     public HouseBuddy(Long firewoodStackSize, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house) {
         this.firewoodStackSize = firewoodStackSize;
         this.weeklyFirewoodContribution = weeklyPointsContribution;
@@ -48,11 +43,11 @@ public class HouseBuddy {
         this.house = house;
     }
 
-    static HouseBuddy getDefaultHouseBuddy(HouseEntity house) {
-        return new HouseBuddy(
-                DEFAULT_FIREWOOD_STACK_SIZE,
-                DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION,
-                DEFAULT_IMAGE,
-                house);
+    public HouseBuddy(Long firewoodStackSize, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house, User user) {
+        this.firewoodStackSize = firewoodStackSize;
+        this.weeklyFirewoodContribution = weeklyPointsContribution;
+        this.avatarImageUrl = avatarImageUrl;
+        this.house = house;
+        this.user = user;
     }
 }

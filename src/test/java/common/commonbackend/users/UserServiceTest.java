@@ -28,18 +28,20 @@ class UserServiceTest {
     private static final String JOIN_CODE = "1234";
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private HouseService houseService;
+    @Mock
+    private HouseBuddyService houseBuddyService;
+    @Mock
+    private HouseEntity house;
+    @Mock
+    private HouseBuddy houseBuddy;
 
     private UserService userService;
 
-    @Mock
-    private HouseEntity house;
-
     @BeforeEach
     public void setUp() {
-        userService = new UserService(userRepository, houseService);
+        userService = new UserService(userRepository, houseService, houseBuddyService);
     }
 
     @Test
@@ -47,7 +49,9 @@ class UserServiceTest {
         // given
         when(userRepository.save(any())).thenAnswer(returnsFirstArg());
         when(houseService.getHouseForJoinCode(JOIN_CODE)).thenReturn(house);
-        User expectedUser = new User(USERNAME, ENCODED_PASSWORD, house);
+        User expectedUser = new User(USERNAME, ENCODED_PASSWORD, houseBuddy);
+        when(houseBuddy.getHouse()).thenReturn(house);
+        when(houseBuddyService.getDefaultHouseBuddy(house)).thenReturn(houseBuddy);
 
         // when
         User actual = userService.createUser(USERNAME, PASSWORD, JOIN_CODE);
@@ -77,8 +81,9 @@ class UserServiceTest {
         // given
         when(userRepository.save(any())).thenAnswer(returnsFirstArg());
         when(houseService.createNewHouse()).thenReturn(house);
-
-        User expectedUser = new User(USERNAME, ENCODED_PASSWORD, house);
+        when(houseBuddy.getHouse()).thenReturn(house);
+        when(houseBuddyService.getDefaultHouseBuddy(house)).thenReturn(houseBuddy);
+        User expectedUser = new User(USERNAME, ENCODED_PASSWORD, houseBuddy);
 
         // when
         User actual = userService.createUser(USERNAME, PASSWORD);
@@ -93,7 +98,7 @@ class UserServiceTest {
     @Test
     void shouldLoadUserByUsernameWithExistingUser() {
         // given
-        User user = new User(USERNAME, PASSWORD, house);
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
         when(userRepository.findByUsername(USERNAME)).thenReturn(user);
 
         // when

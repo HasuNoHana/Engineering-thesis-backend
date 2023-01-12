@@ -6,6 +6,7 @@ import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.rooms.RoomService;
 import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.tasks.TaskService;
+import common.commonbackend.users.HouseBuddyService;
 import common.commonbackend.users.UserService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,30 +21,25 @@ public abstract class ControllerTest {
 
     @MockBean
     protected TaskRepository taskRepository;
-
     @MockBean
     @Qualifier("userService")
     protected UserDetailsService userDetailsService;
-
     @MockBean
     protected HouseRepository houseRepository;
-
     @MockBean
     protected TaskService taskService;
     @MockBean
     protected UserService userService;
     @MockBean
     protected HouseService houseService;
-
     @MockBean
     protected RoomRepository roomRepository;
-
     @MockBean
     protected ControllerHelper controllerHelper;
-
     @MockBean
     protected RoomService roomService;
-
+    @MockBean
+    protected HouseBuddyService houseBuddyService;
     @Autowired
     private MockMvc mockMvc;
 

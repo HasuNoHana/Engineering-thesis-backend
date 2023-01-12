@@ -1,7 +1,7 @@
 package common.commonbackend.rooms;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

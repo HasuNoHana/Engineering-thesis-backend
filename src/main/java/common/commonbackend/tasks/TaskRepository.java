@@ -1,6 +1,6 @@
 package common.commonbackend.tasks;
 
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

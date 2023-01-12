@@ -1,10 +1,10 @@
 package common.commonbackend.tasks;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.rooms.Room;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class TaskControllerTest extends ControllerTest {
+class TaskControllerTest extends ControllerTest {
 
     public static final String ROOM_NAME = "Kuchnia";
     public static final String ROOM_IMAGE_URL = "url";
@@ -37,7 +37,7 @@ public class TaskControllerTest extends ControllerTest {
 
     @Test
     @SneakyThrows
-    public void shouldGetTaskById() {
+    void shouldGetTaskById() {
         //given
         Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
         when(taskService.getTask(TASK_ID, controllerHelper.getMyHouse())).thenReturn(task);
@@ -50,7 +50,7 @@ public class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    public void shouldGetToDoTasks() throws Exception {
+    void shouldGetToDoTasks() throws Exception {
         //given
         List<Task> tasks = List.of(
                 new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room),
@@ -68,7 +68,7 @@ public class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    public void shouldGetDoneTasks() throws Exception {
+    void shouldGetDoneTasks() throws Exception {
         //given
         List<Task> tasks = List.of(new Task(TASK_NAME, INITIAL_PRICE, DONE, room));
 
@@ -84,7 +84,7 @@ public class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    public void shouldDeleteTask() throws Exception {
+    void shouldDeleteTask() throws Exception {
         getMocMvc().perform(delete("/api/task?id=" + TASK_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string(String.valueOf(TASK_ID)))
@@ -92,7 +92,7 @@ public class TaskControllerTest extends ControllerTest {
     }
 
     @Test
-    public void shouldPostTask() throws Exception {
+    void shouldPostTask() throws Exception {
         //given
         Task task = new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
         TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, room.getId());

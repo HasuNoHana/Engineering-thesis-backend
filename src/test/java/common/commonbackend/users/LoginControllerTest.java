@@ -1,8 +1,10 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.house.HouseEntity;
-import org.junit.Test;
+import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.users.house_buddy.HouseBuddy;
+import common.commonbackend.users.login.LoginController;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -13,15 +15,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(LoginController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class LoginControllerTest extends ControllerTest {
+class LoginControllerTest extends ControllerTest {
     public static final String USERNAME = "zuza";
     public static final String PASSWORD = "haslo";
+    public static final long FIREWOOD_STACK_SIZE = 0L;
+    public static final long WEEKLY_POINTS_CONTRIBUTION = 100L;
+    public static final String IMAGE = "image";
 
     @Test
-    public void shouldGetUser() throws Exception {
+    void shouldGetUser() throws Exception {
         //given
         HouseEntity house = new HouseEntity();
-        User user = new User(USERNAME,PASSWORD, house);
+        HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, WEEKLY_POINTS_CONTRIBUTION, IMAGE, house);
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
 
         //then
         getMocMvc().perform(get("/api/user")

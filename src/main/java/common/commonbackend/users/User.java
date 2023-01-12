@@ -1,9 +1,8 @@
-package common.commonbackend.user;
+package common.commonbackend.users;
 
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.users.house_buddy.HouseBuddy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -16,21 +15,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
-
     @Column(name = "USERNAME")
     private String username;
-
     @Column(name = "PASSWORD")
     private String password;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HOUSE_BUDDY_ID", referencedColumnName = "id")
+    private HouseBuddy houseBuddy;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "HOUSE_ID", nullable = false)
-    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
-    private HouseEntity house;
-
-    public User(String username, String password, HouseEntity house) {
+    public User(String username, String password, HouseBuddy houseBuddy) {
         this.username = username;
         this.password = password;
-        this.house = house;
+        this.houseBuddy = houseBuddy;
     }
 }

@@ -1,4 +1,4 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
 
 import org.springframework.data.repository.CrudRepository;

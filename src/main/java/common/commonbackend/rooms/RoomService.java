@@ -1,6 +1,6 @@
 package common.commonbackend.rooms;
 
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package common.commonbackend.house;
+package common.commonbackend.houses;
 
 import common.commonbackend.ControllerTest;
-import common.commonbackend.user.User;
+import common.commonbackend.users.User;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 
 import static common.commonbackend.TestObjectMapperHelper.asJsonString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -50,4 +51,20 @@ class HouseControllerTest extends ControllerTest {
         verify(userService, times(1)).getUserById(USER_ID);
     }
 
+    @Test
+    @SneakyThrows
+    void shouldGetJoinCode() {
+        //given
+        when(controllerHelper.getMyHouse()).thenReturn(houseEntity);
+        when(houseEntity.getJoinCode()).thenReturn(JOIN_CODE);
+
+        //when
+        getMocMvc().perform(get("/api/joinCode")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(JOIN_CODE));
+        //when
+        verify(controllerHelper, times(1)).getMyHouse();
+    }
 }

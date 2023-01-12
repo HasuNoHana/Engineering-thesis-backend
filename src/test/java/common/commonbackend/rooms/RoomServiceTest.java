@@ -1,6 +1,6 @@
 package common.commonbackend.rooms;
 
-import common.commonbackend.house.HouseEntity;
+import common.commonbackend.houses.HouseEntity;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

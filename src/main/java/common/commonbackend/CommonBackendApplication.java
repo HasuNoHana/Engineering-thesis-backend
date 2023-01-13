@@ -55,8 +55,8 @@ public class CommonBackendApplication {
 		userService.createUser("obcy", "666", "6666");
 
 
-		Room room1 = new Room("Sypialnia", "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg",houseEntity);
-		Room room2 = new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/b/b8/L_K%C3%BCche_2015.jpg",houseEntity);
+		Room room1 = new Room("Sypialnia", "https://upload.wikimedia.org/wikipedia/commons/2/2d/Simbavati4.jpg", houseEntity);
+		Room room2 = new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/b/b8/L_K%C3%BCche_2015.jpg", houseEntity);
 		Room room3 = new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/8/8a/Bathroom_with_tub_and_fireplace_%28Pleasure_Point_Roadhouse%2C_Monterey_Bay%2C_California_-_30_September%2C_2002%29.jpg",houseEntity);
 		this.roomRepository.save(room1);
 		this.roomRepository.save(room2);
@@ -92,7 +92,24 @@ public class CommonBackendApplication {
 				"https://upload.wikimedia.org/wikipedia/commons/f/f5/Circle-icons-flower.svg",
 				"https://upload.wikimedia.org/wikipedia/commons/3/3c/Dog_%28134522%29_-_The_Noun_Project.svg");
 
+		List<String> roomImages = List.of("https://upload.wikimedia.org/wikipedia/commons/5/59/Kitchen_life_in_the_18nt_cen.JPG",
+				"https://upload.wikimedia.org/wikipedia/commons/d/dc/Kitchen_Renovation_Marlton_New_Jersey.jpg",
+				"https://upload.wikimedia.org/wikipedia/commons/9/9c/Set_Design-_Something%27s_Gotta_Give-Sony-Pictures-2003.png",
+				"https://upload.wikimedia.org/wikipedia/commons/b/b8/L_K%C3%BCche_2015.jpg",
+
+				"https://upload.wikimedia.org/wikipedia/commons/2/2d/Simbavati4.jpg",
+				"https://upload.wikimedia.org/wikipedia/commons/0/0d/Bedroom_Mitcham.jpg",
+				"https://upload.wikimedia.org/wikipedia/commons/b/b5/Beautiful_fitted_bedroom_design_lodnon.gif",
+				"https://upload.wikimedia.org/wikipedia/commons/c/cf/Regency_Suite_King_-_Bedroom.jpg",
+
+				"https://upload.wikimedia.org/wikipedia/commons/f/f9/Youngest_child_bedroom_-_second_floor_-_Tinsley_Living_Farm_-_Museum_of_the_Rockies_-_2013-07-08.jpg",
+
+				"https://upload.wikimedia.org/wikipedia/commons/0/03/Edison_NJ_The_Coffee_House_beautiful_bathroom_decor.JPG",
+				"https://upload.wikimedia.org/wikipedia/commons/b/b1/CasaMila-Bany.jpg");
+
+
 		avatarImages.forEach(image -> imageService.saveImage(new Image(image, ImageType.AVATAR)));
+		roomImages.forEach(image -> imageService.saveImage(new Image(image, ImageType.ROOM)));
 	}
 
 }

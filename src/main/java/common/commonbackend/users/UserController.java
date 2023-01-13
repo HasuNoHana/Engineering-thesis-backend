@@ -1,7 +1,6 @@
 package common.commonbackend.users;
 
 import common.commonbackend.ControllerHelper;
-import common.commonbackend.images.ImageService;
 import common.commonbackend.users.house_buddy.HouseBuddy;
 import common.commonbackend.users.house_buddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,6 @@ public class UserController {
 
     private final HouseBuddyService houseBuddyService;
 
-    private final ImageService imageService;
-
     @GetMapping(path = "/currentUserData")
     public ResponseEntity<HouseBuddy> getCurrentUserData() {
         HouseBuddy houseBuddy = controllerHelper.getMyUser().getHouseBuddy();
@@ -46,11 +43,5 @@ public class UserController {
         }
         User user = userService.editUser(id, newUser);
         return new ResponseEntity<>(user.getHouseBuddy(), HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/avatarImages")
-    public ResponseEntity<Iterable<String>> getAvatarImages() {
-        List<String> imageUrls = imageService.getAvatarImages();
-        return new ResponseEntity<>(imageUrls, HttpStatus.OK);
     }
 }

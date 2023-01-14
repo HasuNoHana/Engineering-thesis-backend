@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -25,6 +27,10 @@ class TaskServiceTest {
     public static final long ROOM_ID = 1L;
     public static final String TASK_NAME_2 = "task2";
     public static final int INITIAL_PRICE_2 = 20;
+
+    public static final long USER_ID = 2L;
+    public static final int REPETITION_RATE_DTO = 1;
+    public static final Period REPETITION_RATE = Period.ofDays(REPETITION_RATE_DTO);
     @Mock
     TaskPriceUpdaterService taskPriceUpdaterService;
     @Mock
@@ -45,7 +51,7 @@ class TaskServiceTest {
     @Test
     void shouldGetTask() {
         //given
-        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE);
 
         when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(task);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task)).thenReturn(task);
@@ -61,8 +67,8 @@ class TaskServiceTest {
     void shouldGetToDoTasks() {
         //given
         List<Task> tasks = List.of(
-                new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room),
-                new Task(TASK_NAME_2, INITIAL_PRICE_2, NOT_DONE, room));
+                new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE),
+                new Task(TASK_NAME_2, INITIAL_PRICE_2, NOT_DONE, room, USER_ID, REPETITION_RATE));
 
         when(taskRepository.findTaskByDoneAndRoom_House(NOT_DONE, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
@@ -78,8 +84,8 @@ class TaskServiceTest {
     void shouldGetDoneTasks() {
         //given
         List<Task> tasks = List.of(
-                new Task(TASK_NAME, INITIAL_PRICE, DONE, room),
-                new Task(TASK_NAME_2, INITIAL_PRICE_2, DONE, room));
+                new Task(TASK_NAME, INITIAL_PRICE, DONE, room, USER_ID, REPETITION_RATE),
+                new Task(TASK_NAME_2, INITIAL_PRICE_2, DONE, room, USER_ID, REPETITION_RATE));
 
         when(taskRepository.findTaskByDoneAndRoom_House(DONE, house)).thenReturn(tasks);
         when(taskPriceUpdaterService.getTasksWithUpdatedPrice(tasks)).thenReturn(tasks);
@@ -94,7 +100,7 @@ class TaskServiceTest {
     @Test
     void shouldDeleteTask() {
         //given
-        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE);
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(task);
 
         //when
@@ -107,8 +113,8 @@ class TaskServiceTest {
     @Test
     void shouldSaveUpdatedTask() {
         //given
-        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
-        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE);
+        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID, REPETITION_RATE_DTO);
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(task);
 
         //when
@@ -123,25 +129,37 @@ class TaskServiceTest {
     @Test
     void shouldSaveNewTask() {
         //given
-        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID);
+        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, ROOM_ID, REPETITION_RATE_DTO);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
         when(roomRepository.getRoomByIdAndHouse(ROOM_ID, house)).thenReturn(room);
 
         //when
-        Task actual = systemUnderTest.saveNewTask(taskDTO, house);
+        Task actual = systemUnderTest.saveNewTask(taskDTO, house, USER_ID);
 
         //then
         assertThat(actual)
                 .extracting(
                         Task::isDone,
                         Task::getInitialPrice,
+                        Task::getCurrentPrice,
                         Task::getName,
-                        Task::getRoom)
+                        Task::getRoom,
+                        Task::getLastDoneDate,
+                        Task::getPreviousLastDoneDate,
+                        Task::getLastDoneUserId,
+                        Task::getPreviousLastDoneUserId,
+                        Task::getRepetitionRate)
                 .contains(
                         taskDTO.isDone(),
-                        taskDTO.getPrice(),
+                        taskDTO.getInitialPrice(),
+                        taskDTO.getInitialPrice(),
                         taskDTO.getName(),
-                        room);
+                        room,
+                        LocalDate.now(),
+                        LocalDate.now(),
+                        USER_ID,
+                        USER_ID,
+                        Period.ofDays(taskDTO.getRepetitionRate()));
 
         verify(roomRepository, times(1)).getRoomByIdAndHouse(ROOM_ID, house);
         verify(taskRepository, times(1)).save(any());
@@ -150,7 +168,7 @@ class TaskServiceTest {
     @Test
     void shouldSetTaskDone() {
         //given
-        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE);
         when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(task);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task)).thenReturn(task);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());

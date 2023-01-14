@@ -60,8 +60,8 @@ public class TaskController {
     }
 
     @PostMapping(path = "/addTask")
-    public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
-        Task task = taskService.saveNewTask(taskDTO, controllerHelper.getMyHouse());
+    public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
+        Task task = taskService.saveNewTask(taskDTO, controllerHelper.getMyHouse(), controllerHelper.getMyUser().getId());
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 

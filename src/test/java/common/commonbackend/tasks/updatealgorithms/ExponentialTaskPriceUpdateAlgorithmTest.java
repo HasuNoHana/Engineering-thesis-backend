@@ -33,10 +33,10 @@ class ExponentialTaskPriceUpdateAlgorithmTest {
         when(clock.instant()).thenReturn(dateNow.atStartOfDay().toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
 
-        ExponentialTaskPriceUpdateAlgorithm exponentialTaskPriceUpdateAlgorithm = new ExponentialTaskPriceUpdateAlgorithm(clock);
+        ExponentialTaskPriceUpdateAlgorithm exponentialAlgorithm = new ExponentialTaskPriceUpdateAlgorithm(clock);
 
         //when
-        long actualPrice = exponentialTaskPriceUpdateAlgorithm.getNewPrice(price, lastDoneDate, period);
+        long actualPrice = exponentialAlgorithm.getNewPrice(price, lastDoneDate, period);
 
         //then
         assertThat(actualPrice).isEqualTo(expectedPrice);

@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
+import java.time.Period;
 import java.util.List;
 
 import static common.commonbackend.TestObjectMapperHelper.asJsonString;
@@ -32,6 +33,9 @@ class TaskControllerTest extends ControllerTest {
     public static final long TASK_ID = 42L;
     public static final String TASK_NAME_2 = "task2";
     public static final int INITIAL_PRICE_2 = 20;
+    public static final long USER_ID = 2L;
+    public static final int REPETITION_RATE_DTO = 1;
+    public static final Period REPETITION_RATE = Period.ofDays(REPETITION_RATE_DTO);
     private final HouseEntity house = new HouseEntity();
     private final Room room = new Room(1L, ROOM_NAME, ROOM_IMAGE_URL, house);
 
@@ -39,7 +43,7 @@ class TaskControllerTest extends ControllerTest {
     @SneakyThrows
     void shouldGetTaskById() {
         //given
-        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+        Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE);
         when(taskService.getTask(TASK_ID, controllerHelper.getMyHouse())).thenReturn(task);
 
         //then
@@ -53,8 +57,8 @@ class TaskControllerTest extends ControllerTest {
     void shouldGetToDoTasks() throws Exception {
         //given
         List<Task> tasks = List.of(
-                new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room),
-                new Task(TASK_NAME_2, INITIAL_PRICE_2, NOT_DONE, room));
+                new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE),
+                new Task(TASK_NAME_2, INITIAL_PRICE_2, NOT_DONE, room, USER_ID, REPETITION_RATE));
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
@@ -70,7 +74,7 @@ class TaskControllerTest extends ControllerTest {
     @Test
     void shouldGetDoneTasks() throws Exception {
         //given
-        List<Task> tasks = List.of(new Task(TASK_NAME, INITIAL_PRICE, DONE, room));
+        List<Task> tasks = List.of(new Task(TASK_NAME, INITIAL_PRICE, DONE, room, USER_ID, REPETITION_RATE));
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
@@ -94,8 +98,8 @@ class TaskControllerTest extends ControllerTest {
     @Test
     void shouldPostTask() throws Exception {
         //given
-        Task task = new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
-        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, room.getId());
+        Task task = new Task(TASK_NAME, INITIAL_PRICE, NOT_DONE, room, USER_ID, REPETITION_RATE);
+        TaskDTO taskDTO = new TaskDTO(TASK_NAME, INITIAL_PRICE, NOT_DONE, room.getId(), REPETITION_RATE_DTO);
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);

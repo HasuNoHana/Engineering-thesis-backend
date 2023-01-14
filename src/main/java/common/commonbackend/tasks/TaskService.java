@@ -44,14 +44,14 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public Task saveNewTask(TaskDTO taskDTO, HouseEntity myHouse) {
+    public Task saveNewTask(TaskDTO taskDTO, HouseEntity myHouse, long currentUserId) {
         log.debug("Got taskDTO: {}", taskDTO);
         Room room = roomRepository.getRoomByIdAndHouse(taskDTO.getRoomId(), myHouse);
         if (room == null) {
             log.error("Room with id: " + taskDTO.getRoomId() + " not found");
             return null;
         }
-        Task task = Task.fromDto(taskDTO, room);
+        Task task = Task.fromDto(taskDTO, room, currentUserId);
         log.debug("Converted to task: {}", task);
         return taskRepository.save(task);
     }

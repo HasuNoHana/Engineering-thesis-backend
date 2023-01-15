@@ -7,14 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TaskRepository extends CrudRepository<Task, Long> {
+public interface TaskRepository extends CrudRepository<TaskEntity, Long> {
 
-    Task getTaskById(Long id);
+    TaskEntity getTaskById(Long id);
 
-    List<Task> findTaskByDoneAndRoom_House(boolean done, HouseEntity house); //NOSONAR
+    List<TaskEntity> findTaskByRoom_House(HouseEntity house); //NOSONAR
 
-    List<Task> findTaskByRoom_House(HouseEntity house); //NOSONAR
-
-    Task getTaskByIdAndRoom_House(Long id, HouseEntity myHouse); //NOSONAR
+    TaskEntity getTaskByIdAndRoom_House(Long id, HouseEntity myHouse); //NOSONAR
 }
 

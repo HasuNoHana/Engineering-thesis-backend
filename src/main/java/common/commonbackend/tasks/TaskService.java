@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -20,53 +21,56 @@ public class TaskService {
     private final RoomRepository roomRepository;
     private final TaskPriceUpdaterService taskPriceUpdaterService;
 
-    public Task getTask(Long id, HouseEntity myHouse) {
+    Task getTask(Long id, HouseEntity myHouse) {
         log.debug("Looking for task with id: " + id);
-        Task task = taskRepository.getTaskByIdAndRoom_House(id, myHouse);
+        Task task = Task.fromEntity(taskRepository.getTaskByIdAndRoom_House(id, myHouse));
         log.debug("Found task: " + task);
-         return taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
+        return taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
     }
 
-    public List<Task> getTasks(HouseEntity myHouse) {
-        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByRoom_House(myHouse));
+    List<Task> getTasks(HouseEntity myHouse) {
+        return taskPriceUpdaterService.getTasksWithUpdatedPrice(
+                taskRepository.findTaskByRoom_House(myHouse)
+                        .stream()
+                        .map(Task::fromEntity)
+                        .map(taskPriceUpdaterService::getOneTaskWithUpdatedPrice)
+                        .collect(Collectors.toList()));
     }
 
-    public List<Task> getToDoTasks(HouseEntity myHouse) {
-        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByDoneAndRoom_House(false, myHouse));
+
+    void deleteTask(Long id) {
+        Task task = Task.fromEntity(taskRepository.getTaskById(id));
+        taskRepository.delete(task.toEntity());
     }
 
-    public List<Task> getDoneTasks(HouseEntity myHouse) {
-        return taskPriceUpdaterService.getTasksWithUpdatedPrice(taskRepository.findTaskByDoneAndRoom_House(true, myHouse));
-    }
-
-    public void deleteTask(Long id) {
-        Task task = taskRepository.getTaskById(id);
-        taskRepository.delete(task);
-    }
-
-    public Task saveNewTask(TaskDTO taskDTO, HouseEntity myHouse) {
+    Task saveNewTask(TaskDTO taskDTO, HouseEntity myHouse) {
         log.debug("Got taskDTO: {}", taskDTO);
         Room room = roomRepository.getRoomByIdAndHouse(taskDTO.getRoomId(), myHouse);
         if (room == null) {
             log.error("Room with id: " + taskDTO.getRoomId() + " not found");
             return null;
         }
-        Task task = Task.fromDto(taskDTO, room);
+        Task task = Task.fromDTOAndRoom(taskDTO);
+        task.setRoom(room);
         log.debug("Converted to task: {}", task);
-        return taskRepository.save(task);
+        return Task.fromEntity(taskRepository.save(task.toEntity()));
     }
 
-    public Task saveUpdatedTask(Long id, TaskDTO updatedTask, HouseEntity house) {
-        Task task = taskRepository.getTaskById(id);
+    Task saveUpdatedTask(TaskDTO updatedTask, HouseEntity house) {
+        TaskEntity originalTask = taskRepository.getTaskById(updatedTask.getId());
         Room room = roomRepository.getRoomByIdAndHouse(updatedTask.getRoomId(), house);
-        task.updateFromDto(updatedTask, room);
-        return taskRepository.save(task);
+        Task newTask = new Task(
+                updatedTask.getId(),
+                updatedTask.getName(),
+                updatedTask.getInitialPrice(),
+                originalTask.isDone(),
+                room);
+        return Task.fromEntity(taskRepository.save(newTask.toEntity()));
     }
 
-    public Task setTaskDone(Long id, HouseEntity house, boolean done) {
+    Task setTaskDone(Long id, HouseEntity house, boolean done) {
         Task task = getTask(id, house);
         task.setDone(done);
-        task =  taskRepository.save(task);
-        return task;
+        return Task.fromEntity(taskRepository.save(task.toEntity()));
     }
 }

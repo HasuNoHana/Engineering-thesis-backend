@@ -6,8 +6,9 @@ import lombok.Value;
 @Value
 @RequiredArgsConstructor
 public class TaskDTO {
+    Long id;
     String name;
-    long price; //TODO to jest intial prcie czy actual
+    long initialPrice;
     boolean done;
     long roomId;
 }

@@ -7,7 +7,7 @@ import common.commonbackend.images.ImageService;
 import common.commonbackend.images.ImageType;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
-import common.commonbackend.tasks.Task;
+import common.commonbackend.tasks.TaskEntity;
 import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,28 +57,28 @@ public class CommonBackendApplication {
 
 		Room room1 = new Room("Sypialnia", "https://upload.wikimedia.org/wikipedia/commons/2/2d/Simbavati4.jpg", houseEntity);
 		Room room2 = new Room("Kuchnia", "https://upload.wikimedia.org/wikipedia/commons/b/b8/L_K%C3%BCche_2015.jpg", houseEntity);
-		Room room3 = new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/8/8a/Bathroom_with_tub_and_fireplace_%28Pleasure_Point_Roadhouse%2C_Monterey_Bay%2C_California_-_30_September%2C_2002%29.jpg",houseEntity);
+		Room room3 = new Room("Łazienka", "https://upload.wikimedia.org/wikipedia/commons/8/8a/Bathroom_with_tub_and_fireplace_%28Pleasure_Point_Roadhouse%2C_Monterey_Bay%2C_California_-_30_September%2C_2002%29.jpg", houseEntity);
 		this.roomRepository.save(room1);
 		this.roomRepository.save(room2);
 		this.roomRepository.save(room3);
 
-		Room szatanskaKuchnia = new Room("Kuchnia piekła", "https://upload.wikimedia.org/wikipedia/pt/0/03/HKSIC.png",obcyHouse);
+		Room szatanskaKuchnia = new Room("Kuchnia piekła", "https://upload.wikimedia.org/wikipedia/pt/0/03/HKSIC.png", obcyHouse);
 		this.roomRepository.save(szatanskaKuchnia);
 
 
-		Task task1 = new Task("task1", 10, false, room1);
-		Task task2 = new Task("task2", 20, false, room1);
-		Task task3 = new Task("task3", 30, true, room1);
-		Task task4 = new Task("task4", 40, false, room2);
-		Task task5 = new Task("task5", 50, true, room2);
+		TaskEntity task1 = new TaskEntity("task1", 10, false, room1);
+		TaskEntity task2 = new TaskEntity("task2", 20, false, room1);
+		TaskEntity task3 = new TaskEntity("task3", 30, true, room1);
+		TaskEntity task4 = new TaskEntity("task4", 40, false, room2);
+		TaskEntity task5 = new TaskEntity("task5", 50, true, room2);
 		this.taskRepository.save(task1);
 		this.taskRepository.save(task2);
 		this.taskRepository.save(task3);
 		this.taskRepository.save(task4);
 		this.taskRepository.save(task5);
 
-		Task task6 = new Task("złożyć ofiarę z martwych niemowląt", 10, false, szatanskaKuchnia);
-		Task task66 = new Task("przygotować pentagram", 20, true, szatanskaKuchnia);
+		TaskEntity task6 = new TaskEntity("złożyć ofiarę z martwych niemowląt", 10, false, szatanskaKuchnia);
+		TaskEntity task66 = new TaskEntity("przygotować pentagram", 20, true, szatanskaKuchnia);
 
 		this.taskRepository.save(task6);
 		this.taskRepository.save(task66);

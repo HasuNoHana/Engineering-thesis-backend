@@ -2,7 +2,7 @@ package common.commonbackend.rooms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.houses.HouseEntity;
-import common.commonbackend.tasks.Task;
+import common.commonbackend.tasks.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ public class Room {
 
     @JsonIgnore
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<Task> tasks;
+    private Set<TaskEntity> tasks;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "HOUSE_ID", nullable = false)

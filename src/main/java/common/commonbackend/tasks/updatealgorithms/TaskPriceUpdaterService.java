@@ -13,11 +13,12 @@ public class TaskPriceUpdaterService {
     private final TaskPriceUpdateAlgorithm taskPriceUpdateAlgorithm;
 
     public Task getOneTaskWithUpdatedPrice(Task task) {
-        long newPrice = taskPriceUpdateAlgorithm.getNewPrice(
-                task.getInitialPrice(),
-                task.getLastDoneDate(),
-                task.getRepetitionRate());
-        return task.getNewTaskWithUpdatedPrice(newPrice);
+//        long newPrice = taskPriceUpdateAlgorithm.getNewPrice(
+//                task.getInitialPrice(),
+//                task.getLastDoneDate(),
+//                task.getRepetitionRate());
+//        return task.getNewTaskWithUpdatedPrice(newPrice);
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public List<Task> getTasksWithUpdatedPrice(List<Task> tasks) {

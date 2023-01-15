@@ -3,7 +3,8 @@ package common.commonbackend.rooms;
 import lombok.Value;
 
 @Value
-class RoomDTO {
+public class RoomDTO {
+    long id;
     String name;
     String image;
 }

@@ -11,22 +11,22 @@ import java.util.List;
 public class RoomService {
     private final RoomRepository roomRepository;
 
-    public Room createRoom(RoomDTO roomDTO, HouseEntity house) {
+    Room createRoom(RoomDTO roomDTO, HouseEntity house) {
         Room room = new Room(roomDTO.getName(), roomDTO.getImage(), house);
         return roomRepository.save(room);
     }
 
-    public List<Room> getRoomsForHouse(HouseEntity house) {
+    List<Room> getRoomsForHouse(HouseEntity house) {
         return roomRepository.findRoomsByHouse(house);
     }
 
-    public Room updateRoom(long id, RoomDTO roomDTO, HouseEntity myHouse) {
-        Room room = roomRepository.getRoomByIdAndHouse(id, myHouse);
+    Room updateRoom(RoomDTO roomDTO, HouseEntity myHouse) {
+        Room room = roomRepository.getRoomByIdAndHouse(roomDTO.getId(), myHouse);
         room.updateFromDTO(roomDTO);
         return roomRepository.save(room);
     }
 
-    public Room deleteRoom(long id, HouseEntity myHouse) {
+    Room deleteRoom(long id, HouseEntity myHouse) {
         Room room = roomRepository.getRoomByIdAndHouse(id, myHouse);
         roomRepository.delete(room);
         return room;

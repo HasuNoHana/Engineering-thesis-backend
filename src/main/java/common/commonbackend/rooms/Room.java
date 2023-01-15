@@ -3,12 +3,11 @@ package common.commonbackend.rooms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.tasks.TaskEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,6 +15,8 @@ import java.util.Set;
 @Table(name = "ROOM")
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +31,7 @@ public class Room {
 
     @JsonIgnore
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<TaskEntity> tasks;
+    private Set<TaskEntity> tasks = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "HOUSE_ID", nullable = false)
@@ -50,8 +51,20 @@ public class Room {
         this.house = house;
     }
 
-    public void updateFromDTO(RoomDTO roomDTO) {
+    public static Room fromDto(RoomDTO roomDTO) {
+        return new Room(
+                roomDTO.getId(),
+                roomDTO.getName(),
+                roomDTO.getImage(),
+                new HouseEntity()); //TODO przemyslec to
+    }
+
+    void updateFromDTO(RoomDTO roomDTO) {
         this.name = roomDTO.getName();
         this.image = roomDTO.getImage();
+    }
+
+    public RoomDTO toDto() {
+        return new RoomDTO(id, name, image);
     }
 }

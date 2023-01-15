@@ -44,9 +44,9 @@ public class TaskService {
 
     Task saveNewTask(TaskDTO taskDTO, HouseEntity myHouse) {
         log.debug("Got taskDTO: {}", taskDTO);
-        Room room = roomRepository.getRoomByIdAndHouse(taskDTO.getRoomId(), myHouse);
+        Room room = roomRepository.getRoomByIdAndHouse(taskDTO.getRoom().getId(), myHouse);
         if (room == null) {
-            log.error("Room with id: " + taskDTO.getRoomId() + " not found");
+            log.error("Room with id: " + taskDTO.getRoom().getId() + " not found");
             return null;
         }
         Task task = Task.fromDto(taskDTO);
@@ -57,7 +57,7 @@ public class TaskService {
 
     Task saveUpdatedTask(TaskDTO updatedTask, HouseEntity house) {
         TaskEntity originalTask = taskRepository.getTaskById(updatedTask.getId());
-        Room room = roomRepository.getRoomByIdAndHouse(updatedTask.getRoomId(), house);
+        Room room = roomRepository.getRoomByIdAndHouse(updatedTask.getRoom().getId(), house);
         Task newTask = new Task(
                 updatedTask.getId(),
                 updatedTask.getName(),

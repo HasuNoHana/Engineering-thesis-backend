@@ -52,7 +52,7 @@ class RoomControllerTest extends ControllerTest {
     void shouldCreateRoom() {
         //given
         HouseEntity house = new HouseEntity();
-        RoomDTO roomDTO = new RoomDTO(ROOM_NAME, IMAGE_URL);
+        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, IMAGE_URL);
         Room room = new Room(ROOM_NAME, IMAGE_URL, house);
 
         //when
@@ -73,15 +73,15 @@ class RoomControllerTest extends ControllerTest {
     void shouldUpdateRoom() {
         //given
         HouseEntity house = new HouseEntity();
-        RoomDTO roomDTO = new RoomDTO(ROOM_NAME, IMAGE_URL);
+        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, IMAGE_URL);
         Room room = new Room(ROOM_NAME, IMAGE_URL, house);
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
-        when(roomService.updateRoom(ID, roomDTO, house)).thenReturn(room);
+        when(roomService.updateRoom(roomDTO, house)).thenReturn(room);
 
         //then
-        getMocMvc().perform(post("/api/updateRoom?id=" + ID)
+        getMocMvc().perform(post("/api/updateRoom")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(roomDTO)))
                 .andExpect(status().isOk())

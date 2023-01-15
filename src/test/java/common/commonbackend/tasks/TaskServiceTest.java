@@ -50,7 +50,7 @@ class TaskServiceTest {
     private final TaskDTO notDoneTaskDTO = notDoneTask.toDto();
     private final TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
     private final TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room, LAST_DONE_DATE, REPETITION_RATE);
-    private Room room2 = new Room(ROOM_ID_2, ROOM_NAME_2, IMAGE_URL_2, house);
+    private final Room room2 = new Room(ROOM_ID_2, ROOM_NAME_2, IMAGE_URL_2, house);
 
     @BeforeEach
     void setUp() {
@@ -84,7 +84,7 @@ class TaskServiceTest {
     @Test
     void shouldSaveUpdatedTask() {
         //given
-        TaskDTO taskDto = new TaskDTO(TASK_ID, TASK_NAME_2, INITIAL_PRICE_2, null, NOT_DONE, ROOM_ID_2, LAST_DONE_DATE_2, REPETITION_RATE_2.getDays());
+        TaskDTO taskDto = new TaskDTO(TASK_ID, TASK_NAME_2, INITIAL_PRICE_2, null, NOT_DONE, room2.toDto(), LAST_DONE_DATE_2, REPETITION_RATE_2.getDays());
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(notDoneTaskEntity);
         when(roomRepository.getRoomByIdAndHouse(ROOM_ID_2, house)).thenReturn(room2);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());

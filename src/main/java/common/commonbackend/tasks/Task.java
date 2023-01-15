@@ -1,10 +1,7 @@
 package common.commonbackend.tasks;
 
 import common.commonbackend.rooms.Room;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,6 +10,7 @@ import java.util.Optional;
 @Getter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Task {
     private Long id;
     private String name;
@@ -49,18 +47,20 @@ public class Task {
     }
 
     static Task fromDto(TaskDTO taskDTO) {
+        Optional<Long> currentPrice = Optional.ofNullable(taskDTO.getCurrentPrice());
         return new Task(taskDTO.getId(),
                 taskDTO.getName(),
                 taskDTO.getInitialPrice(),
+                currentPrice,
                 taskDTO.isDone(),
-                null,  //TODO rethink this?
+                Room.fromDto(taskDTO.getRoom()),  //TODO rethink this?
                 taskDTO.getLastDoneDate(),
                 Period.ofDays(taskDTO.getRepetitionRateInDays()));
     }
 
 
     TaskDTO toDto() {
-        return new TaskDTO(id, name, initialPrice, currentPrice.orElse(null), done, room.getId(), lastDoneDate, repetitionRate.getDays());
+        return new TaskDTO(id, name, initialPrice, currentPrice.orElse(null), done, room.toDto(), lastDoneDate, repetitionRate.getDays());
     }
 
     TaskEntity toEntity() {

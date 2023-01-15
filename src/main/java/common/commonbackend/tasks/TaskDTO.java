@@ -1,5 +1,6 @@
 package common.commonbackend.tasks;
 
+import common.commonbackend.rooms.RoomDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -13,7 +14,7 @@ class TaskDTO {
     long initialPrice;
     Long currentPrice;
     boolean done;
-    long roomId;
+    RoomDTO room;
     LocalDate lastDoneDate;
     int repetitionRateInDays;
 }

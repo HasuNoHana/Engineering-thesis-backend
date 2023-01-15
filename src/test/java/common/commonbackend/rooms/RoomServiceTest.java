@@ -32,7 +32,7 @@ class RoomServiceTest {
     void shouldCreateRoom() {
         //given
         HouseEntity house = new HouseEntity();
-        RoomDTO roomDTO = new RoomDTO(ROOM_NAME, ROOM_IMAGE);
+        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, ROOM_IMAGE);
         when(roomRepository.save(any())).thenAnswer(returnsFirstArg());
 
         //when
@@ -55,13 +55,13 @@ class RoomServiceTest {
     void shouldUpdateRoom() {
         //given
         HouseEntity house = new HouseEntity();
-        RoomDTO roomDTO = new RoomDTO(UPDATED_ROOM_NAME, UPDATED_ROOM_IMAGE);
+        RoomDTO roomDTO = new RoomDTO(1L, UPDATED_ROOM_NAME, UPDATED_ROOM_IMAGE);
         Room oldRoom = new Room(ROOM_NAME, ROOM_IMAGE, house);
         when(roomRepository.getRoomByIdAndHouse(ID, house)).thenReturn(oldRoom);
         when(roomRepository.save(any())).thenAnswer(returnsFirstArg());
 
         //when
-        Room actual = systemUnderTest.updateRoom(ID, roomDTO, house);
+        Room actual = systemUnderTest.updateRoom(roomDTO, house);
 
         //then
         assertThat(actual)

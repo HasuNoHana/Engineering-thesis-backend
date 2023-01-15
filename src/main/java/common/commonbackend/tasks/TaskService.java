@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
-
     private final TaskRepository taskRepository;
-
     private final RoomRepository roomRepository;
     private final TaskPriceUpdaterService taskPriceUpdaterService;
 
@@ -50,7 +49,7 @@ public class TaskService {
             log.error("Room with id: " + taskDTO.getRoomId() + " not found");
             return null;
         }
-        Task task = Task.fromDTOAndRoom(taskDTO);
+        Task task = Task.fromDto(taskDTO);
         task.setRoom(room);
         log.debug("Converted to task: {}", task);
         return Task.fromEntity(taskRepository.save(task.toEntity()));
@@ -64,7 +63,9 @@ public class TaskService {
                 updatedTask.getName(),
                 updatedTask.getInitialPrice(),
                 originalTask.isDone(),
-                room);
+                room,
+                updatedTask.getLastDoneDate(),
+                Period.ofDays(updatedTask.getRepetitionRateInDays()));
         return Task.fromEntity(taskRepository.save(newTask.toEntity()));
     }
 

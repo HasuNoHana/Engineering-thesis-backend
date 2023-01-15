@@ -4,6 +4,8 @@ import common.commonbackend.rooms.Room;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Data
 @NoArgsConstructor(force = true)
@@ -32,9 +34,9 @@ public class TaskEntity {
     @JoinColumn(name = "ROOM_ID", nullable = false)
     private final Room room;
 
-//    @Column(name = "LAST_DONE_DATE")
-//    private LocalDate lastDoneDate = LocalDate.now();
-//
-//    @Column(name = "REPETITION_RATE")
-//    private Period repetitionRate = Period.ofDays(1);
+    @Column(name = "LAST_DONE_DATE")
+    private LocalDate lastDoneDate = LocalDate.now();
+
+    @Column(name = "REPETITION_RATE")
+    private Period repetitionRate = Period.ofDays(1);
 }

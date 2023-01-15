@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
@@ -28,6 +31,8 @@ class TaskServiceTest {
     private static final long ROOM_ID_2 = 3L;
     private static final String ROOM_NAME_2 = "roomName2";
     private static final String IMAGE_URL_2 = "url2";
+    private static final Period REPETITION_RATE_2 = Period.ofDays(6);
+    private static final LocalDate LAST_DONE_DATE_2 = LocalDate.now().plusDays(3);
     @Mock
     TaskPriceUpdaterService taskPriceUpdaterService;
     @Mock
@@ -37,13 +42,14 @@ class TaskServiceTest {
     @Mock
     HouseEntity house;
     private TaskService systemUnderTest;
-
+    private static final Period REPETITION_RATE = Period.ofDays(1);
+    private static final LocalDate LAST_DONE_DATE = LocalDate.now();
     private final Room room = new Room(ROOM_ID, ROOM_NAME, IMAGE_URL, house);
-    private final Task notDoneTask = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
-    ;
+    private final Task notDoneTask = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, LAST_DONE_DATE, REPETITION_RATE);
+
     private final TaskDTO notDoneTaskDTO = notDoneTask.toDto();
     private final TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
-    private final TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room);
+    private final TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room, LAST_DONE_DATE, REPETITION_RATE);
     private Room room2 = new Room(ROOM_ID_2, ROOM_NAME_2, IMAGE_URL_2, house);
 
     @BeforeEach
@@ -78,7 +84,7 @@ class TaskServiceTest {
     @Test
     void shouldSaveUpdatedTask() {
         //given
-        TaskDTO taskDto = new TaskDTO(TASK_ID, TASK_NAME_2, INITIAL_PRICE_2, NOT_DONE, ROOM_ID_2);
+        TaskDTO taskDto = new TaskDTO(TASK_ID, TASK_NAME_2, INITIAL_PRICE_2, null, NOT_DONE, ROOM_ID_2, LAST_DONE_DATE_2, REPETITION_RATE_2.getDays());
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(notDoneTaskEntity);
         when(roomRepository.getRoomByIdAndHouse(ROOM_ID_2, house)).thenReturn(room2);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());

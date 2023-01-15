@@ -8,6 +8,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 import static common.commonbackend.TestObjectMapperHelper.asJsonString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,7 +35,9 @@ class TaskControllerTest extends ControllerTest {
     public static final int INITIAL_PRICE_2 = 20;
     private final HouseEntity house = new HouseEntity();
     private final Room room = new Room(1L, ROOM_NAME, ROOM_IMAGE_URL, house);
-    private final Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room);
+    private static final Period REPETITION_RATE = Period.ofDays(1);
+    private static final LocalDate LAST_DONE_DATE = LocalDate.now();
+    private final Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, LAST_DONE_DATE, REPETITION_RATE);
     private final TaskDTO taskDTO = task.toDto();
 
     @Test

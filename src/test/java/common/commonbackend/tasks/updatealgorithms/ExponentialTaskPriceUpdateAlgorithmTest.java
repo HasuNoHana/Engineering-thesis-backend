@@ -20,8 +20,8 @@ import static org.mockito.Mockito.when;
 class ExponentialTaskPriceUpdateAlgorithmTest {
 
 
-    public static final LocalDate DATE = LocalDate.of(2022, 1, 1);
-    public static final Period DAY_PERIOD = Period.ofDays(1);
+    private static final LocalDate DATE = LocalDate.of(2022, 1, 1);
+    private static final Period DAY_PERIOD = Period.ofDays(1);
     private static final Period WEEK_PERIOD = Period.ofWeeks(1);
     @Mock
     private Clock clock;

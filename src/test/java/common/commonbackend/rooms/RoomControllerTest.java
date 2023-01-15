@@ -22,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RoomControllerTest extends ControllerTest {
 
     private static final String IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/3/31/White_paper.jpg";
-    public static final String ROOM_NAME = "Kitchen";
-    public static final String ROOM_NAME_2 = "Bathroom";
+    private static final String ROOM_NAME = "Kitchen";
+    private static final String ROOM_NAME_2 = "Bathroom";
     private static final long ID = 42L;
 
     @Test

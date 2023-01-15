@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageService {
 
-    public static final ImageType IMAGE_TYPE_ROOM = ImageType.ROOM;
-    public static final ImageType IMAGE_TYPE_AVATAR = ImageType.AVATAR;
+    private static final ImageType IMAGE_TYPE_ROOM = ImageType.ROOM;
+    private static final ImageType IMAGE_TYPE_AVATAR = ImageType.AVATAR;
 
     private final ImageRepository imageRepository;
 
-    public List<String> getAvatarImages() {
+    List<String> getAvatarImages() {
         return imageRepository
                 .findImagesByImageType(IMAGE_TYPE_AVATAR)
                 .stream()
@@ -23,7 +23,7 @@ public class ImageService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getRoomImages() {
+    List<String> getRoomImages() {
         return imageRepository
                 .findImagesByImageType(IMAGE_TYPE_ROOM)
                 .stream()

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Value
 @RequiredArgsConstructor
-public class TaskDTO {
+class TaskDTO {
     Long id;
     String name;
     long initialPrice;

@@ -21,9 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockitoSettings
 class ImageControllerTest extends ControllerTest {
 
-//    @Mock
-//    private ImageService imageService;
-
     @Test
     @SneakyThrows
     void shouldGetRoomImages() {

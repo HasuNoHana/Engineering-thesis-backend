@@ -29,14 +29,14 @@ import static org.mockito.Mockito.*;
 @MockitoSettings
 class UserServiceTest {
 
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String ENCODED_PASSWORD = UserService.getPasswordEncoder().encode(PASSWORD);
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String ENCODED_PASSWORD = UserService.getPasswordEncoder().encode(PASSWORD);
     private static final String JOIN_CODE = "1234";
-    public static final long USER_ID = 1L;
-    public static final Long FIREWOOD_STACK_SIZE = 40L;
+    private static final long USER_ID = 1L;
+    private static final Long FIREWOOD_STACK_SIZE = 40L;
 
-    public static final long WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
+    private static final long WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
     private static final String IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
     @Mock
     private UserRepository userRepository;
@@ -54,7 +54,7 @@ class UserServiceTest {
     private UserService userService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         userService = new UserService(userRepository, houseService, houseBuddyService, houseBuddyRepository);
     }
 

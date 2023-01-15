@@ -26,16 +26,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockitoSettings
 class UserControllerTest extends ControllerTest {
 
-    public static final long USER_ID = 1L;
-    public static final String USERNAME = "zuza";
-    public static final Long FIREWOOD_STACK_SIZE = 40L;
+    private static final long USER_ID = 1L;
+    private static final String USERNAME = "zuza";
+    private static final Long FIREWOOD_STACK_SIZE = 40L;
 
-    public static final long DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
+    private static final long DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
     private static final String DEFAULT_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
-    public static final String USERNAME2 = "filip";
-    public static final int FIREWOOD_STACK_SIZE_2 = 20;
-    public static final int WEEKLY_FIREWOOD_CONTRIBUTION_2 = 30;
-    public static final String IMAGE_2 = "url2";
+    private static final String USERNAME2 = "filip";
+    private static final int FIREWOOD_STACK_SIZE_2 = 20;
+    private static final int WEEKLY_FIREWOOD_CONTRIBUTION_2 = 30;
+    private static final String IMAGE_2 = "url2";
     private static final String PASSWORD = "password";
 
     @Mock

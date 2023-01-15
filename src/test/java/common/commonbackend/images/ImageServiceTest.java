@@ -13,9 +13,9 @@ import static org.mockito.Mockito.when;
 
 @MockitoSettings
 class ImageServiceTest {
-    public static final ImageType IMAGE_TYPE_ROOM = ImageType.ROOM;
-    public static final ImageType IMAGE_TYPE_AVATAR = ImageType.AVATAR;
-    public static final String IMAGE_URL = "url1";
+    private static final ImageType IMAGE_TYPE_ROOM = ImageType.ROOM;
+    private static final ImageType IMAGE_TYPE_AVATAR = ImageType.AVATAR;
+    private static final String IMAGE_URL = "url1";
     private ImageService systemUnderTest;
     @Mock
     private ImageRepository imageRepository;

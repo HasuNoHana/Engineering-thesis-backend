@@ -19,15 +19,15 @@ import static org.mockito.Mockito.*;
 @MockitoSettings
 class TaskServiceTest {
     private static final String TASK_NAME = "TaskName";
-    public static final long INITIAL_PRICE = 10;
-    public static final boolean NOT_DONE = false;
-    public static final boolean DONE = true;
-    public static final long TASK_ID = 1L;
-    public static final long ROOM_ID = 1L;
-    public static final String TASK_NAME_2 = "task2";
-    public static final int INITIAL_PRICE_2 = 20;
-    public static final String ROOM_NAME = "Kuchnia";
-    public static final String IMAGE_URL = "url";
+    private static final long INITIAL_PRICE = 10;
+    private static final boolean NOT_DONE = false;
+    private static final boolean DONE = true;
+    private static final long TASK_ID = 1L;
+    private static final long ROOM_ID = 1L;
+    private static final String TASK_NAME_2 = "task2";
+    private static final int INITIAL_PRICE_2 = 20;
+    private static final String ROOM_NAME = "Kuchnia";
+    private static final String IMAGE_URL = "url";
     private static final long ROOM_ID_2 = 3L;
     private static final String ROOM_NAME_2 = "roomName2";
     private static final String IMAGE_URL_2 = "url2";

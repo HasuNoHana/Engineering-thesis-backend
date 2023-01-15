@@ -14,14 +14,14 @@ import static org.mockito.Mockito.when;
 @MockitoSettings
 class HouseBuddyServiceTest {
 
-    public static final long DEFAULT_FIREWOOD_STACK_SIZE = 0L;
-    public static final long DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
+    private static final long DEFAULT_FIREWOOD_STACK_SIZE = 0L;
+    private static final long DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
     private static final String DEFAULT_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
-    public static final String USERNAME = "username";
-    public static final long USER_ID = 1L;
-    public static final long FIREWOOD_STACK_SIZE = 40L;
-    public static final long WEEKLY_POINTS_CONTRIBUTION = 100L;
-    public static final String IMAGE = "image";
+    private static final String USERNAME = "username";
+    private static final long USER_ID = 1L;
+    private static final long FIREWOOD_STACK_SIZE = 40L;
+    private static final long WEEKLY_POINTS_CONTRIBUTION = 100L;
+    private static final String IMAGE = "image";
 
     @Mock
     private HouseEntity house;

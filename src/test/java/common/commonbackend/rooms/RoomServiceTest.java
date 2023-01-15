@@ -16,9 +16,9 @@ import static org.mockito.Mockito.*;
 class RoomServiceTest {
     private static final String ROOM_IMAGE = "url";
     private static final String ROOM_NAME = "Kitchen";
-    public static final long ID = 1L;
-    public static final String UPDATED_ROOM_NAME = "updatedRoomName";
-    public static final String UPDATED_ROOM_IMAGE = "updatedRoomImage";
+    private static final long ID = 1L;
+    private static final String UPDATED_ROOM_NAME = "updatedRoomName";
+    private static final String UPDATED_ROOM_IMAGE = "updatedRoomImage";
     @Mock
     private RoomRepository roomRepository;
     private RoomService systemUnderTest;

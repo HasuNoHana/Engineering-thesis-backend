@@ -24,15 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class TaskControllerTest extends ControllerTest {
 
-    public static final String ROOM_NAME = "Kuchnia";
-    public static final String ROOM_IMAGE_URL = "url";
-    public static final String TASK_NAME = "name";
-    public static final int INITIAL_PRICE = 10;
-    public static final boolean NOT_DONE = false;
-    public static final boolean DONE = true;
-    public static final long TASK_ID = 42L;
-    public static final String TASK_NAME_2 = "task2";
-    public static final int INITIAL_PRICE_2 = 20;
+    private static final String ROOM_NAME = "Kuchnia";
+    private static final String ROOM_IMAGE_URL = "url";
+    private static final String TASK_NAME = "name";
+    private static final int INITIAL_PRICE = 10;
+    private static final boolean NOT_DONE = false;
+    private static final boolean DONE = true;
+    private static final long TASK_ID = 42L;
+    private static final String TASK_NAME_2 = "task2";
+    private static final int INITIAL_PRICE_2 = 20;
     private final HouseEntity house = new HouseEntity();
     private final Room room = new Room(1L, ROOM_NAME, ROOM_IMAGE_URL, house);
     private static final Period REPETITION_RATE = Period.ofDays(1);

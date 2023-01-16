@@ -12,6 +12,10 @@ class TaskDTOBuilder {
     private boolean done;
     private RoomDTO room;
     private LocalDate lastDoneDate;
+
+    private LocalDate previousLastDoneDate;
+    private long lastDoneUserId;
+    private long previousLastDoneUserId;
     private int repetitionRateInDays;
 
     TaskDTOBuilder setId(Long id) {
@@ -49,12 +53,28 @@ class TaskDTOBuilder {
         return this;
     }
 
+    TaskDTOBuilder setPreviousLastDoneDate(LocalDate previousLastDoneDate) {
+        this.previousLastDoneDate = previousLastDoneDate;
+        return this;
+    }
+
+    TaskDTOBuilder setLastDoneUserId(long lastDoneUserId) {
+        this.lastDoneUserId = lastDoneUserId;
+        return this;
+    }
+
+    TaskDTOBuilder setPreviousLastDoneUserId(long previousLastDoneUserId) {
+        this.previousLastDoneUserId = previousLastDoneUserId;
+        return this;
+    }
+
     TaskDTOBuilder setRepetitionRateInDays(int repetitionRateInDays) {
         this.repetitionRateInDays = repetitionRateInDays;
         return this;
     }
 
     TaskDTO createTaskDTO() {
-        return new TaskDTO(id, name, initialPrice, currentPrice, done, room, lastDoneDate, repetitionRateInDays);
+        return new TaskDTO(id, name, initialPrice, currentPrice, done, room, lastDoneDate,
+                previousLastDoneDate, lastDoneUserId, previousLastDoneUserId, repetitionRateInDays);
     }
 }

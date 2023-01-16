@@ -14,9 +14,14 @@ class TaskDTO {
     boolean done;
     RoomDTO room;
     LocalDate lastDoneDate;
+    LocalDate previousLastDoneDate;
+    long lastDoneUserId;
+    long previousLastDoneUserId;
     int repetitionRateInDays;
 
-    TaskDTO(Long id, String name, long initialPrice, Long currentPrice, boolean done, RoomDTO room, LocalDate lastDoneDate, int repetitionRateInDays) { //NOSONAR
+    TaskDTO(Long id, String name, long initialPrice, Long currentPrice, boolean done, RoomDTO room,//NOSONAR
+            LocalDate lastDoneDate, LocalDate previousLastDoneDate, long lastDoneUserId,//NOSONAR
+            long previousLastDoneUserId, int repetitionRateInDays) { //NOSONAR
         this.id = id;
         this.name = name;
         this.initialPrice = initialPrice;
@@ -24,6 +29,9 @@ class TaskDTO {
         this.done = done;
         this.room = room;
         this.lastDoneDate = lastDoneDate;
+        this.previousLastDoneDate = previousLastDoneDate;
+        this.lastDoneUserId = lastDoneUserId;
+        this.previousLastDoneUserId = previousLastDoneUserId;
         this.repetitionRateInDays = repetitionRateInDays;
     }
 }

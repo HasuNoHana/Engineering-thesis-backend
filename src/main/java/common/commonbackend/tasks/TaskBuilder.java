@@ -12,6 +12,9 @@ public class TaskBuilder {
     private boolean done;
     private Room room;
     private LocalDate lastDoneDate;
+    private LocalDate previousLastDoneDate;
+    private long lastDoneUserId;
+    private long previousLastDoneUserId;
     private Period repetitionRate;
 
     public TaskBuilder setId(Long id) {
@@ -44,12 +47,27 @@ public class TaskBuilder {
         return this;
     }
 
+    public TaskBuilder setPreviousLastDoneDate(LocalDate previousLastDoneDate) {
+        this.previousLastDoneDate = previousLastDoneDate;
+        return this;
+    }
+
+    public TaskBuilder setLastDoneUserId(long lastDoneUserId) {
+        this.lastDoneUserId = lastDoneUserId;
+        return this;
+    }
+
+    public TaskBuilder setPreviousLastDoneUserId(long previousLastDoneUserId) {
+        this.previousLastDoneUserId = previousLastDoneUserId;
+        return this;
+    }
+
     public TaskBuilder setRepetitionRate(Period repetitionRate) {
         this.repetitionRate = repetitionRate;
         return this;
     }
 
     public Task createTask() {
-        return new Task(id, name, initialPrice, done, room, lastDoneDate, repetitionRate);
+        return new Task(id, name, initialPrice, done, room, lastDoneDate, previousLastDoneDate, lastDoneUserId, previousLastDoneUserId, repetitionRate);
     }
 }

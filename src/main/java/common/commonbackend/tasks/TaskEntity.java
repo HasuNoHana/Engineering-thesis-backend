@@ -39,6 +39,15 @@ public class TaskEntity {
     @Column(name = "LAST_DONE_DATE")
     private LocalDate lastDoneDate = LocalDate.now();
 
+    @Column(name = "PREVIOUS_LAST_DONE_DATE")
+    private LocalDate previousLastDoneDate = LocalDate.now();
+
+    @Column(name = "LAST_DONE_USER_ID")
+    private long lastDoneUserId;
+
+    @Column(name = "PREVIOUS_LAST_DONE_USER_ID")
+    private long previousLastDoneUserId;
+
     @Column(name = "REPETITION_RATE")
     private Period repetitionRate = Period.ofDays(1);
 }

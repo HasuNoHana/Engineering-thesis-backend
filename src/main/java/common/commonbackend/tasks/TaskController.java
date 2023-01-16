@@ -21,13 +21,15 @@ public class TaskController {
 
     @PostMapping(path = "/makeTaskDone")
     public ResponseEntity<TaskDTO> makeTaskDone(@RequestParam Long id) {
-        Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), true);
+        Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), true,
+                controllerHelper.getMyUser().getId());
         return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/makeTaskToDo")
     public ResponseEntity<TaskDTO> makeTaskToDo(@RequestParam Long id) {
-        Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), false);
+        Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), false,
+                controllerHelper.getMyUser().getId());
         return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
@@ -37,7 +39,7 @@ public class TaskController {
         return new ResponseEntity<>(toDto(tasks), HttpStatus.OK);
     }
 
-    private static List<TaskDTO> toDto(List<Task> tasks) {
+    protected static List<TaskDTO> toDto(List<Task> tasks) {
         return tasks.stream().map(Task::toDto).collect(Collectors.toList());
     }
 

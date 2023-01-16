@@ -22,14 +22,15 @@ public class Task {
     private boolean done;
     @Setter // TODO rethink if this is needed
     private Room room;
+    @Setter
+    private LocalDate lastDoneDate;
+    @Setter
+    private LocalDate previousLastDoneDate;
+    @Setter
+    private long lastDoneUserId;
+    @Setter
 
-    private final LocalDate lastDoneDate;
-
-    private final LocalDate previousLastDoneDate;
-
-    private final long lastDoneUserId;
-
-    private final long previousLastDoneUserId;
+    private long previousLastDoneUserId;
 
     private final Period repetitionRate;
 

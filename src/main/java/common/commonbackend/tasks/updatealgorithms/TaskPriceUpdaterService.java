@@ -17,7 +17,7 @@ public class TaskPriceUpdaterService {
                 task.getInitialPrice(),
                 task.getLastDoneDate(),
                 task.getRepetitionRate());
-        return task.getNewTaskWithUpdatedPrice(newPrice);
+        return task.setCurrentPrice(newPrice);
     }
 
     public List<Task> getTasksWithUpdatedPrice(List<Task> tasks) {

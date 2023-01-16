@@ -1,80 +1,95 @@
 package common.commonbackend.tasks;
 
 import common.commonbackend.rooms.Room;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
-@Data
-@NoArgsConstructor(force = true)
-@Entity
+@Getter
+@ToString
 @EqualsAndHashCode
-@AllArgsConstructor
-@Table(name = "TASK") // TODO task powinien byc rozdzielony na task DTO ktory kominukuje sie z baza i task ktory jest wykorzystywany w biznesowej czesci do zmiany price
 public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private Long id;
-
-    @Column(name = "NAME")
-    private String name;
-
-    @Column(name = "PRICE")
-    private long initialPrice;
-
-    @Column(name = "DONE")
+    private final Long id;
+    private final String name;
+    private final long initialPrice;
+    private Optional<Long> currentPrice = Optional.empty();
+    @Setter // TODO rethink if this is needed
     private boolean done;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "ROOM_ID", nullable = false)
+    @Setter // TODO rethink if this is needed
     private Room room;
 
+    private final LocalDate lastDoneDate;
 
-    @Column(name = "LAST_DONE_DATE")
-    private LocalDate lastDoneDate = LocalDate.now(); //TODO add persistence
+    private final Period repetitionRate;
 
-    @Column(name = "REPETITION_RATE")
-    private Period repetitionRate = Period.ofDays(1); //TODO add persistence
-
-
-    public Task(Long id, String name, long initialPrice, boolean done, Room room) {
+    Task(Long id, String name, long initialPrice, boolean done, Room room, LocalDate lastDoneDate, Period repetitionRate) {
         this.id = id;
         this.name = name;
-        this.initialPrice = initialPrice; //TODO wywalić to
+        this.initialPrice = initialPrice;
         this.done = done;
         this.room = room;
+        this.lastDoneDate = lastDoneDate;
+        this.repetitionRate = repetitionRate;
     }
 
-    public Task(String name, long initialPrice, boolean done, Room room) { // NOSONAR TODO remove this constructor
-        this.name = name;
-        this.initialPrice = initialPrice;//TODO wywalić to
-        this.done = done;
-        this.room = room;
+    static Task fromEntity(TaskEntity taskEntity) {
+        return new TaskBuilder()
+                .setId(taskEntity.getId())
+                .setName(taskEntity.getName())
+                .setInitialPrice(taskEntity.getInitialPrice())
+                .setDone(taskEntity.isDone())
+                .setRoom(taskEntity.getRoom())
+                .setLastDoneDate(taskEntity.getLastDoneDate())
+                .setRepetitionRate(taskEntity.getRepetitionRate())
+                .createTask();
     }
 
-    public static Task fromDto(TaskDTO taskDTO, Room room) {
-        return new Task(
-                taskDTO.getName(),
-                taskDTO.getPrice(), // TODO tu jest bug z logigki biznesowej. Actual price jest przypisywany do initial price
-                taskDTO.isDone(),
-                room
-        );
+    static Task fromDto(TaskDTO taskDTO) {
+        TaskBuilder taskBuilder = new TaskBuilder()
+                .setName(taskDTO.getName())
+                .setInitialPrice(taskDTO.getInitialPrice())
+                .setRoom(Room.fromDto(taskDTO.getRoom()))
+                .setRepetitionRate(Period.ofDays(taskDTO.getRepetitionRateInDays()));
+
+        if (taskDTO.getId() == null) {
+            return taskBuilder
+                    .setId(null)
+                    .setDone(false)
+                    .setLastDoneDate(LocalDate.now())
+                    .createTask();
+        } else {
+            return taskBuilder
+                    .setId(taskDTO.getId())
+                    .setDone(taskDTO.isDone())
+                    .setLastDoneDate(taskDTO.getLastDoneDate())
+                    .createTask();
+        }
     }
 
-    public Task getNewTaskWithUpdatedPrice(long newPrice) {
-        return new Task(this.id, this.name, newPrice, this.done, this.room);
+
+    TaskDTO toDto() {
+        return new TaskDTOBuilder()
+                .setId(id)
+                .setName(name)
+                .setInitialPrice(initialPrice)
+                .setCurrentPrice(currentPrice.orElse(null))
+                .setDone(done).setRoom(room.toDto())
+                .setLastDoneDate(lastDoneDate)
+                .setRepetitionRateInDays(repetitionRate.getDays())
+                .createTaskDTO();
     }
 
-    public void updateFromDto(TaskDTO updatedTask, Room room) {
-        this.name = updatedTask.getName();
-        this.initialPrice = updatedTask.getPrice();
-        this.done = updatedTask.isDone();
-        this.room = room;
+    TaskEntity toEntity() {
+        return new TaskEntity(id, name, initialPrice, done, room, lastDoneDate, repetitionRate);
+    }
+
+    public Task setCurrentPrice(long newPrice) {
+        this.currentPrice = Optional.of(newPrice);
+        return this;
     }
 }

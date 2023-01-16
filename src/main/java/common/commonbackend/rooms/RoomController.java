@@ -29,8 +29,8 @@ public class RoomController {
     }
 
     @PostMapping(path = "/updateRoom")
-    public ResponseEntity<Room> updateRoom(@RequestParam long id, @RequestBody RoomDTO roomDTO) {
-        Room room = roomService.updateRoom(id, roomDTO, controllerHelper.getMyHouse());
+    public ResponseEntity<Room> updateRoom(@RequestBody RoomDTO roomDTO) {
+        Room room = roomService.updateRoom(roomDTO, controllerHelper.getMyHouse());//TODO wywal ten id z wolania metody
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 

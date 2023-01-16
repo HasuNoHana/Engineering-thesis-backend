@@ -16,11 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(LoginController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class LoginControllerTest extends ControllerTest {
-    public static final String USERNAME = "zuza";
-    public static final String PASSWORD = "haslo";
-    public static final long FIREWOOD_STACK_SIZE = 0L;
-    public static final long WEEKLY_POINTS_CONTRIBUTION = 100L;
-    public static final String IMAGE = "image";
+    private static final String USERNAME = "zuza";
+    private static final String PASSWORD = "haslo";
+    private static final long FIREWOOD_STACK_SIZE = 0L;
+    private static final long WEEKLY_POINTS_CONTRIBUTION = 100L;
+    private static final String IMAGE = "image";
 
     @Test
     void shouldGetUser() throws Exception {

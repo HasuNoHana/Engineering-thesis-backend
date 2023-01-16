@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Log4j2
 @RestController
 @RequestMapping("/api")
@@ -16,53 +19,39 @@ public class TaskController {
 
     private final ControllerHelper controllerHelper;
 
-    @GetMapping(path = "/task")
-    public ResponseEntity<Task> getTaskById(@RequestParam Long id) {
-        Task task = taskService.getTask(id,controllerHelper.getMyHouse());
-        return new ResponseEntity<>(task, HttpStatus.OK);
-    }
-
     @PostMapping(path = "/makeTaskDone")
-    public ResponseEntity<Task> makeTaskDone(@RequestParam Long id) {
+    public ResponseEntity<TaskDTO> makeTaskDone(@RequestParam Long id) {
         Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), true);
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/makeTaskToDo")
-    public ResponseEntity<Task> makeTaskToDo(@RequestParam Long id) {
+    public ResponseEntity<TaskDTO> makeTaskToDo(@RequestParam Long id) {
         Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), false);
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/tasks")
-    public ResponseEntity<Iterable<Task>> getTasks() {
-        Iterable<Task> tasks = taskService.getTasks(controllerHelper.getMyHouse());
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    public ResponseEntity<Iterable<TaskDTO>> getTasks() {
+        List<Task> tasks = taskService.getTasks(controllerHelper.getMyHouse());
+        return new ResponseEntity<>(toDto(tasks), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/todo_tasks")
-    public ResponseEntity<Iterable<Task>> getToDoTasks() {
-        Iterable<Task> todoTasks = taskService.getToDoTasks(controllerHelper.getMyHouse());
-        return new ResponseEntity<>(todoTasks, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/done_tasks")
-    public ResponseEntity<Iterable<Task>> getDoneTasks() {
-        Iterable<Task> todoTasks = taskService.getDoneTasks(controllerHelper.getMyHouse());
-        return new ResponseEntity<>(todoTasks, HttpStatus.OK);
+    private static List<TaskDTO> toDto(List<Task> tasks) {
+        return tasks.stream().map(Task::toDto).collect(Collectors.toList());
     }
 
     @PostMapping(path = "/updateTask")
-    public ResponseEntity<Task> updateTask(@RequestParam Long id, @RequestBody TaskDTO taskDTO) {
-        log.debug("Update task with id: " + id);
-        Task t = taskService.saveUpdatedTask(id, taskDTO, controllerHelper.getMyHouse());
-        return new ResponseEntity<>(t, HttpStatus.OK);
+    public ResponseEntity<TaskDTO> updateTask(@RequestBody TaskDTO taskDTO) {
+        log.debug("Update task with id: " + taskDTO.getId());
+        Task task = taskService.saveUpdatedTask(taskDTO, controllerHelper.getMyHouse());
+        return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/addTask")
-    public ResponseEntity<Task> createOrUpdateTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
         Task task = taskService.saveNewTask(taskDTO, controllerHelper.getMyHouse());
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/task")

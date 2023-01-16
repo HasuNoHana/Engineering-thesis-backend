@@ -30,7 +30,7 @@ public class HouseEntity {
     @OneToMany(mappedBy = "house", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<HouseBuddy> houseBuddies = new HashSet<>();
 
-    public void addHouseBuddy(HouseBuddy houseBuddy) {
+    void addHouseBuddy(HouseBuddy houseBuddy) {
         houseBuddies.add(houseBuddy);
     }
 }

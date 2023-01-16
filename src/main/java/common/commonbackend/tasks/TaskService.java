@@ -58,14 +58,15 @@ public class TaskService {
     Task saveUpdatedTask(TaskDTO updatedTask, HouseEntity house) {
         TaskEntity originalTask = taskRepository.getTaskById(updatedTask.getId());
         Room room = roomRepository.getRoomByIdAndHouse(updatedTask.getRoom().getId(), house);
-        Task newTask = new Task(
-                updatedTask.getId(),
-                updatedTask.getName(),
-                updatedTask.getInitialPrice(),
-                originalTask.isDone(),
-                room,
-                updatedTask.getLastDoneDate(),
-                Period.ofDays(updatedTask.getRepetitionRateInDays()));
+        Task newTask = new TaskBuilder()
+                .setId(updatedTask.getId())
+                .setName(updatedTask.getName())
+                .setInitialPrice(updatedTask.getInitialPrice())
+                .setDone(originalTask.isDone())
+                .setRoom(room)
+                .setLastDoneDate(updatedTask.getLastDoneDate())
+                .setRepetitionRate(Period.ofDays(updatedTask.getRepetitionRateInDays()))
+                .createTask();
         return Task.fromEntity(taskRepository.save(newTask.toEntity()));
     }
 

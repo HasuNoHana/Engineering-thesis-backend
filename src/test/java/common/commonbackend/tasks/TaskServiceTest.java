@@ -45,7 +45,7 @@ class TaskServiceTest {
     private static final Period REPETITION_RATE = Period.ofDays(1);
     private static final LocalDate LAST_DONE_DATE = LocalDate.now();
     private final Room room = new Room(ROOM_ID, ROOM_NAME, IMAGE_URL, house);
-    private final Task notDoneTask = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, LAST_DONE_DATE, REPETITION_RATE);
+    private final Task notDoneTask = new TaskBuilder().setId(TASK_ID).setName(TASK_NAME).setInitialPrice(INITIAL_PRICE).setDone(NOT_DONE).setRoom(room).setLastDoneDate(LAST_DONE_DATE).setRepetitionRate(REPETITION_RATE).createTask();
 
     private final TaskDTO notDoneTaskDTO = notDoneTask.toDto();
     private final TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
@@ -84,7 +84,7 @@ class TaskServiceTest {
     @Test
     void shouldSaveUpdatedTask() {
         //given
-        TaskDTO taskDto = new TaskDTO(TASK_ID, TASK_NAME_2, INITIAL_PRICE_2, null, NOT_DONE, room2.toDto(), LAST_DONE_DATE_2, REPETITION_RATE_2.getDays());
+        TaskDTO taskDto = new TaskDTOBuilder().setId(TASK_ID).setName(TASK_NAME_2).setInitialPrice(INITIAL_PRICE_2).setCurrentPrice(null).setDone(NOT_DONE).setRoom(room2.toDto()).setLastDoneDate(LAST_DONE_DATE_2).setRepetitionRateInDays(REPETITION_RATE_2.getDays()).createTaskDTO();
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(notDoneTaskEntity);
         when(roomRepository.getRoomByIdAndHouse(ROOM_ID_2, house)).thenReturn(room2);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());

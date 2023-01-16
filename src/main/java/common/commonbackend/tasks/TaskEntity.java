@@ -1,7 +1,10 @@
 package common.commonbackend.tasks;
 
 import common.commonbackend.rooms.Room;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +13,6 @@ import java.time.Period;
 @Data
 @NoArgsConstructor(force = true)
 @Entity
-@EqualsAndHashCode
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "TASK")

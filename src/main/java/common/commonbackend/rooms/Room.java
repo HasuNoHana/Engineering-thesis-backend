@@ -3,7 +3,9 @@ package common.commonbackend.rooms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.tasks.TaskEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -15,8 +17,6 @@ import java.util.Set;
 @Table(name = "ROOM")
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,7 +56,7 @@ public class Room {
                 roomDTO.getId(),
                 roomDTO.getName(),
                 roomDTO.getImage(),
-                new HouseEntity()); //TODO przemyslec to
+                null); //TODO przemyslec to
     }
 
     void updateFromDTO(RoomDTO roomDTO) {

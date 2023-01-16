@@ -37,7 +37,7 @@ class TaskControllerTest extends ControllerTest {
     private final Room room = new Room(1L, ROOM_NAME, ROOM_IMAGE_URL, house);
     private static final Period REPETITION_RATE = Period.ofDays(1);
     private static final LocalDate LAST_DONE_DATE = LocalDate.now();
-    private final Task task = new Task(TASK_ID, TASK_NAME, INITIAL_PRICE, NOT_DONE, room, LAST_DONE_DATE, REPETITION_RATE);
+    private final Task task = new TaskBuilder().setId(TASK_ID).setName(TASK_NAME).setInitialPrice(INITIAL_PRICE).setDone(NOT_DONE).setRoom(room).setLastDoneDate(LAST_DONE_DATE).setRepetitionRate(REPETITION_RATE).createTask();
     private final TaskDTO taskDTO = task.toDto();
 
     @Test

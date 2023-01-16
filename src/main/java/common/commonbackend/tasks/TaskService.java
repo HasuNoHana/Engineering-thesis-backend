@@ -30,7 +30,7 @@ public class TaskService {
 
     List<Task> getTasks(HouseEntity myHouse) {
         return taskPriceUpdaterService.getTasksWithUpdatedPrice(
-                taskRepository.findTaskByRoom_House(myHouse)
+                taskRepository.findTasksByRoom_House(myHouse)
                         .stream()
                         .map(Task::fromEntity)
                         .map(taskPriceUpdaterService::getOneTaskWithUpdatedPrice)

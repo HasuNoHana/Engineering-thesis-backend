@@ -39,7 +39,7 @@ public class TaskController {
         return new ResponseEntity<>(toDto(tasks), HttpStatus.OK);
     }
 
-    private static List<TaskDTO> toDto(List<Task> tasks) {
+    protected static List<TaskDTO> toDto(List<Task> tasks) {
         return tasks.stream().map(Task::toDto).collect(Collectors.toList());
     }
 

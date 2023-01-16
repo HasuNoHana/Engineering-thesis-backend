@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -23,6 +25,7 @@ class TaskServiceTest {
     private static final boolean NOT_DONE = false;
     private static final boolean DONE = true;
     private static final long TASK_ID = 1L;
+    private static final long TASK_ID_2 = 2L;
     private static final long ROOM_ID = 2L;
     private static final String TASK_NAME_2 = "task2";
     private static final int INITIAL_PRICE_2 = 20;
@@ -50,8 +53,7 @@ class TaskServiceTest {
     private static final long LAST_DONE_USER_ID = 1L;
     private static final long PREVIOUS_LAST_DONE_USER_ID = 2L;
     private final Room room = new Room(ROOM_ID, ROOM_NAME, IMAGE_URL, house);
-    private final Task notDoneTask = new TaskBuilder()
-            .setId(TASK_ID)
+    private final TaskBuilder taskBuilder = new TaskBuilder()
             .setName(TASK_NAME)
             .setInitialPrice(INITIAL_PRICE)
             .setDone(NOT_DONE).setRoom(room)
@@ -59,7 +61,9 @@ class TaskServiceTest {
             .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
             .setLastDoneUserId(LAST_DONE_USER_ID)
             .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
-            .setRepetitionRate(REPETITION_RATE).createTask();
+            .setRepetitionRate(REPETITION_RATE);
+    private final Task notDoneTask = taskBuilder.setId(TASK_ID).createTask();
+    private final Task secondTask = taskBuilder.setId(TASK_ID_2).createTask();
 
     private final TaskDTO notDoneTaskDTO = notDoneTask.toDto();
     private final TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
@@ -70,6 +74,22 @@ class TaskServiceTest {
     @BeforeEach
     void setUp() {
         systemUnderTest = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
+    }
+
+    @Test
+    void shouldGetTasks() {
+        //given
+        List<Task> expectedTasks = List.of(notDoneTask, secondTask);
+        when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(any())).thenAnswer(returnsFirstArg());
+        when(taskRepository.findTasksByRoom_House(house))
+                .thenReturn(expectedTasks.stream().map(Task::toEntity).collect(Collectors.toList()));
+        when(taskPriceUpdaterService.getTasksWithUpdatedPrice(any())).thenAnswer(returnsFirstArg());
+
+        //when
+        List<Task> receivedTasks = systemUnderTest.getTasks(house);
+
+        //then
+        assertThat(receivedTasks).isEqualTo(expectedTasks);
     }
 
     @Test
@@ -181,5 +201,60 @@ class TaskServiceTest {
                         TASK_ID);
 
         verify(taskRepository, times(1)).save(doneTaskEntity);
+    }
+
+    @Test
+    void shouldSetTaskNotDone() {
+        //given
+        TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
+                LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, LAST_DONE_USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
+
+        Task expectedTask = new TaskBuilder()
+                .setId(TASK_ID)
+                .setName(TASK_NAME)
+                .setInitialPrice(INITIAL_PRICE)
+                .setDone(NOT_DONE)
+                .setRoom(room)
+                .setLastDoneDate(PREVIOUS_LAST_DONE_DATE)
+                .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
+                .setLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
+                .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
+                .setRepetitionRate(REPETITION_RATE)
+                .createTask();
+
+        when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(doneTaskEntity);
+        when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(any())).thenAnswer(returnsFirstArg());
+        when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
+
+
+        //when
+        Task actual = systemUnderTest.setTaskDone(TASK_ID, house, NOT_DONE, USER_ID);
+
+        //then
+        assertThat(actual)
+                .extracting(
+                        Task::isDone,
+                        Task::getInitialPrice,
+                        Task::getName,
+                        Task::getRoom,
+                        Task::getId,
+                        Task::getLastDoneDate,
+                        Task::getPreviousLastDoneDate,
+                        Task::getLastDoneUserId,
+                        Task::getPreviousLastDoneUserId,
+                        Task::getRepetitionRate)
+                .contains(
+                        expectedTask.isDone(),
+                        expectedTask.getInitialPrice(),
+                        expectedTask.getName(),
+                        expectedTask.getRoom(),
+                        expectedTask.getId(),
+                        expectedTask.getLastDoneDate(),
+                        expectedTask.getLastDoneUserId(),
+                        expectedTask.getPreviousLastDoneDate(),
+                        expectedTask.getPreviousLastDoneUserId()
+                );
+
+        verify(taskRepository, times(1)).save(expectedTask.toEntity());
     }
 }

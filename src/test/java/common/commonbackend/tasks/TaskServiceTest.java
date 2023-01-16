@@ -23,7 +23,7 @@ class TaskServiceTest {
     private static final boolean NOT_DONE = false;
     private static final boolean DONE = true;
     private static final long TASK_ID = 1L;
-    private static final long ROOM_ID = 1L;
+    private static final long ROOM_ID = 2L;
     private static final String TASK_NAME_2 = "task2";
     private static final int INITIAL_PRICE_2 = 20;
     private static final String ROOM_NAME = "Kuchnia";
@@ -33,6 +33,7 @@ class TaskServiceTest {
     private static final String IMAGE_URL_2 = "url2";
     private static final Period REPETITION_RATE_2 = Period.ofDays(6);
     private static final LocalDate LAST_DONE_DATE_2 = LocalDate.now().plusDays(3);
+    private static final long USER_ID = 4L;
     @Mock
     TaskPriceUpdaterService taskPriceUpdaterService;
     @Mock
@@ -153,6 +154,8 @@ class TaskServiceTest {
     @Test
     void shouldSetTaskDone() {
         //given
+        TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
+                LocalDate.now(), LAST_DONE_DATE, USER_ID, LAST_DONE_USER_ID, REPETITION_RATE);
         when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(notDoneTaskEntity);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(notDoneTask)).thenReturn(notDoneTask);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
@@ -160,7 +163,7 @@ class TaskServiceTest {
         TaskService taskService = this.systemUnderTest;
 
         //when
-        Task actual = taskService.setTaskDone(TASK_ID, house, DONE);
+        Task actual = taskService.setTaskDone(TASK_ID, house, DONE, USER_ID);
 
         //then
         assertThat(actual)

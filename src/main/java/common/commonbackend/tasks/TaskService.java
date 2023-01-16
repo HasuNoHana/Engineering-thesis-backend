@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,8 +71,17 @@ public class TaskService {
         return Task.fromEntity(taskRepository.save(newTask.toEntity()));
     }
 
-    Task setTaskDone(Long id, HouseEntity house, boolean done) {
+    Task setTaskDone(Long id, HouseEntity house, boolean done, long userId) {
         Task task = getTask(id, house);
+        if (done) {
+            task.setPreviousLastDoneDate(task.getLastDoneDate());
+            task.setPreviousLastDoneUserId(task.getLastDoneUserId());
+            task.setLastDoneDate(LocalDate.now());
+            task.setLastDoneUserId(userId);
+        } else {
+            task.setLastDoneDate(task.getPreviousLastDoneDate());
+            task.setLastDoneUserId(task.getPreviousLastDoneUserId());
+        }
         task.setDone(done);
         return Task.fromEntity(taskRepository.save(task.toEntity()));
     }

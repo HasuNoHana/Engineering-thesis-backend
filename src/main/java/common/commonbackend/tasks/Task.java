@@ -25,15 +25,25 @@ public class Task {
 
     private final LocalDate lastDoneDate;
 
+    private final LocalDate previousLastDoneDate;
+
+    private final long lastDoneUserId;
+
+    private final long previousLastDoneUserId;
+
     private final Period repetitionRate;
 
-    Task(Long id, String name, long initialPrice, boolean done, Room room, LocalDate lastDoneDate, Period repetitionRate) {
+    Task(Long id, String name, long initialPrice, boolean done, Room room, LocalDate lastDoneDate,//NOSONAR
+         LocalDate previousLastDoneDate, long lastDoneUserId, long previousLastDoneUserId, Period repetitionRate) { //NOSONAR
         this.id = id;
         this.name = name;
         this.initialPrice = initialPrice;
         this.done = done;
         this.room = room;
         this.lastDoneDate = lastDoneDate;
+        this.previousLastDoneDate = previousLastDoneDate;
+        this.lastDoneUserId = lastDoneUserId;
+        this.previousLastDoneUserId = previousLastDoneUserId;
         this.repetitionRate = repetitionRate;
     }
 
@@ -45,6 +55,9 @@ public class Task {
                 .setDone(taskEntity.isDone())
                 .setRoom(taskEntity.getRoom())
                 .setLastDoneDate(taskEntity.getLastDoneDate())
+                .setPreviousLastDoneDate(taskEntity.getPreviousLastDoneDate())
+                .setLastDoneUserId(taskEntity.getLastDoneUserId())
+                .setPreviousLastDoneUserId(taskEntity.getPreviousLastDoneUserId())
                 .setRepetitionRate(taskEntity.getRepetitionRate())
                 .createTask();
     }
@@ -61,12 +74,18 @@ public class Task {
                     .setId(null)
                     .setDone(false)
                     .setLastDoneDate(LocalDate.now())
+                    .setPreviousLastDoneDate(LocalDate.now())
+                    .setLastDoneUserId(0)
+                    .setPreviousLastDoneUserId(0)
                     .createTask();
         } else {
             return taskBuilder
                     .setId(taskDTO.getId())
                     .setDone(taskDTO.isDone())
                     .setLastDoneDate(taskDTO.getLastDoneDate())
+                    .setPreviousLastDoneDate(taskDTO.getPreviousLastDoneDate())
+                    .setLastDoneUserId(taskDTO.getLastDoneUserId())
+                    .setPreviousLastDoneUserId(taskDTO.getPreviousLastDoneUserId())
                     .createTask();
         }
     }
@@ -80,12 +99,16 @@ public class Task {
                 .setCurrentPrice(currentPrice.orElse(null))
                 .setDone(done).setRoom(room.toDto())
                 .setLastDoneDate(lastDoneDate)
+                .setPreviousLastDoneDate(previousLastDoneDate)
+                .setLastDoneUserId(lastDoneUserId)
+                .setPreviousLastDoneUserId(previousLastDoneUserId)
                 .setRepetitionRateInDays(repetitionRate.getDays())
                 .createTaskDTO();
     }
 
     TaskEntity toEntity() {
-        return new TaskEntity(id, name, initialPrice, done, room, lastDoneDate, repetitionRate);
+        return new TaskEntity(id, name, initialPrice, done, room, lastDoneDate,
+                previousLastDoneDate, lastDoneUserId, previousLastDoneUserId, repetitionRate);
     }
 
     public Task setCurrentPrice(long newPrice) {

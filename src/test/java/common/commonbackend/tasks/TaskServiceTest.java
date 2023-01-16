@@ -43,13 +43,27 @@ class TaskServiceTest {
     HouseEntity house;
     private TaskService systemUnderTest;
     private static final Period REPETITION_RATE = Period.ofDays(1);
+    private static final LocalDate PREVIOUS_LAST_DONE_DATE = LocalDate.now().minusDays(3);
+
     private static final LocalDate LAST_DONE_DATE = LocalDate.now();
+    private static final long LAST_DONE_USER_ID = 1L;
+    private static final long PREVIOUS_LAST_DONE_USER_ID = 2L;
     private final Room room = new Room(ROOM_ID, ROOM_NAME, IMAGE_URL, house);
-    private final Task notDoneTask = new TaskBuilder().setId(TASK_ID).setName(TASK_NAME).setInitialPrice(INITIAL_PRICE).setDone(NOT_DONE).setRoom(room).setLastDoneDate(LAST_DONE_DATE).setRepetitionRate(REPETITION_RATE).createTask();
+    private final Task notDoneTask = new TaskBuilder()
+            .setId(TASK_ID)
+            .setName(TASK_NAME)
+            .setInitialPrice(INITIAL_PRICE)
+            .setDone(NOT_DONE).setRoom(room)
+            .setLastDoneDate(LAST_DONE_DATE)
+            .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
+            .setLastDoneUserId(LAST_DONE_USER_ID)
+            .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
+            .setRepetitionRate(REPETITION_RATE).createTask();
 
     private final TaskDTO notDoneTaskDTO = notDoneTask.toDto();
     private final TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
-    private final TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room, LAST_DONE_DATE, REPETITION_RATE);
+    private final TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
+            LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, LAST_DONE_USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
     private final Room room2 = new Room(ROOM_ID_2, ROOM_NAME_2, IMAGE_URL_2, house);
 
     @BeforeEach

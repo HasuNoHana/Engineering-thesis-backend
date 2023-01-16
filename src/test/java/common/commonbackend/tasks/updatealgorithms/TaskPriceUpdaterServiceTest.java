@@ -25,7 +25,15 @@ class TaskPriceUpdaterServiceTest {
         TaskPriceUpdateAlgorithm dumbAlgorithm = (price, lastDoneDate, period) -> 10;
 
         TaskPriceUpdaterService taskPriceUpdaterService = new TaskPriceUpdaterService(dumbAlgorithm);
-        Task task = new TaskBuilder().setId(1L).setName("TaskName").setInitialPrice(10).setDone(false).setRoom(room).setLastDoneDate(LocalDate.now()).setRepetitionRate(Period.ofDays(1)).createTask();
+        Task task = new TaskBuilder()
+                .setId(1L)
+                .setName("TaskName")
+                .setInitialPrice(10)
+                .setDone(false)
+                .setRoom(room)
+                .setLastDoneDate(LocalDate.now())
+                .setRepetitionRate(Period.ofDays(1))
+                .createTask();
 
         //when
         Task updatedTask = taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);

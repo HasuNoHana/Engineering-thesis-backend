@@ -2,14 +2,18 @@ package common.commonbackend.users;
 
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.users.house_buddy.HouseBuddy;
+import common.commonbackend.users.house_buddy.HouseBuddyRepository;
 import common.commonbackend.users.house_buddy.HouseBuddyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
 
 @MockitoSettings
 class HouseBuddyServiceTest {
@@ -22,16 +26,19 @@ class HouseBuddyServiceTest {
     private static final long FIREWOOD_STACK_SIZE = 40L;
     private static final long WEEKLY_POINTS_CONTRIBUTION = 100L;
     private static final String IMAGE = "image";
+    private static final long CURRENT_PRICE = 30L;
 
     @Mock
     private HouseEntity house;
     @Mock
     private User user;
+    @Mock
+    private HouseBuddyRepository houseBuddyRepository;
     private HouseBuddyService systemUnderTest;
 
     @BeforeEach
     void setUp() {
-        systemUnderTest = new HouseBuddyService();
+        systemUnderTest = new HouseBuddyService(houseBuddyRepository);
     }
 
     @Test
@@ -53,6 +60,7 @@ class HouseBuddyServiceTest {
                 house, user);
         when(user.getUsername()).thenReturn(USERNAME);
         when(user.getId()).thenReturn(USER_ID);
+
         //when
         UserDTO userDTO = systemUnderTest.createUserDTOFromHouseBuddy(houseBuddy);
 
@@ -62,6 +70,38 @@ class HouseBuddyServiceTest {
         assertEquals(FIREWOOD_STACK_SIZE, userDTO.getPoints());
         assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTO.getRange());
         assertEquals(IMAGE, userDTO.getImage());
+    }
+
+    @Test
+    void shouldAddPointsToHouseBuddy() {
+        //given
+        HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, WEEKLY_POINTS_CONTRIBUTION, IMAGE,
+                house, user);
+        when(user.getHouseBuddy()).thenReturn(houseBuddy);
+        when(houseBuddyRepository.getHouseBuddyById(any())).thenReturn(houseBuddy);
+        when(houseBuddyRepository.save(any())).thenReturn(houseBuddy);
+
+        //when
+        User actual = systemUnderTest.addPointsToHouseBuddy(user, CURRENT_PRICE);
+
+        //then
+        assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(CURRENT_PRICE + FIREWOOD_STACK_SIZE);
+    }
+
+    @Test
+    void shouldSubstractPointsToHouseBuddy() {
+        //given
+        HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, WEEKLY_POINTS_CONTRIBUTION, IMAGE,
+                house, user);
+        when(user.getHouseBuddy()).thenReturn(houseBuddy);
+        when(houseBuddyRepository.getHouseBuddyById(any())).thenReturn(houseBuddy);
+        when(houseBuddyRepository.save(any())).thenReturn(houseBuddy);
+
+        //when
+        User actual = systemUnderTest.substractPointsFromHouseBuddy(user, CURRENT_PRICE);
+
+        //then
+        assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE - CURRENT_PRICE);
     }
 
 }

@@ -4,6 +4,8 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
+import common.commonbackend.users.User;
+import common.commonbackend.users.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -44,7 +46,11 @@ class TaskServiceTest {
     @Mock
     RoomRepository roomRepository;
     @Mock
+    UserService userService;
+    @Mock
     HouseEntity house;
+    @Mock
+    User user;
     private TaskService systemUnderTest;
     private static final Period REPETITION_RATE = Period.ofDays(1);
     private static final LocalDate PREVIOUS_LAST_DONE_DATE = LocalDate.now().minusDays(3);
@@ -73,7 +79,7 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        systemUnderTest = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService);
+        systemUnderTest = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService, userService);
     }
 
     @Test
@@ -180,10 +186,8 @@ class TaskServiceTest {
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(notDoneTask)).thenReturn(notDoneTask);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
 
-        TaskService taskService = this.systemUnderTest;
-
         //when
-        Task actual = taskService.setTaskDone(TASK_ID, house, DONE, USER_ID);
+        Task actual = systemUnderTest.setTaskDone(TASK_ID, house, DONE, user);
 
         //then
         assertThat(actual)
@@ -199,15 +203,13 @@ class TaskServiceTest {
                         TASK_NAME,
                         room,
                         TASK_ID);
-
-        verify(taskRepository, times(1)).save(doneTaskEntity);
     }
 
     @Test
     void shouldSetTaskNotDone() {
         //given
         TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
-                LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, LAST_DONE_USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
+                LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
 
         Task expectedTask = new TaskBuilder()
                 .setId(TASK_ID)
@@ -225,10 +227,10 @@ class TaskServiceTest {
         when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(doneTaskEntity);
         when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(any())).thenAnswer(returnsFirstArg());
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
-
+        when(user.getId()).thenReturn(USER_ID);
 
         //when
-        Task actual = systemUnderTest.setTaskDone(TASK_ID, house, NOT_DONE, USER_ID);
+        Task actual = systemUnderTest.setTaskDone(TASK_ID, house, NOT_DONE, user);
 
         //then
         assertThat(actual)

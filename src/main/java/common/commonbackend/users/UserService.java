@@ -90,11 +90,11 @@ public class UserService implements UserDetailsService {
         return new UserPrincipal(user);
     }
 
-    public List<User> getUsersForHouse(HouseEntity myHouse) {
+    List<User> getUsersForHouse(HouseEntity myHouse) {
         return this.userRepository.findByHouseBuddy_House(myHouse);
     }
 
-    public User editUser(Long id, UserDTO newUser) {
+    User editUser(Long id, UserDTO newUser) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found");
@@ -104,5 +104,23 @@ public class UserService implements UserDetailsService {
         houseBuddy.setAvatarImageUrl(newUser.getImage());
         houseBuddyRepository.save(houseBuddy);
         return user.get();
+    }
+
+    public User addPointsToUser(User user, Optional<Long> currentPrice) {
+        if (currentPrice.isEmpty()) {
+            log.error("Current price is not present");
+        } else {
+            return houseBuddyService.addPointsToHouseBuddy(user, currentPrice.get());
+        }
+        return null;
+    }
+
+    public User substractPointsFromUser(User user, Optional<Long> currentPrice) {
+        if (currentPrice.isEmpty()) {
+            log.error("Current price is not present");
+        } else {
+            return houseBuddyService.substractPointsFromHouseBuddy(user, currentPrice.get());
+        }
+        return null;
     }
 }

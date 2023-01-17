@@ -38,6 +38,7 @@ class UserServiceTest {
 
     private static final long WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
     private static final String IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
+    public static final long CURRENT_PRICE = 30L;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -174,6 +175,83 @@ class UserServiceTest {
         assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE);
         assertThat(actual.getHouseBuddy().getWeeklyFirewoodContribution()).isEqualTo(WEEKLY_FIREWOOD_CONTRIBUTION);
         assertThat(actual.getHouseBuddy().getAvatarImageUrl()).isEqualTo(IMAGE);
+    }
+
+    @Test
+    void shouldGetUserById() {
+        // given
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        // when
+        User actual = userService.getUserById(USER_ID);
+
+        // then
+        verify(userRepository, times(1)).findById(USER_ID);
+        assertThat(actual.getUsername()).isEqualTo(USERNAME);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenNoUser() {
+        // given
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
+
+        //when
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> userService.getUserById(USER_ID);
+
+        //then
+        assertThatThrownBy(throwingCallable).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void shouldAddPointsToUser() {
+        // given
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+        when(houseBuddyService.addPointsToHouseBuddy(user, CURRENT_PRICE)).thenReturn(user);
+
+        // when
+        User actual = userService.addPointsToUser(user, Optional.of(CURRENT_PRICE));
+
+        // then
+        verify(houseBuddyService, times(1)).addPointsToHouseBuddy(user, CURRENT_PRICE);
+    }
+
+    @Test
+    void shouldSubstractPointsToUser() {
+        // given
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+        when(houseBuddyService.substractPointsFromHouseBuddy(user, CURRENT_PRICE)).thenReturn(user);
+
+        // when
+        User actual = userService.substractPointsFromUser(user, Optional.of(CURRENT_PRICE));
+
+        // then
+        verify(houseBuddyService, times(1)).substractPointsFromHouseBuddy(user, CURRENT_PRICE);
+    }
+
+    @Test
+    void shouldSubstractPointsToNotExistingPrice() {
+        // given
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+
+        // when
+        User actual = userService.substractPointsFromUser(user, Optional.empty());
+
+        // then
+        assertThat(actual).isNull();
+    }
+
+    @Test
+    void shouldAddPointsToNotExistingPrice() {
+        // given
+        User user = new User(USERNAME, PASSWORD, houseBuddy);
+
+        // when
+        User actual = userService.addPointsToUser(user, Optional.empty());
+
+        // then
+        assertThat(actual).isNull();
     }
 
 }

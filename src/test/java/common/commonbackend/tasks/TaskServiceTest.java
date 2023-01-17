@@ -22,6 +22,18 @@ import static org.mockito.Mockito.*;
 
 @MockitoSettings
 class TaskServiceTest {
+    @Mock
+    TaskPriceUpdaterService taskPriceUpdaterService;
+    @Mock
+    TaskRepository taskRepository;
+    @Mock
+    RoomRepository roomRepository;
+    @Mock
+    UserService userService;
+    @Mock
+    HouseEntity house;
+    @Mock
+    User user;
     private static final String TASK_NAME = "TaskName";
     private static final long INITIAL_PRICE = 10;
     private static final boolean NOT_DONE = false;
@@ -39,18 +51,6 @@ class TaskServiceTest {
     private static final Period REPETITION_RATE_2 = Period.ofDays(6);
     private static final LocalDate LAST_DONE_DATE_2 = LocalDate.now().plusDays(3);
     private static final long USER_ID = 4L;
-    @Mock
-    TaskPriceUpdaterService taskPriceUpdaterService;
-    @Mock
-    TaskRepository taskRepository;
-    @Mock
-    RoomRepository roomRepository;
-    @Mock
-    UserService userService;
-    @Mock
-    HouseEntity house;
-    @Mock
-    User user;
     private TaskService systemUnderTest;
     private static final Period REPETITION_RATE = Period.ofDays(1);
     private static final LocalDate PREVIOUS_LAST_DONE_DATE = LocalDate.now().minusDays(3);
@@ -254,7 +254,8 @@ class TaskServiceTest {
                         expectedTask.getLastDoneDate(),
                         expectedTask.getLastDoneUserId(),
                         expectedTask.getPreviousLastDoneDate(),
-                        expectedTask.getPreviousLastDoneUserId()
+                        expectedTask.getPreviousLastDoneUserId(),
+                        expectedTask.getRepetitionRate()
                 );
 
         verify(taskRepository, times(1)).save(expectedTask.toEntity());

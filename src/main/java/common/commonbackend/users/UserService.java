@@ -5,6 +5,8 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.security.UserPrincipal;
+import common.commonbackend.tasks.Task;
+import common.commonbackend.tasks.TaskService;
 import common.commonbackend.users.house_buddy.HouseBuddy;
 import common.commonbackend.users.house_buddy.HouseBuddyRepository;
 import common.commonbackend.users.house_buddy.HouseBuddyService;
@@ -17,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +31,9 @@ public class UserService implements UserDetailsService {
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
     private final UserRepository userRepository;
     private final HouseService houseService;
-
     private final HouseBuddyService houseBuddyService;
     private final HouseBuddyRepository houseBuddyRepository;
+    private final TaskService taskService;
 
     public User getUserById(long id) {
         Optional<User> user = userRepository.findById(id);
@@ -106,21 +110,10 @@ public class UserService implements UserDetailsService {
         return user.get();
     }
 
-    public User addPointsToUser(User user, Optional<Long> currentPrice) {
-        if (currentPrice.isEmpty()) {
-            log.error("Current price is not present");
-        } else {
-            return houseBuddyService.addPointsToHouseBuddy(user, currentPrice.get());
-        }
-        return null;
-    }
-
-    public User substractPointsFromUser(User user, Optional<Long> currentPrice) {
-        if (currentPrice.isEmpty()) {
-            log.error("Current price is not present");
-        } else {
-            return houseBuddyService.substractPointsFromHouseBuddy(user, currentPrice.get());
-        }
-        return null;
+    long countDoneTasksThisWeek(Long userId, HouseEntity house) {
+        List<Task> tasksForCurrentHouse = taskService.getTasks(house);
+        return tasksForCurrentHouse.stream().filter(task -> (task.getLastDoneUserId() == userId) &&
+                (ChronoUnit.DAYS.between(task.getLastDoneDate(), LocalDate.now()) <= 7) &&
+                task.isDone()).count();
     }
 }

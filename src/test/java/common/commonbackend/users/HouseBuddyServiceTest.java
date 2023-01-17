@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +32,7 @@ class HouseBuddyServiceTest {
     private static final String IMAGE = "image";
     private static final long CURRENT_PRICE = 30L;
     private static final String PASSWORD = "haslo";
-    public static final long HOUSE_BUDDY_ID = 8L;
+    private static final long HOUSE_BUDDY_ID = 8L;
 
     @Mock
     User user1;
@@ -138,7 +139,7 @@ class HouseBuddyServiceTest {
         when(houseBuddyRepository.save(any())).thenReturn(houseBuddy);
 
         //when
-        User actual = systemUnderTest.addPointsToHouseBuddy(user, CURRENT_PRICE);
+        User actual = systemUnderTest.addPointsToUser(user, Optional.of(CURRENT_PRICE));
 
         //then
         assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(CURRENT_PRICE + FIREWOOD_STACK_SIZE);
@@ -154,10 +155,28 @@ class HouseBuddyServiceTest {
         when(houseBuddyRepository.save(any())).thenReturn(houseBuddy);
 
         //when
-        User actual = systemUnderTest.substractPointsFromHouseBuddy(user, CURRENT_PRICE);
+        User actual = systemUnderTest.substractPointsFromUser(user, Optional.of(CURRENT_PRICE));
 
         //then
         assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE - CURRENT_PRICE);
+    }
+
+    @Test
+    void shouldSubstractPointsToNotExistingPrice() {
+        // when
+        User actual = systemUnderTest.substractPointsFromUser(user, Optional.empty());
+
+        // then
+        assertThat(actual).isNull();
+    }
+
+    @Test
+    void shouldAddPointsToNotExistingPrice() {
+        // when
+        User actual = systemUnderTest.addPointsToUser(user, Optional.empty());
+
+        // then
+        assertThat(actual).isNull();
     }
 
 }

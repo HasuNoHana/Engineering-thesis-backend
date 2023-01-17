@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
-
     private final ControllerHelper controllerHelper;
 
     @PostMapping(path = "/makeTaskDone")

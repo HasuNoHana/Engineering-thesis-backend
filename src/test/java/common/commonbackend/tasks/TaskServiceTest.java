@@ -5,7 +5,7 @@ import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
 import common.commonbackend.users.User;
-import common.commonbackend.users.UserService;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -29,7 +29,7 @@ class TaskServiceTest {
     @Mock
     RoomRepository roomRepository;
     @Mock
-    UserService userService;
+    HouseBuddyService houseBuddyService;
     @Mock
     HouseEntity house;
     @Mock
@@ -79,7 +79,7 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        systemUnderTest = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService, userService);
+        systemUnderTest = new TaskService(taskRepository, roomRepository, taskPriceUpdaterService, houseBuddyService);
     }
 
     @Test

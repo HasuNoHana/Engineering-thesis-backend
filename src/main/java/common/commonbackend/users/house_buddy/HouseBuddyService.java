@@ -4,13 +4,16 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.users.User;
 import common.commonbackend.users.UserDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class HouseBuddyService {
 
     private static final long DEFAULT_FIREWOOD_STACK_SIZE = 0L;
@@ -43,19 +46,29 @@ public class HouseBuddyService {
         return userDTOS;
     }
 
-    public User addPointsToHouseBuddy(User user, Long currentPrice) {
-        HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
-        houseBuddy.setFirewoodStackSize(houseBuddy.getFirewoodStackSize() + currentPrice);
-        return houseBuddyRepository.save(houseBuddy).getUser();
-    }
-
-    public User substractPointsFromHouseBuddy(User user, Long currentPrice) {
-        HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
-        houseBuddy.setFirewoodStackSize(houseBuddy.getFirewoodStackSize() - currentPrice);
-        return houseBuddyRepository.save(houseBuddy).getUser();
-    }
-
     public HouseBuddy getHouseBuddyById(Long id) {
         return houseBuddyRepository.getHouseBuddyById(id);
+    }
+
+    public User addPointsToUser(User user, Optional<Long> currentPrice) {
+        if (currentPrice.isEmpty()) {
+            log.error("Current price is not present");
+        } else {
+            HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
+            houseBuddy.setFirewoodStackSize(houseBuddy.getFirewoodStackSize() + currentPrice.get());
+            return houseBuddyRepository.save(houseBuddy).getUser();
+        }
+        return null;
+    }
+
+    public User substractPointsFromUser(User user, Optional<Long> currentPrice) {
+        if (currentPrice.isEmpty()) {
+            log.error("Current price is not present");
+        } else {
+            HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
+            houseBuddy.setFirewoodStackSize(houseBuddy.getFirewoodStackSize() - currentPrice.get());
+            return houseBuddyRepository.save(houseBuddy).getUser();
+        }
+        return null;
     }
 }

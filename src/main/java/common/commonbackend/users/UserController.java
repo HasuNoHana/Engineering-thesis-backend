@@ -45,4 +45,12 @@ public class UserController {
         User user = userService.editUser(id, newUser);
         return new ResponseEntity<>(user.getHouseBuddy(), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/doneTasksThisWeek")
+    public ResponseEntity<Long> getDoneTasksThisWeek() {
+        long doneTasksThisWeek = userService
+                .countDoneTasksThisWeek(controllerHelper.getMyUser().getId(), controllerHelper.getMyHouse());
+        return new ResponseEntity<>(doneTasksThisWeek, HttpStatus.OK);
+    }
+
 }

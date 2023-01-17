@@ -3,6 +3,8 @@ package common.commonbackend.users;
 import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.houses.HouseService;
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
+import common.commonbackend.tasks.Task;
+import common.commonbackend.tasks.TaskService;
 import common.commonbackend.users.house_buddy.HouseBuddy;
 import common.commonbackend.users.house_buddy.HouseBuddyRepository;
 import common.commonbackend.users.house_buddy.HouseBuddyService;
@@ -15,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,15 +51,26 @@ class UserServiceTest {
     @Mock
     private HouseEntity house;
     @Mock
+    private User user;
+    @Mock
     private HouseBuddy houseBuddy;
     @Mock
     private HouseBuddyRepository houseBuddyRepository;
+    @Mock
+    private TaskService taskService;
+    @Mock
+    private Task task1;
+    @Mock
+    private Task task2;
+    @Mock
+    private Task task3;
 
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository, houseService, houseBuddyService, houseBuddyRepository);
+        userService = new UserService(userRepository, houseService, houseBuddyService,
+                houseBuddyRepository, taskService);
     }
 
     @Test
@@ -205,53 +219,26 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldAddPointsToUser() {
-        // given
-        User user = new User(USERNAME, PASSWORD, houseBuddy);
-        when(houseBuddyService.addPointsToHouseBuddy(user, CURRENT_PRICE)).thenReturn(user);
+    void shouldCountDoneTasksThisWeek() {
+        when(task1.getLastDoneUserId()).thenReturn(USER_ID);
+        when(task1.getLastDoneDate()).thenReturn(LocalDate.now());
+        when(task1.isDone()).thenReturn(true);
+
+        when(task2.getLastDoneUserId()).thenReturn(USER_ID);
+        when(task2.getLastDoneDate()).thenReturn(LocalDate.now());
+        when(task2.isDone()).thenReturn(false);
+
+        when(task3.getLastDoneUserId()).thenReturn(USER_ID);
+        when(task3.getLastDoneDate()).thenReturn(LocalDate.now().minusDays(8));
+
+        List<Task> tasks = List.of(task1, task2, task3);
+        when(taskService.getTasks(house)).thenReturn(tasks);
 
         // when
-        User actual = userService.addPointsToUser(user, Optional.of(CURRENT_PRICE));
+        long actual = userService.countDoneTasksThisWeek(USER_ID, house);
 
         // then
-        verify(houseBuddyService, times(1)).addPointsToHouseBuddy(user, CURRENT_PRICE);
-    }
-
-    @Test
-    void shouldSubstractPointsToUser() {
-        // given
-        User user = new User(USERNAME, PASSWORD, houseBuddy);
-        when(houseBuddyService.substractPointsFromHouseBuddy(user, CURRENT_PRICE)).thenReturn(user);
-
-        // when
-        User actual = userService.substractPointsFromUser(user, Optional.of(CURRENT_PRICE));
-
-        // then
-        verify(houseBuddyService, times(1)).substractPointsFromHouseBuddy(user, CURRENT_PRICE);
-    }
-
-    @Test
-    void shouldSubstractPointsToNotExistingPrice() {
-        // given
-        User user = new User(USERNAME, PASSWORD, houseBuddy);
-
-        // when
-        User actual = userService.substractPointsFromUser(user, Optional.empty());
-
-        // then
-        assertThat(actual).isNull();
-    }
-
-    @Test
-    void shouldAddPointsToNotExistingPrice() {
-        // given
-        User user = new User(USERNAME, PASSWORD, houseBuddy);
-
-        // when
-        User actual = userService.addPointsToUser(user, Optional.empty());
-
-        // then
-        assertThat(actual).isNull();
+        assertThat(actual).isEqualTo(1L);
     }
 
 }

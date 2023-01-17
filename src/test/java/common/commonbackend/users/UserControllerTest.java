@@ -37,6 +37,7 @@ class UserControllerTest extends ControllerTest {
     private static final int WEEKLY_FIREWOOD_CONTRIBUTION_2 = 30;
     private static final String IMAGE_2 = "url2";
     private static final String PASSWORD = "password";
+    private static final long NUMBER_OF_TASKS = 9L;
 
     @Mock
     User user;
@@ -113,4 +114,22 @@ class UserControllerTest extends ControllerTest {
         verify(userService, times(1)).editUser(USER_ID, userDTO);
     }
 
+    @Test
+    @SneakyThrows
+    void getDoneTasksThisWeek() {
+        //given
+        when(controllerHelper.getMyHouse()).thenReturn(house);
+        when(controllerHelper.getMyUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID);
+        when(userService.countDoneTasksThisWeek(USER_ID, house)).thenReturn(NUMBER_OF_TASKS);
+
+        //when
+        getMocMvc().perform(get("/api/doneTasksThisWeek"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(String.valueOf(NUMBER_OF_TASKS)))
+                .andDo(print());
+
+        //then
+        verify(userService, times(1)).countDoneTasksThisWeek(USER_ID, house);
+    }
 }

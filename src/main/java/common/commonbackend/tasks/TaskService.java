@@ -5,7 +5,7 @@ import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
 import common.commonbackend.users.User;
-import common.commonbackend.users.UserService;
+import common.commonbackend.users.house_buddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final RoomRepository roomRepository;
     private final TaskPriceUpdaterService taskPriceUpdaterService;
-
-    private final UserService userService;
+    private final HouseBuddyService houseBuddyService;
 
     Task getTask(Long id, HouseEntity myHouse) {
         log.debug("Looking for task with id: " + id);
@@ -32,7 +31,7 @@ public class TaskService {
         return taskPriceUpdaterService.getOneTaskWithUpdatedPrice(task);
     }
 
-    List<Task> getTasks(HouseEntity myHouse) {
+    public List<Task> getTasks(HouseEntity myHouse) {
         return taskPriceUpdaterService.getTasksWithUpdatedPrice(
                 taskRepository.findTasksByRoom_House(myHouse)
                         .stream()
@@ -82,14 +81,14 @@ public class TaskService {
             task.setPreviousLastDoneUserId(task.getLastDoneUserId());
             task.setLastDoneDate(LocalDate.now());
             task.setLastDoneUserId(user.getId());
-            userService.addPointsToUser(user, task.getCurrentPrice());
+            houseBuddyService.addPointsToUser(user, task.getCurrentPrice());
         } else {
             if (task.getLastDoneUserId() != user.getId()) {
                 return task;
             }
             task.setLastDoneDate(task.getPreviousLastDoneDate());
             task.setLastDoneUserId(task.getPreviousLastDoneUserId());
-            userService.substractPointsFromUser(user, task.getCurrentPrice());
+            houseBuddyService.substractPointsFromUser(user, task.getCurrentPrice());
         }
         task.setDone(done);
         return Task.fromEntity(taskRepository.save(task.toEntity()));

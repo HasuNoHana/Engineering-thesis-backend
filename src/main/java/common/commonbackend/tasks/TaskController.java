@@ -22,14 +22,14 @@ public class TaskController {
     @PostMapping(path = "/makeTaskDone")
     public ResponseEntity<TaskDTO> makeTaskDone(@RequestParam Long id) {
         Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), true,
-                controllerHelper.getMyUser().getId());
+                controllerHelper.getMyUser());
         return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/makeTaskToDo")
     public ResponseEntity<TaskDTO> makeTaskToDo(@RequestParam Long id) {
         Task task = taskService.setTaskDone(id, controllerHelper.getMyHouse(), false,
-                controllerHelper.getMyUser().getId());
+                controllerHelper.getMyUser());
         return new ResponseEntity<>(task.toDto(), HttpStatus.OK);
     }
 

@@ -122,9 +122,8 @@ class TaskControllerTest extends ControllerTest {
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
         when(controllerHelper.getMyUser()).thenReturn(user);
-        when(user.getId()).thenReturn(USER_ID);
         Task taskDone = taskBuilder.setDone(DONE).createTask();
-        when(taskService.setTaskDone(TASK_ID, house, DONE, USER_ID)).thenReturn(taskDone);
+        when(taskService.setTaskDone(TASK_ID, house, DONE, user)).thenReturn(taskDone);
 
 
         //then
@@ -135,7 +134,7 @@ class TaskControllerTest extends ControllerTest {
                 .andExpect(content().json(asJsonString(taskDone.toDto())));
 
         verify(taskService, times(1))
-                .setTaskDone(TASK_ID, house, DONE, USER_ID);
+                .setTaskDone(TASK_ID, house, DONE, user);
     }
 
     @Test
@@ -144,10 +143,9 @@ class TaskControllerTest extends ControllerTest {
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
         when(controllerHelper.getMyUser()).thenReturn(user);
-        when(user.getId()).thenReturn(USER_ID);
         Task taskDone = taskBuilder.setDone(NOT_DONE).createTask();
         TaskDTO taskDTO = taskDone.toDto();
-        when(taskService.setTaskDone(TASK_ID, house, NOT_DONE, USER_ID)).thenReturn(taskDone);
+        when(taskService.setTaskDone(TASK_ID, house, NOT_DONE, user)).thenReturn(taskDone);
 
 
         //then
@@ -158,6 +156,6 @@ class TaskControllerTest extends ControllerTest {
                 .andExpect(content().json(asJsonString(taskDone.toDto())));
 
         verify(taskService, times(1))
-                .setTaskDone(TASK_ID, house, NOT_DONE, USER_ID);
+                .setTaskDone(TASK_ID, house, NOT_DONE, user);
     }
 }

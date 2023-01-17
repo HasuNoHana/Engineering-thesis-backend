@@ -4,6 +4,8 @@ import common.commonbackend.houses.HouseEntity;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.updatealgorithms.TaskPriceUpdaterService;
+import common.commonbackend.users.User;
+import common.commonbackend.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final RoomRepository roomRepository;
     private final TaskPriceUpdaterService taskPriceUpdaterService;
+
+    private final UserService userService;
 
     Task getTask(Long id, HouseEntity myHouse) {
         log.debug("Looking for task with id: " + id);
@@ -71,16 +75,21 @@ public class TaskService {
         return Task.fromEntity(taskRepository.save(newTask.toEntity()));
     }
 
-    Task setTaskDone(Long id, HouseEntity house, boolean done, long userId) {
+    Task setTaskDone(Long id, HouseEntity house, boolean done, User user) {
         Task task = getTask(id, house);
         if (done) {
             task.setPreviousLastDoneDate(task.getLastDoneDate());
             task.setPreviousLastDoneUserId(task.getLastDoneUserId());
             task.setLastDoneDate(LocalDate.now());
-            task.setLastDoneUserId(userId);
+            task.setLastDoneUserId(user.getId());
+            userService.addPointsToUser(user, task.getCurrentPrice());
         } else {
+            if (task.getLastDoneUserId() != user.getId()) {
+                return task;
+            }
             task.setLastDoneDate(task.getPreviousLastDoneDate());
             task.setLastDoneUserId(task.getPreviousLastDoneUserId());
+            userService.substractPointsFromUser(user, task.getCurrentPrice());
         }
         task.setDone(done);
         return Task.fromEntity(taskRepository.save(task.toEntity()));

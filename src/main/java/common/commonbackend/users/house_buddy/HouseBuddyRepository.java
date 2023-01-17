@@ -5,4 +5,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HouseBuddyRepository extends CrudRepository<HouseBuddy, Long> {
+
+    HouseBuddy save(HouseBuddy houseBuddy);
+
+    HouseBuddy getHouseBuddyById(Long id);
 }

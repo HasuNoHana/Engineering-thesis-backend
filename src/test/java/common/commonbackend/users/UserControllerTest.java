@@ -55,6 +55,7 @@ class UserControllerTest extends ControllerTest {
         HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, DEFAULT_IMAGE, house);
         User user = new User(USERNAME, PASSWORD, houseBuddy);
         when(controllerHelper.getMyUser()).thenReturn(user);
+        when(houseBuddyService.getHouseBuddyById(any())).thenReturn(houseBuddy);
 
         //when
         getMocMvc().perform(get("/api/currentUserData"))

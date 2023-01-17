@@ -25,7 +25,8 @@ public class UserController {
 
     @GetMapping(path = "/currentUserData")
     public ResponseEntity<HouseBuddy> getCurrentUserData() {
-        HouseBuddy houseBuddy = controllerHelper.getMyUser().getHouseBuddy();
+        HouseBuddy houseBuddy = houseBuddyService
+                .getHouseBuddyById(controllerHelper.getMyUser().getHouseBuddy().getId());
         return new ResponseEntity<>(houseBuddy, HttpStatus.OK);
     }
 

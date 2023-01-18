@@ -24,6 +24,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -41,7 +42,7 @@ class UserServiceTest {
 
     private static final long WEEKLY_FIREWOOD_CONTRIBUTION = 100L;
     private static final String IMAGE = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg";
-    public static final long CURRENT_PRICE = 30L;
+    private static final String NEW_PASSWORD = "newPassword";
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -64,7 +65,6 @@ class UserServiceTest {
     private Task task2;
     @Mock
     private Task task3;
-
     private UserService userService;
 
     @BeforeEach
@@ -220,6 +220,7 @@ class UserServiceTest {
 
     @Test
     void shouldCountDoneTasksThisWeek() {
+        //given
         when(task1.getLastDoneUserId()).thenReturn(USER_ID);
         when(task1.getLastDoneDate()).thenReturn(LocalDate.now());
         when(task1.isDone()).thenReturn(true);
@@ -239,6 +240,40 @@ class UserServiceTest {
 
         // then
         assertThat(actual).isEqualTo(1L);
+    }
+
+    @Test
+    void shouldChangePasswordForGoodCurrentPassword() {
+        //given
+        User user = new User(USERNAME, UserService.getPasswordEncoder().encode(PASSWORD), houseBuddy);
+        when(userRepository.save(any())).thenAnswer(returnsFirstArg());
+
+        // when
+        User actual = userService.changePassword(PASSWORD, NEW_PASSWORD, user);
+
+        // then
+        assertTrue(UserService.getPasswordEncoder().matches(NEW_PASSWORD, actual.getPassword()));
+    }
+
+    @Test
+    void shouldNotChangePasswordForBadCurrentPassword() {
+        // given
+        User user = new User(USERNAME, UserService.getPasswordEncoder().encode("otherPassword"), houseBuddy);
+
+        //when
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> userService.changePassword(PASSWORD, NEW_PASSWORD, user);
+
+        //then
+        assertThatThrownBy(throwingCallable).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void shouldDeleteUser() {
+        // when
+        userService.deleteUser(user);
+
+        // then
+        verify(userRepository, times(1)).delete(user);
     }
 
 }

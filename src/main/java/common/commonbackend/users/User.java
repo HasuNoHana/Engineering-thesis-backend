@@ -3,6 +3,7 @@ package common.commonbackend.users;
 import common.commonbackend.users.house_buddy.HouseBuddy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -17,6 +18,7 @@ public class User {
     private Long id;
     @Column(name = "USERNAME")
     private String username;
+    @Setter
     @Column(name = "PASSWORD")
     private String password;
     @OneToOne(cascade = CascadeType.ALL)

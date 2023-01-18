@@ -1,4 +1,4 @@
-package common.commonbackend.users.login;
+package common.commonbackend.users.authorization;
 
 import common.commonbackend.houses.exceptions.WrongHouseJoinCodeException;
 import common.commonbackend.users.UserService;
@@ -54,13 +54,13 @@ public class SignUpController {
     }
 
     @Value
-    public static class UserWithoutHouse {
+    protected static class UserWithoutHouse {
         String username;
         String password;
     }
 
     @Value
-    public static class UserAndJoinCode {
+    protected static class UserAndJoinCode {
         String username;
         String password;
         String houseJoinCode;

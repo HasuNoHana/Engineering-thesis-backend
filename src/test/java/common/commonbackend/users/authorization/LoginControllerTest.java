@@ -1,9 +1,9 @@
-package common.commonbackend.users;
+package common.commonbackend.users.authorization;
 
 import common.commonbackend.ControllerTest;
 import common.commonbackend.houses.HouseEntity;
+import common.commonbackend.users.User;
 import common.commonbackend.users.house_buddy.HouseBuddy;
-import common.commonbackend.users.login.LoginController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

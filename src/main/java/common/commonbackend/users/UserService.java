@@ -116,4 +116,16 @@ public class UserService implements UserDetailsService {
                 (ChronoUnit.DAYS.between(task.getLastDoneDate(), LocalDate.now()) <= 7) &&
                 task.isDone()).count();
     }
+
+    public User changePassword(String currentPassword, String newPassword, User myUser) {
+        if (!PASSWORD_ENCODER.matches(currentPassword, myUser.getPassword())) {
+            throw new IllegalArgumentException("Wrong password");
+        }
+        myUser.setPassword(PASSWORD_ENCODER.encode(newPassword));
+        return userRepository.save(myUser);
+    }
+
+    public void deleteUser(User myUser) {
+        userRepository.delete(myUser);
+    }
 }

@@ -1,4 +1,4 @@
-package common.commonbackend.users.login;
+package common.commonbackend.users.authorization;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;

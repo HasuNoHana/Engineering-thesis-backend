@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 
 @MockitoSettings
 class TaskServiceTest {
+    private static final long CURRENT_PRICE = 15L;
     @Mock
     TaskPriceUpdaterService taskPriceUpdaterService;
     @Mock
@@ -36,6 +37,7 @@ class TaskServiceTest {
     User user;
     private static final String TASK_NAME = "TaskName";
     private static final long INITIAL_PRICE = 10;
+    private static final long LAST_DONE_PRICE = CURRENT_PRICE;
     private static final boolean NOT_DONE = false;
     private static final boolean DONE = true;
     private static final long TASK_ID = 1L;
@@ -56,6 +58,7 @@ class TaskServiceTest {
     private static final LocalDate PREVIOUS_LAST_DONE_DATE = LocalDate.now().minusDays(3);
 
     private static final LocalDate LAST_DONE_DATE = LocalDate.now();
+    private static final LocalDate BEGIN_PERIOD_DATE = LocalDate.now();
     private static final long LAST_DONE_USER_ID = 1L;
     private static final long PREVIOUS_LAST_DONE_USER_ID = 2L;
     private final Room room = new Room(ROOM_ID, ROOM_NAME, IMAGE_URL, house);
@@ -67,14 +70,17 @@ class TaskServiceTest {
             .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
             .setLastDoneUserId(LAST_DONE_USER_ID)
             .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
-            .setRepetitionRate(REPETITION_RATE);
+            .setRepetitionRate(REPETITION_RATE)
+            .setBeginPeriodDate(BEGIN_PERIOD_DATE)
+            .setLastDonePrice(LAST_DONE_PRICE);
     private final Task notDoneTask = taskBuilder.setId(TASK_ID).createTask();
     private final Task secondTask = taskBuilder.setId(TASK_ID_2).createTask();
 
     private final TaskDTO notDoneTaskDTO = notDoneTask.toDto();
     private final TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
     private final TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
-            LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, LAST_DONE_USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
+            LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, LAST_DONE_USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE,
+            BEGIN_PERIOD_DATE, LAST_DONE_PRICE);
     private final Room room2 = new Room(ROOM_ID_2, ROOM_NAME_2, IMAGE_URL_2, house);
 
     @BeforeEach
@@ -180,11 +186,25 @@ class TaskServiceTest {
     @Test
     void shouldSetTaskDone() {
         //given
-        TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
-                LocalDate.now(), LAST_DONE_DATE, USER_ID, LAST_DONE_USER_ID, REPETITION_RATE);
+        Task notDoneTask = new TaskBuilder()
+                .setName(TASK_NAME)
+                .setInitialPrice(INITIAL_PRICE)
+                .setDone(NOT_DONE).setRoom(room)
+                .setLastDoneDate(LAST_DONE_DATE)
+                .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
+                .setLastDoneUserId(LAST_DONE_USER_ID)
+                .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
+                .setRepetitionRate(REPETITION_RATE)
+                .setBeginPeriodDate(BEGIN_PERIOD_DATE)
+                .setLastDonePrice(LAST_DONE_PRICE)
+                .setId(TASK_ID).createTask();
+        notDoneTask.setCurrentPrice(CURRENT_PRICE);
+        TaskEntity notDoneTaskEntity = notDoneTask.toEntity();
         when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(notDoneTaskEntity);
-        when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(notDoneTask)).thenReturn(notDoneTask);
+        notDoneTask.setLastDonePrice(CURRENT_PRICE);
+        when(taskPriceUpdaterService.getOneTaskWithUpdatedPrice(any())).thenReturn(notDoneTask);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
+        when(user.getId()).thenReturn(USER_ID);
 
         //when
         Task actual = systemUnderTest.setTaskDone(TASK_ID, house, DONE, user);
@@ -196,20 +216,37 @@ class TaskServiceTest {
                         Task::getInitialPrice,
                         Task::getName,
                         Task::getRoom,
-                        Task::getId)
+                        Task::getId,
+                        Task::getLastDoneDate,
+                        Task::getPreviousLastDoneDate,
+                        Task::getLastDoneUserId,
+                        Task::getPreviousLastDoneUserId,
+                        Task::getRepetitionRate,
+                        Task::getBeginPeriodDate,
+                        Task::getLastDonePrice)
                 .contains(
                         DONE,
-                        INITIAL_PRICE,
-                        TASK_NAME,
-                        room,
-                        TASK_ID);
+                        notDoneTask.getInitialPrice(),
+                        notDoneTask.getName(),
+                        notDoneTask.getRoom(),
+                        notDoneTask.getId(),
+                        LocalDate.now(),
+                        USER_ID,
+                        notDoneTask.getLastDoneDate(),
+                        notDoneTask.getLastDoneUserId(),
+                        notDoneTask.getRepetitionRate(),
+                        notDoneTask.getBeginPeriodDate(),
+                        notDoneTask.getCurrentPrice().get()
+                );
+
     }
 
     @Test
     void shouldSetTaskNotDone() {
         //given
         TaskEntity doneTaskEntity = new TaskEntity(TASK_ID, TASK_NAME, INITIAL_PRICE, DONE, room,
-                LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
+                LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE,
+                BEGIN_PERIOD_DATE, LAST_DONE_PRICE);
 
         Task expectedTask = new TaskBuilder()
                 .setId(TASK_ID)
@@ -222,6 +259,8 @@ class TaskServiceTest {
                 .setLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
                 .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
                 .setRepetitionRate(REPETITION_RATE)
+                .setBeginPeriodDate(BEGIN_PERIOD_DATE)
+                .setLastDonePrice(LAST_DONE_PRICE)
                 .createTask();
 
         when(taskRepository.getTaskByIdAndRoom_House(TASK_ID, house)).thenReturn(doneTaskEntity);
@@ -244,7 +283,9 @@ class TaskServiceTest {
                         Task::getPreviousLastDoneDate,
                         Task::getLastDoneUserId,
                         Task::getPreviousLastDoneUserId,
-                        Task::getRepetitionRate)
+                        Task::getRepetitionRate,
+                        Task::getBeginPeriodDate,
+                        Task::getLastDonePrice)
                 .contains(
                         expectedTask.isDone(),
                         expectedTask.getInitialPrice(),
@@ -255,7 +296,9 @@ class TaskServiceTest {
                         expectedTask.getLastDoneUserId(),
                         expectedTask.getPreviousLastDoneDate(),
                         expectedTask.getPreviousLastDoneUserId(),
-                        expectedTask.getRepetitionRate()
+                        expectedTask.getRepetitionRate(),
+                        expectedTask.getBeginPeriodDate(),
+                        expectedTask.getLastDonePrice()
                 );
 
         verify(taskRepository, times(1)).save(expectedTask.toEntity());

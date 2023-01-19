@@ -70,6 +70,8 @@ public class TaskService {
                 .setRoom(room)
                 .setLastDoneDate(updatedTask.getLastDoneDate())
                 .setRepetitionRate(Period.ofDays(updatedTask.getRepetitionRateInDays()))
+                .setBeginPeriodDate(originalTask.getBeginPeriodDate())
+                .setLastDonePrice(originalTask.getLastDonePrice())
                 .createTask();
         return Task.fromEntity(taskRepository.save(newTask.toEntity()));
     }
@@ -81,6 +83,7 @@ public class TaskService {
             task.setPreviousLastDoneUserId(task.getLastDoneUserId());
             task.setLastDoneDate(LocalDate.now());
             task.setLastDoneUserId(user.getId());
+            task.setLastDonePrice(task.getCurrentPrice().isPresent() ? task.getCurrentPrice().get() : 0);//NOSONAR
             houseBuddyService.addPointsToUser(user, task.getCurrentPrice());
         } else {
             if (task.getLastDoneUserId() != user.getId()) {
@@ -88,7 +91,7 @@ public class TaskService {
             }
             task.setLastDoneDate(task.getPreviousLastDoneDate());
             task.setLastDoneUserId(task.getPreviousLastDoneUserId());
-            houseBuddyService.substractPointsFromUser(user, task.getCurrentPrice());
+            houseBuddyService.substractPointsFromUser(user, task.getLastDonePrice());
         }
         task.setDone(done);
         return Task.fromEntity(taskRepository.save(task.toEntity()));

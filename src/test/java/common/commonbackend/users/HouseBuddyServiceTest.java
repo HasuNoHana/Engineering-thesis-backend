@@ -155,19 +155,10 @@ class HouseBuddyServiceTest {
         when(houseBuddyRepository.save(any())).thenReturn(houseBuddy);
 
         //when
-        User actual = systemUnderTest.substractPointsFromUser(user, Optional.of(CURRENT_PRICE));
+        User actual = systemUnderTest.substractPointsFromUser(user, CURRENT_PRICE);
 
         //then
         assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE - CURRENT_PRICE);
-    }
-
-    @Test
-    void shouldSubstractPointsToNotExistingPrice() {
-        // when
-        User actual = systemUnderTest.substractPointsFromUser(user, Optional.empty());
-
-        // then
-        assertThat(actual).isNull();
     }
 
     @Test

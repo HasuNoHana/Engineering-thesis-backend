@@ -50,4 +50,10 @@ public class TaskEntity {
 
     @Column(name = "REPETITION_RATE")
     private Period repetitionRate = Period.ofDays(1);
+
+    @Column(name = "BEGIN_PERIOD_DATE")
+    private LocalDate beginPeriodDate = LocalDate.now();
+
+    @Column(name = "LAST_DONE_PRICE")
+    private long lastDonePrice = 0;
 }

@@ -115,13 +115,25 @@ public class Task {
     }
 
     TaskEntity toEntity() {
-        return new TaskEntity(id, name, initialPrice, done, room, lastDoneDate,
-                previousLastDoneDate, lastDoneUserId, previousLastDoneUserId, repetitionRate, beginPeriodDate,
-                lastDonePrice);
+        return new TaskEntityBuilder().setId(id).setName(name).setInitialPrice(initialPrice).setDone(done).setRoom(room).setLastDoneDate(lastDoneDate).setPreviousLastDoneDate(previousLastDoneDate).setLastDoneUserId(lastDoneUserId).setPreviousLastDoneUserId(previousLastDoneUserId).setRepetitionRate(repetitionRate).setBeginPeriodDate(beginPeriodDate).setLastDonePrice(lastDonePrice).createTaskEntity();
     }
 
     public Task setCurrentPrice(long newPrice) {
         this.currentPrice = Optional.of(newPrice);
         return this;
+    }
+
+    Task reset() {
+        this.done = false;
+        this.beginPeriodDate = LocalDate.now();
+        return this;
+    }
+
+    String logForScheduler() {
+        return "taskId: " + id +
+                " bp: " + beginPeriodDate +
+                " ldd: " + lastDoneDate +
+                " repetition " + repetitionRate +
+                " done: " + done;
     }
 }

@@ -9,6 +9,7 @@ class JoinCodeGenerator {
 
     private final Random random;
 
+
     public JoinCodeGenerator(Random random) {
         this.random = random;
     }

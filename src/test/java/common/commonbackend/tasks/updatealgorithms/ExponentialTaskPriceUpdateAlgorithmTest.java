@@ -28,7 +28,7 @@ class ExponentialTaskPriceUpdateAlgorithmTest {
 
     @ParameterizedTest
     @MethodSource("provideStreamForUpdateAlgorithm")
-    void shouldCorrectlyCalculateExponentialIncrement(int price, LocalDate lastDoneDate, Period period, LocalDate dateNow, int expectedPrice) {
+    void shouldCorrectlyCalculateExponentialIncrement(int price, LocalDate beginPeriodDate, Period period, LocalDate dateNow, int expectedPrice) {
         //given
         when(clock.instant()).thenReturn(dateNow.atStartOfDay().toInstant(ZoneOffset.UTC));
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
@@ -36,7 +36,7 @@ class ExponentialTaskPriceUpdateAlgorithmTest {
         ExponentialTaskPriceUpdateAlgorithm exponentialTaskPriceUpdateAlgorithm = new ExponentialTaskPriceUpdateAlgorithm(clock);
 
         //when
-        long actualPrice = exponentialTaskPriceUpdateAlgorithm.getNewPrice(price, lastDoneDate, period);
+        long actualPrice = exponentialTaskPriceUpdateAlgorithm.getNewPrice(price, beginPeriodDate, period);
 
         //then
         assertThat(actualPrice).isEqualTo(expectedPrice);

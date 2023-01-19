@@ -15,8 +15,8 @@ class ExponentialTaskPriceUpdateAlgorithm implements TaskPriceUpdateAlgorithm {
     private final Clock clock;
 
     @Override
-    public long getNewPrice(long oldPrice, LocalDate lastDoneDate, Period repetitionRate) {
-        long daysFromLastDone = Period.between(lastDoneDate, LocalDate.now(clock)).getDays();
+    public long getNewPrice(long oldPrice, LocalDate beginPeriodDate, Period repetitionRate) {
+        long daysFromLastDone = Period.between(beginPeriodDate, LocalDate.now(clock)).getDays();
 
         if (daysFromLastDone < repetitionRate.getDays()) {
             return oldPrice;

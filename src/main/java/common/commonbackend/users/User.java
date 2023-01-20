@@ -30,4 +30,11 @@ public class User {
         this.password = password;
         this.houseBuddy = houseBuddy;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                '}';
+    }
 }

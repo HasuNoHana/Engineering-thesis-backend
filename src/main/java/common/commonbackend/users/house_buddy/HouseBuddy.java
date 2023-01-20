@@ -21,11 +21,11 @@ public class HouseBuddy {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "FIREWOOD_STACK_SIZE")
-    private Long firewoodStackSize;
+    @Column(name = "FIREWOOD_STACK_SIZE") //TODO fix name
+    private Long currentPoints;
 
-    @Column(name = "WEEKLY_FIREWOOD_CONTRIBUTION")
-    private Long weeklyFirewoodContribution;
+    @Column(name = "WEEKLY_FIREWOOD_CONTRIBUTION")  //TODO fix name
+    private Long weeklyContribiution;
 
     @Column(name = "AVATAR_IMAGE_URL")
     private String avatarImageUrl;
@@ -39,18 +39,28 @@ public class HouseBuddy {
     @OneToOne(mappedBy = "houseBuddy")
     private User user;
 
-    public HouseBuddy(Long firewoodStackSize, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house) {
-        this.firewoodStackSize = firewoodStackSize;
-        this.weeklyFirewoodContribution = weeklyPointsContribution;
+    public HouseBuddy(Long currentPoints, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house) {
+        this.currentPoints = currentPoints;
+        this.weeklyContribiution = weeklyPointsContribution;
         this.avatarImageUrl = avatarImageUrl;
         this.house = house;
     }
 
-    public HouseBuddy(Long firewoodStackSize, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house, User user) {
-        this.firewoodStackSize = firewoodStackSize;
-        this.weeklyFirewoodContribution = weeklyPointsContribution;
+    public HouseBuddy(Long currentPoints, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house, User user) {
+        this.currentPoints = currentPoints;
+        this.weeklyContribiution = weeklyPointsContribution;
         this.avatarImageUrl = avatarImageUrl;
         this.house = house;
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "HouseBuddy{" +
+                "id=" + id +
+                ", currentPoints=" + currentPoints +
+                ", weeklyContribiution=" + weeklyContribiution +
+                ", user=" + user +
+                '}';
     }
 }

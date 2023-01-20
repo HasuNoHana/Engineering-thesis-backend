@@ -31,6 +31,7 @@ import java.util.stream.StreamSupport;
 @Log4j2
 public class UserService implements UserDetailsService {
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    public static final String USER_NOT_FOUND = "User not found";
     private final UserRepository userRepository;
     private final HouseService houseService;
     private final HouseBuddyService houseBuddyService;
@@ -40,7 +41,7 @@ public class UserService implements UserDetailsService {
     public User getUserById(long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException(USER_NOT_FOUND);
         }
         return user.get();
     }
@@ -103,10 +104,10 @@ public class UserService implements UserDetailsService {
     User editUser(Long id, UserDTO newUser) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException(USER_NOT_FOUND);
         }
         HouseBuddy houseBuddy = user.get().getHouseBuddy();
-        houseBuddy.setWeeklyContribiution(newUser.getRange());
+        houseBuddy.setWeeklyContribution(newUser.getRange());
         houseBuddy.setAvatarImageUrl(newUser.getImage());
         houseBuddyRepository.save(houseBuddy);
         return user.get();
@@ -128,7 +129,11 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUser(User myUser) {
-        userRepository.delete(myUser);
+        Optional<User> current = userRepository.findById(myUser.getId());
+        if (current.isEmpty()) {
+            throw new IllegalArgumentException(USER_NOT_FOUND);
+        }
+        userRepository.delete(current.get());
     }
 
     void substractContribiutionFromAllUsers() {
@@ -143,7 +148,7 @@ public class UserService implements UserDetailsService {
 
     private HouseBuddy substructWeeklyContribiutionFromOneUser(HouseBuddy houseBuddy) {
         Long currentPoints = houseBuddy.getCurrentPoints();
-        Long weeklyContribiution = houseBuddy.getWeeklyContribiution();
+        Long weeklyContribiution = houseBuddy.getWeeklyContribution();
         houseBuddy.setCurrentPoints(currentPoints - weeklyContribiution);
         return houseBuddy;
     }

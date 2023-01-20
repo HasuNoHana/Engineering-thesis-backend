@@ -56,7 +56,7 @@ class HouseBuddyServiceTest {
 
         //then
         assertEquals(DEFAULT_FIREWOOD_STACK_SIZE, houseBuddy.getCurrentPoints());
-        assertEquals(DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, houseBuddy.getWeeklyContribiution());
+        assertEquals(DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, houseBuddy.getWeeklyContribution());
         assertEquals(DEFAULT_IMAGE, houseBuddy.getAvatarImageUrl());
         assertEquals(house, houseBuddy.getHouse());
     }

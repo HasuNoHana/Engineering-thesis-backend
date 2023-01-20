@@ -189,7 +189,7 @@ class UserServiceTest {
         verify(userRepository, times(1)).findById(USER_ID);
         assertThat(actual.getUsername()).isEqualTo(USERNAME);
         assertThat(actual.getHouseBuddy().getCurrentPoints()).isEqualTo(FIREWOOD_STACK_SIZE);
-        assertThat(actual.getHouseBuddy().getWeeklyContribiution()).isEqualTo(WEEKLY_FIREWOOD_CONTRIBUTION);
+        assertThat(actual.getHouseBuddy().getWeeklyContribution()).isEqualTo(WEEKLY_FIREWOOD_CONTRIBUTION);
         assertThat(actual.getHouseBuddy().getAvatarImageUrl()).isEqualTo(IMAGE);
     }
 
@@ -271,6 +271,8 @@ class UserServiceTest {
 
     @Test
     void shouldDeleteUser() {
+        //given
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
         // when
         userService.deleteUser(user);
 

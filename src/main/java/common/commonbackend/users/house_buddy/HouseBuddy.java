@@ -21,11 +21,11 @@ public class HouseBuddy {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "FIREWOOD_STACK_SIZE") //TODO fix name
+    @Column(name = "CURRENT_POINTS")
     private Long currentPoints;
 
-    @Column(name = "WEEKLY_FIREWOOD_CONTRIBUTION")  //TODO fix name
-    private Long weeklyContribiution;
+    @Column(name = "WEEKLY_CONTRIBUTION")
+    private Long weeklyContribution;
 
     @Column(name = "AVATAR_IMAGE_URL")
     private String avatarImageUrl;
@@ -41,14 +41,14 @@ public class HouseBuddy {
 
     public HouseBuddy(Long currentPoints, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house) {
         this.currentPoints = currentPoints;
-        this.weeklyContribiution = weeklyPointsContribution;
+        this.weeklyContribution = weeklyPointsContribution;
         this.avatarImageUrl = avatarImageUrl;
         this.house = house;
     }
 
     public HouseBuddy(Long currentPoints, Long weeklyPointsContribution, String avatarImageUrl, HouseEntity house, User user) {
         this.currentPoints = currentPoints;
-        this.weeklyContribiution = weeklyPointsContribution;
+        this.weeklyContribution = weeklyPointsContribution;
         this.avatarImageUrl = avatarImageUrl;
         this.house = house;
         this.user = user;
@@ -59,7 +59,7 @@ public class HouseBuddy {
         return "HouseBuddy{" +
                 "id=" + id +
                 ", currentPoints=" + currentPoints +
-                ", weeklyContribiution=" + weeklyContribiution +
+                ", weeklyContribution=" + weeklyContribution +
                 ", user=" + user +
                 '}';
     }

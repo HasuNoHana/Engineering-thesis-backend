@@ -55,8 +55,8 @@ class HouseBuddyServiceTest {
         HouseBuddy houseBuddy = systemUnderTest.getDefaultHouseBuddy(house);
 
         //then
-        assertEquals(DEFAULT_FIREWOOD_STACK_SIZE, houseBuddy.getFirewoodStackSize());
-        assertEquals(DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, houseBuddy.getWeeklyFirewoodContribution());
+        assertEquals(DEFAULT_FIREWOOD_STACK_SIZE, houseBuddy.getCurrentPoints());
+        assertEquals(DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, houseBuddy.getWeeklyContribiution());
         assertEquals(DEFAULT_IMAGE, houseBuddy.getAvatarImageUrl());
         assertEquals(house, houseBuddy.getHouse());
     }
@@ -142,7 +142,7 @@ class HouseBuddyServiceTest {
         User actual = systemUnderTest.addPointsToUser(user, Optional.of(CURRENT_PRICE));
 
         //then
-        assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(CURRENT_PRICE + FIREWOOD_STACK_SIZE);
+        assertThat(actual.getHouseBuddy().getCurrentPoints()).isEqualTo(CURRENT_PRICE + FIREWOOD_STACK_SIZE);
     }
 
     @Test
@@ -155,19 +155,10 @@ class HouseBuddyServiceTest {
         when(houseBuddyRepository.save(any())).thenReturn(houseBuddy);
 
         //when
-        User actual = systemUnderTest.substractPointsFromUser(user, Optional.of(CURRENT_PRICE));
+        User actual = systemUnderTest.substractPointsFromUser(user, CURRENT_PRICE);
 
         //then
-        assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE - CURRENT_PRICE);
-    }
-
-    @Test
-    void shouldSubstractPointsToNotExistingPrice() {
-        // when
-        User actual = systemUnderTest.substractPointsFromUser(user, Optional.empty());
-
-        // then
-        assertThat(actual).isNull();
+        assertThat(actual.getHouseBuddy().getCurrentPoints()).isEqualTo(FIREWOOD_STACK_SIZE - CURRENT_PRICE);
     }
 
     @Test

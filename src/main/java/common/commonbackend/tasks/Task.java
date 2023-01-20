@@ -29,13 +29,16 @@ public class Task {
     @Setter
     private long lastDoneUserId;
     @Setter
-
     private long previousLastDoneUserId;
-
+    @Setter
+    private LocalDate beginPeriodDate;
     private final Period repetitionRate;
+    @Setter
+    private long lastDonePrice;
 
     Task(Long id, String name, long initialPrice, boolean done, Room room, LocalDate lastDoneDate,//NOSONAR
-         LocalDate previousLastDoneDate, long lastDoneUserId, long previousLastDoneUserId, Period repetitionRate) { //NOSONAR
+         LocalDate previousLastDoneDate, long lastDoneUserId, long previousLastDoneUserId, Period repetitionRate,
+         LocalDate beginPeriodDate, long lastDonePrice) { //NOSONAR
         this.id = id;
         this.name = name;
         this.initialPrice = initialPrice;
@@ -46,6 +49,8 @@ public class Task {
         this.lastDoneUserId = lastDoneUserId;
         this.previousLastDoneUserId = previousLastDoneUserId;
         this.repetitionRate = repetitionRate;
+        this.beginPeriodDate = beginPeriodDate;
+        this.lastDonePrice = lastDonePrice;
     }
 
     static Task fromEntity(TaskEntity taskEntity) {
@@ -60,10 +65,12 @@ public class Task {
                 .setLastDoneUserId(taskEntity.getLastDoneUserId())
                 .setPreviousLastDoneUserId(taskEntity.getPreviousLastDoneUserId())
                 .setRepetitionRate(taskEntity.getRepetitionRate())
+                .setBeginPeriodDate(taskEntity.getBeginPeriodDate())
+                .setLastDonePrice(taskEntity.getLastDonePrice())
                 .createTask();
     }
 
-    static Task fromDto(TaskDTO taskDTO) {
+    static Task fromDto(TaskDTO taskDTO) {//TODO Czy tu nie powinien być begin period date?
         TaskBuilder taskBuilder = new TaskBuilder()
                 .setName(taskDTO.getName())
                 .setInitialPrice(taskDTO.getInitialPrice())
@@ -108,12 +115,25 @@ public class Task {
     }
 
     TaskEntity toEntity() {
-        return new TaskEntity(id, name, initialPrice, done, room, lastDoneDate,
-                previousLastDoneDate, lastDoneUserId, previousLastDoneUserId, repetitionRate);
+        return new TaskEntityBuilder().setId(id).setName(name).setInitialPrice(initialPrice).setDone(done).setRoom(room).setLastDoneDate(lastDoneDate).setPreviousLastDoneDate(previousLastDoneDate).setLastDoneUserId(lastDoneUserId).setPreviousLastDoneUserId(previousLastDoneUserId).setRepetitionRate(repetitionRate).setBeginPeriodDate(beginPeriodDate).setLastDonePrice(lastDonePrice).createTaskEntity();
     }
 
     public Task setCurrentPrice(long newPrice) {
         this.currentPrice = Optional.of(newPrice);
         return this;
+    }
+
+    Task reset() {
+        this.done = false;
+        this.beginPeriodDate = LocalDate.now();
+        return this;
+    }
+
+    String logForScheduler() {
+        return "taskId: " + id +
+                " bp: " + beginPeriodDate +
+                " ldd: " + lastDoneDate +
+                " repetition " + repetitionRate +
+                " done: " + done;
     }
 }

@@ -4,7 +4,6 @@ import common.commonbackend.rooms.Room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,9 +12,8 @@ import java.time.Period;
 @Data
 @NoArgsConstructor(force = true)
 @Entity
-@AllArgsConstructor
-@RequiredArgsConstructor
 @Table(name = "TASK")
+@AllArgsConstructor
 public class TaskEntity {
 
     @Id
@@ -49,5 +47,11 @@ public class TaskEntity {
     private long previousLastDoneUserId;
 
     @Column(name = "REPETITION_RATE")
-    private Period repetitionRate = Period.ofDays(1);
+    private Period repetitionRate = Period.ofDays(7);
+
+    @Column(name = "BEGIN_PERIOD_DATE")
+    private LocalDate beginPeriodDate = LocalDate.now();
+
+    @Column(name = "LAST_DONE_PRICE")
+    private long lastDonePrice = 0;
 }

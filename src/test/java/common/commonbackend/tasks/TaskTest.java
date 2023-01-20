@@ -27,6 +27,9 @@ class TaskTest {
 
     private static final String TASK_NAME = "TaskName";
     private static final long INITIAL_PRICE = 10L;
+    private static final long LAST_DONE_PRICE = 15L;
+    private static final LocalDate BEGIN_PERIOD_DATE = LocalDate.now();
+
     private static final long ID = 1L;
     private final static TaskBuilder taskBuilder = new TaskBuilder()
             .setId(ID)
@@ -38,9 +41,10 @@ class TaskTest {
             .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
             .setLastDoneUserId(LAST_DONE_USER_ID)
             .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
-            .setRepetitionRate(REPETITION_RATE);
-    private static final TaskEntity taskEntity = new TaskEntity(ID, TASK_NAME, 10, false,
-            room, LAST_DONE_DATE, PREVIOUS_LAST_DONE_DATE, LAST_DONE_USER_ID, PREVIOUS_LAST_DONE_USER_ID, REPETITION_RATE);
+            .setRepetitionRate(REPETITION_RATE)
+            .setBeginPeriodDate(BEGIN_PERIOD_DATE)
+            .setLastDonePrice(LAST_DONE_PRICE);
+    private static final TaskEntity taskEntity = new TaskEntityBuilder().setId(ID).setName(TASK_NAME).setInitialPrice(10).setDone(false).setRoom(room).setLastDoneDate(LAST_DONE_DATE).setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE).setLastDoneUserId(LAST_DONE_USER_ID).setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID).setRepetitionRate(REPETITION_RATE).setBeginPeriodDate(BEGIN_PERIOD_DATE).setLastDonePrice(LAST_DONE_PRICE).createTaskEntity();
 
     private static final TaskDTOBuilder taskDTOBuilder = new TaskDTOBuilder()
             .setId(ID)
@@ -70,7 +74,9 @@ class TaskTest {
                 .setPreviousLastDoneDate(PREVIOUS_LAST_DONE_DATE)
                 .setLastDoneUserId(LAST_DONE_USER_ID)
                 .setPreviousLastDoneUserId(PREVIOUS_LAST_DONE_USER_ID)
-                .setRepetitionRate(REPETITION_RATE);
+                .setRepetitionRate(REPETITION_RATE)
+                .setBeginPeriodDate(BEGIN_PERIOD_DATE)
+                .setLastDonePrice(LAST_DONE_PRICE);
         Task taskWithoutCurrentPrice = taskBuilder.createTask();
 
         //when

@@ -16,6 +16,8 @@ public class TaskBuilder {
     private long lastDoneUserId;
     private long previousLastDoneUserId;
     private Period repetitionRate;
+    private LocalDate beginPeriodDate;
+    private long lastDonePrice;
 
     public TaskBuilder setId(Long id) {
         this.id = id;
@@ -67,7 +69,18 @@ public class TaskBuilder {
         return this;
     }
 
+    public TaskBuilder setBeginPeriodDate(LocalDate beginPeriodDate) {
+        this.beginPeriodDate = beginPeriodDate;
+        return this;
+    }
+
+    public TaskBuilder setLastDonePrice(long lastDonePrice) {
+        this.lastDonePrice = lastDonePrice;
+        return this;
+    }
+
     public Task createTask() {
-        return new Task(id, name, initialPrice, done, room, lastDoneDate, previousLastDoneDate, lastDoneUserId, previousLastDoneUserId, repetitionRate);
+        return new Task(id, name, initialPrice, done, room, lastDoneDate, previousLastDoneDate, lastDoneUserId,
+                previousLastDoneUserId, repetitionRate, beginPeriodDate, lastDonePrice);
     }
 }

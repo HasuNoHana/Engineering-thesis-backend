@@ -33,8 +33,8 @@ public class HouseBuddyService {
         return new UserDTO(
                 houseBuddy.getUser().getId(),
                 houseBuddy.getUser().getUsername(),
-                houseBuddy.getFirewoodStackSize(),
-                houseBuddy.getWeeklyFirewoodContribution(),
+                houseBuddy.getCurrentPoints(),
+                houseBuddy.getWeeklyContribiution(),
                 houseBuddy.getAvatarImageUrl());
     }
 
@@ -55,20 +55,15 @@ public class HouseBuddyService {
             log.error("Current price is not present");
         } else {
             HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
-            houseBuddy.setFirewoodStackSize(houseBuddy.getFirewoodStackSize() + currentPrice.get());
+            houseBuddy.setCurrentPoints(houseBuddy.getCurrentPoints() + currentPrice.get());
             return houseBuddyRepository.save(houseBuddy).getUser();
         }
         return null;
     }
 
-    public User substractPointsFromUser(User user, Optional<Long> currentPrice) {
-        if (currentPrice.isEmpty()) {
-            log.error("Current price is not present");
-        } else {
-            HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
-            houseBuddy.setFirewoodStackSize(houseBuddy.getFirewoodStackSize() - currentPrice.get());
-            return houseBuddyRepository.save(houseBuddy).getUser();
-        }
-        return null;
+    public User substractPointsFromUser(User user, Long currentPrice) {
+        HouseBuddy houseBuddy = houseBuddyRepository.getHouseBuddyById(user.getHouseBuddy().getId());
+        houseBuddy.setCurrentPoints(houseBuddy.getCurrentPoints() - currentPrice);
+        return houseBuddyRepository.save(houseBuddy).getUser();
     }
 }

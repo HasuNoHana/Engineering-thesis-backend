@@ -12,12 +12,14 @@ import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,7 +95,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldbalabalalWhenHouseNotExist(){
+    void shouldbalabalalWhenHouseNotExist() {
         // given
         when(houseService.getHouseForJoinCode(JOIN_CODE)).thenReturn(null);
 
@@ -186,8 +188,8 @@ class UserServiceTest {
         // then
         verify(userRepository, times(1)).findById(USER_ID);
         assertThat(actual.getUsername()).isEqualTo(USERNAME);
-        assertThat(actual.getHouseBuddy().getFirewoodStackSize()).isEqualTo(FIREWOOD_STACK_SIZE);
-        assertThat(actual.getHouseBuddy().getWeeklyFirewoodContribution()).isEqualTo(WEEKLY_FIREWOOD_CONTRIBUTION);
+        assertThat(actual.getHouseBuddy().getCurrentPoints()).isEqualTo(FIREWOOD_STACK_SIZE);
+        assertThat(actual.getHouseBuddy().getWeeklyContribiution()).isEqualTo(WEEKLY_FIREWOOD_CONTRIBUTION);
         assertThat(actual.getHouseBuddy().getAvatarImageUrl()).isEqualTo(IMAGE);
     }
 
@@ -276,4 +278,31 @@ class UserServiceTest {
         verify(userRepository, times(1)).delete(user);
     }
 
+    private final static String AVATAR_IMAGE = "avatarImage";
+
+
+    @Test
+    void shouldSubstractContributionFromAllHouseBuddys() {
+        //given
+        List<HouseBuddy> users = List.of(
+                new HouseBuddy(10L, 100L, AVATAR_IMAGE, house),
+                new HouseBuddy(110L, 100L, AVATAR_IMAGE, house),
+                new HouseBuddy(100L, 100L, AVATAR_IMAGE, house));
+
+        when(houseBuddyRepository.findAll()).thenReturn(users);
+        ArgumentCaptor<Iterable<HouseBuddy>> captor = ArgumentCaptor.forClass(ArrayList.class);
+
+        //when
+        userService.substractContribiutionFromAllUsers();
+
+        //then
+        verify(houseBuddyRepository).saveAll(captor.capture());
+
+        List<HouseBuddy> savedTasks = (List<HouseBuddy>) captor.getValue();
+
+
+        assertThat(savedTasks.get(0).getCurrentPoints()).isEqualTo(-90L);
+        assertThat(savedTasks.get(1).getCurrentPoints()).isEqualTo(10L);
+        assertThat(savedTasks.get(2).getCurrentPoints()).isZero();
+    }
 }

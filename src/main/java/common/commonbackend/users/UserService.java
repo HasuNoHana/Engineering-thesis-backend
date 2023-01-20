@@ -23,6 +23,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +106,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("User not found");
         }
         HouseBuddy houseBuddy = user.get().getHouseBuddy();
-        houseBuddy.setWeeklyFirewoodContribution(newUser.getRange());
+        houseBuddy.setWeeklyContribiution(newUser.getRange());
         houseBuddy.setAvatarImageUrl(newUser.getImage());
         houseBuddyRepository.save(houseBuddy);
         return user.get();
@@ -127,5 +129,22 @@ public class UserService implements UserDetailsService {
 
     public void deleteUser(User myUser) {
         userRepository.delete(myUser);
+    }
+
+    void substractContribiutionFromAllUsers() {
+        log.debug("Current users {}", houseBuddyRepository.findAll());
+        List<HouseBuddy> collect = StreamSupport.stream(houseBuddyRepository.findAll().spliterator(), false)
+                .peek(h -> log.debug("Substracting points from house buddy {}", h))//NOSONAR
+                .map(this::substructWeeklyContribiutionFromOneUser)
+                .collect(Collectors.toList());
+        log.debug("Updated users {}", collect);
+        houseBuddyRepository.saveAll(collect);
+    }
+
+    private HouseBuddy substructWeeklyContribiutionFromOneUser(HouseBuddy houseBuddy) {
+        Long currentPoints = houseBuddy.getCurrentPoints();
+        Long weeklyContribiution = houseBuddy.getWeeklyContribiution();
+        houseBuddy.setCurrentPoints(currentPoints - weeklyContribiution);
+        return houseBuddy;
     }
 }

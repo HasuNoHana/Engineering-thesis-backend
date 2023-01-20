@@ -5,6 +5,8 @@ import common.commonbackend.users.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,14 +15,14 @@ public class HouseService {
     private final HouseRepository houseRepository;
     private final JoinCodeGenerator joinCodeGenerator;
 
-    public HouseEntity createHouseForUser(User user) {
+    HouseEntity createHouseForUser(User user) {
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
         houseEntity.addHouseBuddy(user.getHouseBuddy());
         return houseRepository.save(houseEntity);
     }
 
-    public void addUserToHouse(User user, String joinCode) {
+    void addUserToHouse(User user, String joinCode) {
         HouseEntity houseEntity = houseRepository.findByJoinCode(joinCode);
         if (houseEntity == null) {
             throw new WrongHouseJoinCodeException();
@@ -42,7 +44,18 @@ public class HouseService {
 
     public HouseEntity createNewHouse() {
         HouseEntity houseEntity = new HouseEntity();
-        houseEntity.setJoinCode(joinCodeGenerator.generateNewJoinCode());
+        String joinCode = generateDifferentJoinCode();
+        houseEntity.setJoinCode(joinCode);
         return houseRepository.save(houseEntity);
+    }
+
+    private String generateDifferentJoinCode() {
+        List<String> joinCodes = new ArrayList<>();
+        houseRepository.findAll().forEach(houseEntity -> joinCodes.add(houseEntity.getJoinCode()));
+        String joinCode = joinCodeGenerator.generateNewJoinCode();
+        while (joinCodes.contains(joinCode)) {
+            joinCode = joinCodeGenerator.generateNewJoinCode();
+        }
+        return joinCode;
     }
 }

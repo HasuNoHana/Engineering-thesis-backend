@@ -8,6 +8,7 @@ import common.commonbackend.images.ImageType;
 import common.commonbackend.rooms.Room;
 import common.commonbackend.rooms.RoomRepository;
 import common.commonbackend.tasks.TaskEntity;
+import common.commonbackend.tasks.TaskEntityBuilder;
 import common.commonbackend.tasks.TaskRepository;
 import common.commonbackend.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.List;
 
 @SpringBootApplication
+@EnableScheduling
 public class CommonBackendApplication {
 
 	@Autowired
@@ -65,20 +68,55 @@ public class CommonBackendApplication {
 		Room szatanskaKuchnia = new Room("Kuchnia piekła", "https://upload.wikimedia.org/wikipedia/pt/0/03/HKSIC.png", obcyHouse);
 		this.roomRepository.save(szatanskaKuchnia);
 
+		TaskEntity task1 = new TaskEntityBuilder()
+				.setName("task1")
+				.setInitialPrice(10)
+				.setDone(false)
+				.setRoom(room1)
+				.createTaskEntity();
+		TaskEntity task2 = new TaskEntityBuilder()
+				.setName("task2")
+				.setInitialPrice(20)
+				.setDone(false)
+				.setRoom(room1)
+				.createTaskEntity();
+		TaskEntity task3 = new TaskEntityBuilder()
+				.setName("task3")
+				.setInitialPrice(30)
+				.setDone(true)
+				.setRoom(room1)
+				.createTaskEntity();
+		TaskEntity task4 = new TaskEntityBuilder()
+				.setName("task4")
+				.setInitialPrice(40)
+				.setDone(false)
+				.setRoom(room2)
+				.createTaskEntity();
+		TaskEntity task5 = new TaskEntityBuilder()
+				.setName("task5")
+				.setInitialPrice(50)
+				.setDone(true)
+				.setRoom(room2)
+				.createTaskEntity();
 
-		TaskEntity task1 = new TaskEntity("task1", 10, false, room1);
-		TaskEntity task2 = new TaskEntity("task2", 20, false, room1);
-		TaskEntity task3 = new TaskEntity("task3", 30, true, room1);
-		TaskEntity task4 = new TaskEntity("task4", 40, false, room2);
-		TaskEntity task5 = new TaskEntity("task5", 50, true, room2);
 		this.taskRepository.save(task1);
 		this.taskRepository.save(task2);
 		this.taskRepository.save(task3);
 		this.taskRepository.save(task4);
 		this.taskRepository.save(task5);
 
-		TaskEntity task6 = new TaskEntity("złożyć ofiarę z martwych niemowląt", 10, false, szatanskaKuchnia);
-		TaskEntity task66 = new TaskEntity("przygotować pentagram", 20, true, szatanskaKuchnia);
+		TaskEntity task6 = new TaskEntityBuilder()
+				.setName("złożyć ofiarę")
+				.setInitialPrice(10)
+				.setDone(false)
+				.setRoom(szatanskaKuchnia)
+				.createTaskEntity();
+		TaskEntity task66 = new TaskEntityBuilder()
+				.setName("przygotować pentagram")
+				.setInitialPrice(20)
+				.setDone(true)
+				.setRoom(szatanskaKuchnia)
+				.createTaskEntity();
 
 		this.taskRepository.save(task6);
 		this.taskRepository.save(task66);

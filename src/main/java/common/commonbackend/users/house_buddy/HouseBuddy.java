@@ -59,7 +59,7 @@ public class HouseBuddy {
         return "HouseBuddy{" +
                 "id=" + id +
                 ", currentPoints=" + currentPoints +
-                ", weeklyContribiution=" + weeklyContribution +
+                ", weeklyContribution=" + weeklyContribution +
                 ", user=" + user +
                 '}';
     }

@@ -271,6 +271,8 @@ class UserServiceTest {
 
     @Test
     void shouldDeleteUser() {
+        //given
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
         // when
         userService.deleteUser(user);
 

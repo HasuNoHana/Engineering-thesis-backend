@@ -23,7 +23,7 @@ class TaskTest {
     private static final long PREVIOUS_LAST_DONE_USER_ID = 2L;
     private static final HouseEntity house = new HouseEntity(); //TODO room and house also should be moved to Entity and domain object. We should test here whole mapping to check if not detalis are misisng
     private static final Room room = new Room(2L, "RoomName", "imageUrl", house);
-    private static final RoomDTO roomDTO = new RoomDTO(2L, "RoomName", "imageUrl");
+    private static final RoomDTO roomDTO = new RoomDTO(2L, "RoomName", "imageUrl", 0);
 
     private static final String TASK_NAME = "TaskName";
     private static final long INITIAL_PRICE = 10L;

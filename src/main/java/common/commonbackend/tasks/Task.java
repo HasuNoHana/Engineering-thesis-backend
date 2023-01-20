@@ -70,12 +70,14 @@ public class Task {
                 .createTask();
     }
 
-    static Task fromDto(TaskDTO taskDTO) {//TODO Czy tu nie powinien być begin period date?
+    static Task fromDto(TaskDTO taskDTO) {
         TaskBuilder taskBuilder = new TaskBuilder()
                 .setName(taskDTO.getName())
                 .setInitialPrice(taskDTO.getInitialPrice())
                 .setRoom(Room.fromDto(taskDTO.getRoom()))
-                .setRepetitionRate(Period.ofDays(taskDTO.getRepetitionRateInDays()));
+                .setRepetitionRate(Period.ofDays(taskDTO.getRepetitionRateInDays()))
+                .setBeginPeriodDate(LocalDate.now());
+
 
         if (taskDTO.getId() == null) {
             return taskBuilder
@@ -105,7 +107,7 @@ public class Task {
                 .setName(name)
                 .setInitialPrice(initialPrice)
                 .setCurrentPrice(currentPrice.orElse(null))
-                .setDone(done).setRoom(room.toDto())
+                .setDone(done).setRoom(room.toDto(0))
                 .setLastDoneDate(lastDoneDate)
                 .setPreviousLastDoneDate(previousLastDoneDate)
                 .setLastDoneUserId(lastDoneUserId)
@@ -115,7 +117,20 @@ public class Task {
     }
 
     TaskEntity toEntity() {
-        return new TaskEntityBuilder().setId(id).setName(name).setInitialPrice(initialPrice).setDone(done).setRoom(room).setLastDoneDate(lastDoneDate).setPreviousLastDoneDate(previousLastDoneDate).setLastDoneUserId(lastDoneUserId).setPreviousLastDoneUserId(previousLastDoneUserId).setRepetitionRate(repetitionRate).setBeginPeriodDate(beginPeriodDate).setLastDonePrice(lastDonePrice).createTaskEntity();
+        return new TaskEntityBuilder()
+                .setId(id)
+                .setName(name)
+                .setInitialPrice(initialPrice)
+                .setDone(done)
+                .setRoom(room)
+                .setLastDoneDate(lastDoneDate)
+                .setPreviousLastDoneDate(previousLastDoneDate)
+                .setLastDoneUserId(lastDoneUserId)
+                .setPreviousLastDoneUserId(previousLastDoneUserId)
+                .setRepetitionRate(repetitionRate)
+                .setBeginPeriodDate(beginPeriodDate)
+                .setLastDonePrice(lastDonePrice)
+                .createTaskEntity();
     }
 
     public Task setCurrentPrice(long newPrice) {

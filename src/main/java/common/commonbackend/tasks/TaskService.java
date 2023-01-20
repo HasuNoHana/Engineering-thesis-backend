@@ -69,6 +69,8 @@ public class TaskService {
                 .setDone(originalTask.isDone())
                 .setRoom(room)
                 .setLastDoneDate(updatedTask.getLastDoneDate())
+                .setPreviousLastDoneDate(originalTask.getPreviousLastDoneDate())
+                .setPreviousLastDoneUserId(originalTask.getPreviousLastDoneUserId())
                 .setRepetitionRate(Period.ofDays(updatedTask.getRepetitionRateInDays()))
                 .setBeginPeriodDate(originalTask.getBeginPeriodDate())
                 .setLastDonePrice(originalTask.getLastDonePrice())
@@ -95,5 +97,9 @@ public class TaskService {
         }
         task.setDone(done);
         return Task.fromEntity(taskRepository.save(task.toEntity()));
+    }
+
+    public int getNumberOfNotDoneTasks(Room room) {
+        return this.taskRepository.countTasksByRoomAndDone(room, false);
     }
 }

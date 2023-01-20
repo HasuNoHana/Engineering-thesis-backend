@@ -13,7 +13,7 @@ public class TaxCollectorScheduler {
 
     private final UserService userService;
 
-    @Scheduled(cron = "50 23 * * * *")
+    @Scheduled(cron = "0 50 23 * * *")
     public void substractContributionFromUsers() {
         log.info("Beginning substructing contribution from users");
         userService.substractContribiutionFromAllUsers();

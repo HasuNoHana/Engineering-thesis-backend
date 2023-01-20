@@ -16,7 +16,7 @@ import java.util.stream.StreamSupport;
 public class UndoneTasksAfterPeriodScheduler { //TODO rename me to something more catchy
     private final TaskRepository taskRepository;
 
-    @Scheduled(cron = "50 23 * * * *")
+    @Scheduled(cron = "0 50 23 * * *")
     public void undoneTasksAfterTheirPeriod() {
         log.info("Begin undone tasks after their period"); //TODO fix thiss erorr message
 

@@ -34,7 +34,7 @@ public class HouseBuddyService {
                 houseBuddy.getUser().getId(),
                 houseBuddy.getUser().getUsername(),
                 houseBuddy.getCurrentPoints(),
-                houseBuddy.getWeeklyContribiution(),
+                houseBuddy.getWeeklyContribution(),
                 houseBuddy.getAvatarImageUrl());
     }
 

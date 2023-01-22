@@ -20,4 +20,5 @@ public class BeanInjectionConfig {
     public Random random() throws NoSuchAlgorithmException {
         return SecureRandom.getInstanceStrong();
     }
+
 }

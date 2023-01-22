@@ -19,8 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -116,7 +114,7 @@ public class UserService implements UserDetailsService {
     long countDoneTasksThisWeek(Long userId, HouseEntity house) {
         List<Task> tasksForCurrentHouse = taskService.getTasks(house);
         return tasksForCurrentHouse.stream().filter(task -> (task.getLastDoneUserId() == userId) &&
-                (ChronoUnit.DAYS.between(task.getLastDoneDate(), LocalDate.now()) <= 7) &&
+                (task.getLastDoneDate().isAfter(task.getBeginPeriodDate().minusDays(1))) && //minus 1 days because also equal to beginPeriodDate is counted
                 task.isDone()).count();
     }
 

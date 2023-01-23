@@ -17,20 +17,20 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping(path = "/rooms")
-    public ResponseEntity<Iterable<Room>> getRooms() {
-        Iterable<Room> rooms = roomService.getRoomsForHouse(controllerHelper.getMyHouse());
+    public ResponseEntity<Iterable<RoomDTO>> getRooms() {
+        Iterable<RoomDTO> rooms = roomService.getRoomsForHouse(controllerHelper.getMyHouse());
         return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
     @PostMapping(path = "/addRoom")
-    public ResponseEntity<Room> createRoom(@RequestBody RoomDTO roomDTO) {
-        Room room = roomService.createRoom(roomDTO, controllerHelper.getMyHouse());
+    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO) {
+        RoomDTO room = roomService.createRoom(roomDTO, controllerHelper.getMyHouse());
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 
     @PostMapping(path = "/updateRoom")
-    public ResponseEntity<Room> updateRoom(@RequestBody RoomDTO roomDTO) {
-        Room room = roomService.updateRoom(roomDTO, controllerHelper.getMyHouse());//TODO wywal ten id z wolania metody
+    public ResponseEntity<RoomDTO> updateRoom(@RequestBody RoomDTO roomDTO) {
+        RoomDTO room = roomService.updateRoom(roomDTO, controllerHelper.getMyHouse());
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 

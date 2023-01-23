@@ -23,7 +23,7 @@ class ExponentialTaskPriceUpdateAlgorithm implements TaskPriceUpdateAlgorithm {
         }
 
         double superscript = 1.0 * daysFromLastDone / repetitionRate.getDays();
-        double factor = Math.pow(3.0 / 2, superscript - 1); // TODO taka sama nazwa jak uzywana w reszcze pracy
+        double factor = Math.pow(3.0 / 2, superscript - 1);
         return (long) (oldPrice * factor);
     }
 }

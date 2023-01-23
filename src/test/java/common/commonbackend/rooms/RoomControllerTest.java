@@ -32,9 +32,9 @@ class RoomControllerTest extends ControllerTest {
         //given
         HouseEntity house = new HouseEntity();
 
-        List<Room> rooms = List.of(
-                new Room(ROOM_NAME, IMAGE_URL, house),
-                new Room(ROOM_NAME_2, IMAGE_URL, house));
+        List<RoomDTO> rooms = List.of(
+                new RoomDTO(1L, ROOM_NAME, IMAGE_URL, 0),
+                new RoomDTO(2L, ROOM_NAME_2, IMAGE_URL, 0));
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
@@ -52,19 +52,19 @@ class RoomControllerTest extends ControllerTest {
     void shouldCreateRoom() {
         //given
         HouseEntity house = new HouseEntity();
-        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, IMAGE_URL);
-        Room room = new Room(ROOM_NAME, IMAGE_URL, house);
+        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, IMAGE_URL, 0);
+        Room room = new Room(1L, ROOM_NAME, IMAGE_URL, house);
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
-        when(roomService.createRoom(roomDTO, house)).thenReturn(room);
+        when(roomService.createRoom(roomDTO, house)).thenReturn(room.toDto(0));
 
         //then
         getMocMvc().perform(post("/api/addRoom")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(roomDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(room)))
+                .andExpect(content().json(asJsonString(roomDTO)))
                 .andDo(print());
     }
 
@@ -73,19 +73,19 @@ class RoomControllerTest extends ControllerTest {
     void shouldUpdateRoom() {
         //given
         HouseEntity house = new HouseEntity();
-        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, IMAGE_URL);
-        Room room = new Room(ROOM_NAME, IMAGE_URL, house);
+        RoomDTO roomDTO = new RoomDTO(1L, ROOM_NAME, IMAGE_URL, 0);
+        Room room = new Room(1L, ROOM_NAME, IMAGE_URL, house);
 
         //when
         when(controllerHelper.getMyHouse()).thenReturn(house);
-        when(roomService.updateRoom(roomDTO, house)).thenReturn(room);
+        when(roomService.updateRoom(roomDTO, house)).thenReturn(room.toDto(0));
 
         //then
         getMocMvc().perform(post("/api/updateRoom")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(roomDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(room)))
+                .andExpect(content().json(asJsonString(roomDTO)))
                 .andDo(print());
     }
 

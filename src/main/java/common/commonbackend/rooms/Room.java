@@ -6,6 +6,7 @@ import common.commonbackend.tasks.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -36,6 +37,7 @@ public class Room {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "HOUSE_ID", nullable = false)
     @Cascade(org.hibernate.annotations.CascadeType.MERGE)
+    @Setter
     private HouseEntity house;
 
     public Room(String name, String image, HouseEntity house) {
@@ -56,7 +58,7 @@ public class Room {
                 roomDTO.getId(),
                 roomDTO.getName(),
                 roomDTO.getImage(),
-                null); //TODO przemyslec to
+                null);
     }
 
     void updateFromDTO(RoomDTO roomDTO) {
@@ -64,7 +66,7 @@ public class Room {
         this.image = roomDTO.getImage();
     }
 
-    public RoomDTO toDto() {
-        return new RoomDTO(id, name, image);
+    public RoomDTO toDto(int notDoneTasks) {
+        return new RoomDTO(id, name, image, notDoneTasks);
     }
 }

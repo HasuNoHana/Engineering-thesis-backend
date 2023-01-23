@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/doneTasksThisWeek")
-    public ResponseEntity<Long> getDoneTasksThisWeek() {
+    public ResponseEntity<Long> getDoneTasksThisBeginPeriod() {
         long doneTasksThisWeek = userService
                 .countDoneTasksThisWeek(controllerHelper.getMyUser().getId(), controllerHelper.getMyHouse());
         return new ResponseEntity<>(doneTasksThisWeek, HttpStatus.OK);

@@ -13,17 +13,17 @@ import java.util.stream.StreamSupport;
 @Log4j2
 @Component
 @RequiredArgsConstructor
-public class UndoneTasksAfterPeriodScheduler { //TODO rename me to something more catchy
+public class UndoneTasksAfterPeriodScheduler {
     private final TaskRepository taskRepository;
 
-    @Scheduled(cron = "50 23 * * * *")
+    @Scheduled(cron = "0 50 23 * * *")
     public void undoneTasksAfterTheirPeriod() {
-        log.info("Begin undone tasks after their period"); //TODO fix thiss erorr message
+        log.info("Begin undone tasks after their period");
 
         Iterable<TaskEntity> allTasks = taskRepository.findAll();
         List<TaskEntity> collect = StreamSupport.stream(allTasks.spliterator(), false)
                 .map(Task::fromEntity)
-                .filter(this::shouldBeReseted)
+                .filter(this::shouldBeReset)
                 .peek(t -> log.debug("Following task will be reset {}", t.logForScheduler())) // NOSONAR only for logging purposes
                 .map(Task::reset)
                 .map(Task::toEntity)
@@ -31,14 +31,14 @@ public class UndoneTasksAfterPeriodScheduler { //TODO rename me to something mor
         log.info("reset {} tasks", collect.size());
         taskRepository.saveAll(collect);
 
-        log.info("Done reset tasks");  //TODO fix thiss erorr message
+        log.info("Done reset tasks");
     }
 
-    private boolean shouldBeReseted(Task task) {
+    private boolean shouldBeReset(Task task) {
         log.debug("Checking if task should be reseted {}", task.logForScheduler());
         return task.isDone() && task.getLastDoneDate().isBefore(
                 LocalDate.now().minus(
-                        task.getRepetitionRate().minusDays(1))); // To contains task last done period ago  // TODO fix this shitty message
+                        task.getRepetitionRate().minusDays(1))); // minus 1 because also equal to beginPeriodDate is counted
     }
 
 }

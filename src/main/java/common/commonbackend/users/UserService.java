@@ -19,8 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ import java.util.stream.StreamSupport;
 @Log4j2
 public class UserService implements UserDetailsService {
     private static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
-    public static final String USER_NOT_FOUND = "User not found";
+    private static final String USER_NOT_FOUND = "User not found";
     private final UserRepository userRepository;
     private final HouseService houseService;
     private final HouseBuddyService houseBuddyService;
@@ -116,7 +117,9 @@ public class UserService implements UserDetailsService {
     long countDoneTasksThisWeek(Long userId, HouseEntity house) {
         List<Task> tasksForCurrentHouse = taskService.getTasks(house);
         return tasksForCurrentHouse.stream().filter(task -> (task.getLastDoneUserId() == userId) &&
-                (ChronoUnit.DAYS.between(task.getLastDoneDate(), LocalDate.now()) <= 7) &&
+                (task.getLastDoneDate().isAfter(
+                        LocalDate.now().with(TemporalAdjusters.previous(DayOfWeek.MONDAY))
+                                .minusDays(1))) && //minus 1 days because also equal to beginPeriodDate is counted
                 task.isDone()).count();
     }
 

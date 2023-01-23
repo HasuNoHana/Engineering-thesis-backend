@@ -9,4 +9,5 @@ public class RoomDTO {
     long id;
     String name;
     String image;
+    int tasksNotDone;
 }

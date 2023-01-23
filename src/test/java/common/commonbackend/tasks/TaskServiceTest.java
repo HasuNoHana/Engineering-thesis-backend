@@ -131,7 +131,14 @@ class TaskServiceTest {
     @Test
     void shouldSaveUpdatedTask() {
         //given
-        TaskDTO taskDto = new TaskDTOBuilder().setId(TASK_ID).setName(TASK_NAME_2).setInitialPrice(INITIAL_PRICE_2).setCurrentPrice(null).setDone(NOT_DONE).setRoom(room2.toDto()).setLastDoneDate(LAST_DONE_DATE_2).setRepetitionRateInDays(REPETITION_RATE_2.getDays()).createTaskDTO();
+        TaskDTO taskDto = new TaskDTOBuilder()
+                .setId(TASK_ID)
+                .setName(TASK_NAME_2)
+                .setInitialPrice(INITIAL_PRICE_2)
+                .setCurrentPrice(null).setDone(NOT_DONE)
+                .setRoom(room2.toDto(0))
+                .setLastDoneDate(LAST_DONE_DATE_2)
+                .setRepetitionRateInDays(REPETITION_RATE_2.getDays()).createTaskDTO();
         when(taskRepository.getTaskById(TASK_ID)).thenReturn(notDoneTaskEntity);
         when(roomRepository.getRoomByIdAndHouse(ROOM_ID_2, house)).thenReturn(room2);
         when(taskRepository.save(any())).thenAnswer(returnsFirstArg());
@@ -300,5 +307,17 @@ class TaskServiceTest {
                 );
 
         verify(taskRepository, times(1)).save(expectedTask.toEntity());
+    }
+
+    @Test
+    void shouldGetNumberOfNotDoneTasks() {
+        //given
+        when(taskRepository.countTasksByRoomAndDone(room, NOT_DONE)).thenReturn(5);
+
+        //when
+        int actual = systemUnderTest.getNumberOfNotDoneTasks(room);
+
+        //then
+        assertThat(actual).isEqualTo(5);
     }
 }

@@ -21,7 +21,7 @@ class TaskTest {
     private static final LocalDate LAST_DONE_DATE = LocalDate.now();
     private static final long LAST_DONE_USER_ID = 1L;
     private static final long PREVIOUS_LAST_DONE_USER_ID = 2L;
-    private static final HouseEntity house = new HouseEntity(); //TODO room and house also should be moved to Entity and domain object. We should test here whole mapping to check if not detalis are misisng
+    private static final HouseEntity house = new HouseEntity();
     private static final Room room = new Room(2L, "RoomName", "imageUrl", house);
     private static final RoomDTO roomDTO = new RoomDTO(2L, "RoomName", "imageUrl", 0);
 

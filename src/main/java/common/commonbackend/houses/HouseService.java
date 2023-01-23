@@ -32,11 +32,11 @@ public class HouseService {
     }
 
     public HouseEntity getHouseForJoinCode(String joinCode) {
-        return Optional.ofNullable(houseRepository.findByJoinCode(joinCode)) //TODO to wyjebac powinno zwracac house albo obsluzyc jakos blad
+        return Optional.ofNullable(houseRepository.findByJoinCode(joinCode))
                 .orElseGet(() -> createNewHouse(joinCode));
     }
 
-    private HouseEntity createNewHouse(String joinCode) { //TODO to tez
+    private HouseEntity createNewHouse(String joinCode) {
         HouseEntity houseEntity = new HouseEntity();
         houseEntity.setJoinCode(joinCode);
         return houseRepository.save(houseEntity);

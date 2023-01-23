@@ -18,9 +18,9 @@ public class Task {
     private final String name;
     private final long initialPrice;
     private Optional<Long> currentPrice = Optional.empty();
-    @Setter // TODO rethink if this is needed
+    @Setter
     private boolean done;
-    @Setter // TODO rethink if this is needed
+    @Setter
     private Room room;
     @Setter
     private LocalDate lastDoneDate;

@@ -58,7 +58,7 @@ public class Room {
                 roomDTO.getId(),
                 roomDTO.getName(),
                 roomDTO.getImage(),
-                null); //TODO przemyslec to
+                null);
     }
 
     void updateFromDTO(RoomDTO roomDTO) {

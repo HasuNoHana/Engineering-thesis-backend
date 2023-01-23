@@ -35,7 +35,7 @@ public class SignUpController {
     }
 
     @PostMapping(path = "/createUserForExistingHouse")
-    public ResponseEntity<String> createUserForExistingHouse(@RequestBody UserAndJoinCode userAndJoinCode) {  // TODO what should be returned?
+    public ResponseEntity<String> createUserForExistingHouse(@RequestBody UserAndJoinCode userAndJoinCode) {
         String username = userAndJoinCode.getUsername();
         String password = userAndJoinCode.getPassword();
         String joinCode = userAndJoinCode.getHouseJoinCode();
@@ -54,13 +54,13 @@ public class SignUpController {
     }
 
     @Value
-    protected static class UserWithoutHouse {
+    static class UserWithoutHouse {
         String username;
         String password;
     }
 
     @Value
-    protected static class UserAndJoinCode {
+    static class UserAndJoinCode {
         String username;
         String password;
         String houseJoinCode;

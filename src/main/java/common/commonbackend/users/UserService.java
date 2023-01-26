@@ -108,8 +108,8 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException(USER_NOT_FOUND);
         }
         HouseBuddy houseBuddy = user.get().getHouseBuddy();
-        houseBuddy.setWeeklyContribution(newUser.getRange());
-        houseBuddy.setAvatarImageUrl(newUser.getImage());
+        houseBuddy.setWeeklyContribution(newUser.getWeeklyContribution());
+        houseBuddy.setAvatarImageUrl(newUser.getAvatarImageUrl());
         houseBuddyRepository.save(houseBuddy);
         return user.get();
     }

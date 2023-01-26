@@ -75,9 +75,9 @@ class HouseBuddyServiceTest {
         //then
         assertEquals(USER_ID, userDTO.getId());
         assertEquals(USERNAME, userDTO.getUsername());
-        assertEquals(FIREWOOD_STACK_SIZE, userDTO.getPoints());
-        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTO.getRange());
-        assertEquals(IMAGE, userDTO.getImage());
+        assertEquals(FIREWOOD_STACK_SIZE, userDTO.getCurrentPoints());
+        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTO.getWeeklyContribution());
+        assertEquals(IMAGE, userDTO.getAvatarImageUrl());
     }
 
     @Test
@@ -105,14 +105,14 @@ class HouseBuddyServiceTest {
         //then
         assertEquals(2, userDTOS.size());
         assertEquals(USERNAME, userDTOS.get(0).getUsername());
-        assertEquals(FIREWOOD_STACK_SIZE, userDTOS.get(0).getPoints());
-        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTOS.get(0).getRange());
-        assertEquals(IMAGE, userDTOS.get(0).getImage());
+        assertEquals(FIREWOOD_STACK_SIZE, userDTOS.get(0).getCurrentPoints());
+        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTOS.get(0).getWeeklyContribution());
+        assertEquals(IMAGE, userDTOS.get(0).getAvatarImageUrl());
 
         assertEquals(USERNAME, userDTOS.get(1).getUsername());
-        assertEquals(FIREWOOD_STACK_SIZE, userDTOS.get(1).getPoints());
-        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTOS.get(1).getRange());
-        assertEquals(IMAGE, userDTOS.get(1).getImage());
+        assertEquals(FIREWOOD_STACK_SIZE, userDTOS.get(1).getCurrentPoints());
+        assertEquals(WEEKLY_POINTS_CONTRIBUTION, userDTOS.get(1).getWeeklyContribution());
+        assertEquals(IMAGE, userDTOS.get(1).getAvatarImageUrl());
     }
 
     @Test

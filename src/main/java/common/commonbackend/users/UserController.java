@@ -1,7 +1,6 @@
 package common.commonbackend.users;
 
 import common.commonbackend.ControllerHelper;
-import common.commonbackend.users.house_buddy.HouseBuddy;
 import common.commonbackend.users.house_buddy.HouseBuddyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,10 +23,11 @@ public class UserController {
     private final HouseBuddyService houseBuddyService;
 
     @GetMapping(path = "/currentUserData")
-    public ResponseEntity<HouseBuddy> getCurrentUserData() {
-        HouseBuddy houseBuddy = houseBuddyService
-                .getHouseBuddyById(controllerHelper.getMyUser().getHouseBuddy().getId());
-        return new ResponseEntity<>(houseBuddy, HttpStatus.OK);
+    public ResponseEntity<UserDTO> getCurrentUserData() {
+        User user = controllerHelper.getMyUser();
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getHouseBuddy().getCurrentPoints(),
+                user.getHouseBuddy().getWeeklyContribution(), user.getHouseBuddy().getAvatarImageUrl());
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @GetMapping(path = "/users")
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/editUser")
-    public ResponseEntity<HouseBuddy> editUser(@RequestBody UserDTO newUser) {
+    public ResponseEntity<UserDTO> editUser(@RequestBody UserDTO newUser) {
         User user;
         if (newUser.getId() == -1) {
             user = userService.editUser(controllerHelper.getMyUser().getId(), newUser);
@@ -47,7 +47,9 @@ public class UserController {
             user = userService.editUser(newUser.getId(), newUser);
 
         }
-        return new ResponseEntity<>(user.getHouseBuddy(), HttpStatus.OK);
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getHouseBuddy().getCurrentPoints(),
+                user.getHouseBuddy().getWeeklyContribution(), user.getHouseBuddy().getAvatarImageUrl());
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @GetMapping(path = "/doneTasksThisWeek")

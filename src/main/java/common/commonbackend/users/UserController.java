@@ -38,11 +38,15 @@ public class UserController {
     }
 
     @PostMapping(path = "/editUser")
-    public ResponseEntity<HouseBuddy> editUser(@RequestParam Long id, @RequestBody UserDTO newUser) {
-        if (id == -1) {
-            id = controllerHelper.getMyUser().getId();
+    public ResponseEntity<HouseBuddy> editUser(@RequestBody UserDTO newUser) {
+        User user;
+        if (newUser.getId() == -1) {
+            user = userService.editUser(controllerHelper.getMyUser().getId(), newUser);
+
+        } else {
+            user = userService.editUser(newUser.getId(), newUser);
+
         }
-        User user = userService.editUser(id, newUser);
         return new ResponseEntity<>(user.getHouseBuddy(), HttpStatus.OK);
     }
 

@@ -1,0 +1,1 @@
+docker run --name sql-common -e MYSQL_ROOT_PASSWORD=haslo -d mysql:latest

@@ -8,7 +8,7 @@ import lombok.Value;
 public class UserDTO {
     Long id;
     String username;
-    long points;
-    long range;
-    String image;
+    long currentPoints;
+    long weeklyContribution;
+    String avatarImageUrl;
 }

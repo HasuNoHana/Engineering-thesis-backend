@@ -50,8 +50,7 @@ public class TaskService {
         log.debug("Got taskDTO: {}", taskDTO);
         Room room = roomRepository.getRoomByIdAndHouse(taskDTO.getRoom().getId(), myHouse);
         if (room == null) {
-            log.error("Room with id: " + taskDTO.getRoom().getId() + " not found");
-            return null;
+            throw new IllegalArgumentException("Room with id: " + taskDTO.getRoom().getId() + " does not exist");
         }
         Task task = Task.fromDto(taskDTO);
         task.setRoom(room);

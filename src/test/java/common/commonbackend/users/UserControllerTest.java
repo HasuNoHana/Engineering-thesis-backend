@@ -54,14 +54,17 @@ class UserControllerTest extends ControllerTest {
         //given
         HouseEntity house = new HouseEntity();
         HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, DEFAULT_IMAGE, house);
-        User user = new User(USERNAME, PASSWORD, houseBuddy);
+        UserDTO userDTO = new UserDTO(USER_ID, USERNAME, FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION, DEFAULT_IMAGE);
         when(controllerHelper.getMyUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID);
+        when(user.getUsername()).thenReturn(USERNAME);
+        when(user.getHouseBuddy()).thenReturn(houseBuddy);
         when(houseBuddyService.getHouseBuddyById(any())).thenReturn(houseBuddy);
 
         //when
         getMocMvc().perform(get("/api/currentUserData"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(houseBuddy)))
+                .andExpect(content().json(asJsonString(userDTO)))
                 .andDo(print());
     }
 
@@ -100,6 +103,8 @@ class UserControllerTest extends ControllerTest {
         HouseEntity house = new HouseEntity();
         HouseBuddy houseBuddy = new HouseBuddy(FIREWOOD_STACK_SIZE, DEFAULT_WEEKLY_FIREWOOD_CONTRIBUTION,
                 DEFAULT_IMAGE, house);
+        when(user.getId()).thenReturn(USER_ID);
+        when(user.getUsername()).thenReturn(USERNAME);
         when(user.getHouseBuddy()).thenReturn(houseBuddy);
 
         //when
@@ -107,7 +112,7 @@ class UserControllerTest extends ControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(userDTO)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(houseBuddy)))
+                .andExpect(content().json(asJsonString(userDTO)))
                 .andDo(print());
 
         //then

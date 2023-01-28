@@ -28,6 +28,9 @@ services:
   db_setup:
     image: mysql
     restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       MYSQL_ROOT_PASSWORD: dupa
     entrypoint: [ "bash" , "-c" ,"
@@ -36,5 +39,3 @@ services:
         create user 'springuser'@'%' identified by 'ThePassword';
         grant all on db_example.* to 'springuser'@'%';
       \"" ]
-    depends_on:
-      - db

@@ -13,7 +13,7 @@ services:
         - ./init.sql:/data/application/init.sql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: dupa
+      MYSQL_ROOT_PASSWORD: AlaTezLubiJacka
     ports:
       - 3306:3306
 

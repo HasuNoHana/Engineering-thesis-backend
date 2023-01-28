@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose -f database/stack.yml up
+docker-compose -f database/stack.yml up --remove-orphans

@@ -7,17 +7,15 @@ services:
     image: mysql
     # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
     # (this is just an example, not intended to be a production configuration)
-    command: --default-authentication-plugin=mysql_native_password
+#    command: --default-authentication-plugin=mysql_native_password
+    command: --init-file /data/application/init.sql --default-authentication-plugin=mysql_native_password
+    volumes:
+        - ./init.sql:/data/application/init.sql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: dupa
     ports:
       - 3306:3306
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-uroot", "-h", "localhost", "-pdupa" ]
-      timeout: 20s
-      retries: 10
-      interval: 2s
 
 
   adminer:
@@ -25,19 +23,3 @@ services:
     restart: always
     ports:
       - 8090:8080
-
-  db_setup:
-    image: mysql
-    restart: "no"
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      MYSQL_ROOT_PASSWORD: dupa
-    entrypoint: [ "bash" , "-c" ,"
-    mysql -h localhost -P 3306 --protocol=tcp -u root -pdupa ","--execute SELECT user FROM mysql.user;",
-      #      "create database db_example;",
-      #      "SELECT user FROM mysql.user;",
-      #      "create user 'springuser'@'%' identified by 'ThePassword';",
-      #      "grant all on db_example.* to 'springuser'@'%';"
-    ]

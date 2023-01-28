@@ -13,6 +13,11 @@ services:
       MYSQL_ROOT_PASSWORD: dupa
     ports:
       - 3306:3306
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-uroot", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}" ]
+      timeout: 20s
+      retries: 10
+
 
   adminer:
     image: adminer
@@ -22,7 +27,7 @@ services:
 
   db_setup:
     image: mysql
-    restart: no
+    restart: "no"
     environment:
       MYSQL_ROOT_PASSWORD: dupa
     entrypoint: [ "bash" , "-c" ,"

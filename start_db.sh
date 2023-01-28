@@ -1,1 +1,2 @@
-docker run --name sql-common -e MYSQL_ROOT_PASSWORD=haslo -d mysql:latest
+#!/bin/bash
+docker-compose -f database/stack.yml up --remove-orphans

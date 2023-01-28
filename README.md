@@ -8,6 +8,7 @@ Backend application for Common App.
 * Apache Maven 3.6.3
 * Java 11.0.17
 * Docker 20.10.22
+* Docker Compose 3.1
 
 ## Starting Application
 

@@ -1,6 +1,8 @@
-# Common Backed
+# CommOn Backed
 
-Backend application for Common App.
+CommOn is a system supporting the management and division of household chores.
+
+This is backend of application I wrote as part of my thesis. Whole text is available in file engineering-thesis.pdf.
 
 ## Requirements
 

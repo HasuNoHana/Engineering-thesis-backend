@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    build: database/.
+    image: common-db:latest
+    networks:
+      dev:
+
+  db_azure:
+    extends: db
+    image: commoncontainersregistry.azurecr.io/common-db:1.0.0
+
+  web:
+    build: .
+    image: common-web:latest
+    restart: always
+#    ports:
+#      - "8080:8080"
+    networks:
+      dev:
+
+  web_azure:
+    extends: web
+    image: commoncontainersregistry.azurecr.io/common-web:1.0.0
+
+networks:
+  dev:
